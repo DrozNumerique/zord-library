@@ -17,9 +17,9 @@
     </div>
 </form>
 <?php if (isset($models['counter']['reports']) && isset($models['counter']['months'])) { ?>
-<div id="reports">
+<div id="reports" data-id="<?php echo $models['counter']['id']; ?>">
 <?php   foreach (array_keys($models['counter']['reports']) as $type) { ?>
-    <a download="<?php echo isset($models['counter']['context']) ? $models['counter']['context']['id'] : $models['counter']['user']['login'].'_BR'.$type.'_'.$models['counter']['range']['start'].'_'.$models['counter']['range']['end'].'.xls'; ?>"><?php echo $locale->download; ?></a>
+    <a href="/counter?type=<?php echo $type; ?>&id=<?php echo $models['counter']['id']; ?>" download="<?php echo isset($models['counter']['context']) ? $models['counter']['context']['id'] : $models['counter']['user']['login'].'_BR'.$type.'_'.$models['counter']['range']['start'].'_'.$models['counter']['range']['end'].'.xls'; ?>"><?php echo $locale->download; ?></a>
     <div class="report">
 <?php     $this->render('report', ['counter' => $models['counter'], 'type' => $type]); ?>
     </div>

@@ -516,8 +516,12 @@ class Book extends Module {
         if (!isset($user)) {
             return $this->page('home');
         }
-        if (isset($this->params['id'])) {
-            
+        if (isset($this->params['id']) && isset($this->params['type'])) {
+            if (isset($_SESSION['__ZORD__']['__LIBRARY__']['__COUNTER__'][$this->params['id']])) {
+                return $this->view('/counter', ['type' => $this->params['type'], 'counter' => $_SESSION['__ZORD__']['__LIBRARY__']['__COUNTER__'][$this->params['id']]], 'application/vnd.ms-excel', false);
+            } else {
+                return $this->page('home');
+            }
         }
         $users = [];
         if (!isset($context)) {

@@ -116,14 +116,6 @@
 			}
 		]
 	},
-	"counter": {
-		"scripts": [
-			{
-				"type": "text/javascript",
-				"src": "/library/js/counter.js"
-			}
-		]
-	},
 	"admin": {
 		"styles": [
 			{
