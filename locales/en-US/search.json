@@ -41,7 +41,6 @@
 	},
 	"corpus": {
 		"list": "List of book titles",
-		"add": "Add this book to my selection",
 		"select": "Selected corpus",
 		"full": "full",
 		"remove": "to remove a book, click on title"

@@ -41,7 +41,6 @@
 	},
 	"corpus": {
 		"list": "Liste des titres d'ouvrage",
-		"add": "Ajouter ce titre à ma sélection",
 		"select": "Corpus sélectionné",
 		"full": "complet",
 		"remove": "pour supprimer un titre, cliquez dessus"

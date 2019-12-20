@@ -222,17 +222,20 @@ function fetch(start, rows) {
 }
 
 function updateSelectedCorpus(books) {
+	selected = document.getElementById('selected');
 	full = document.getElementById('full');
 	remove = document.getElementById('remove');
 	if (full !== null && remove !== null) {
+		[].forEach.call(document.getElementById('titles').options, function(option) {
+			option.selected = false;
+		});
+		$('#titles').trigger('chosen:updated');
 		if (books.length == 0) {
+			selected.classList.add('empty');
 			full.style.display = full.parentNode.firstElementChild.style.display;
 			remove.style.display = 'none';
-			[].forEach.call(document.getElementById('titles').options, function(option) {
-				option.selected = false;
-			});
-			$('#titles').trigger('chosen:updated');
 		} else {
+			selected.classList.remove('empty');
 			full.style.display = 'none';
 			remove.style.display = remove.parentNode.firstElementChild.style.display;
 		}
@@ -372,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 		titles.setAttribute('data-loading', 'false');
 		window.dispatchEvent(new Event("selectLoaded"));
-		titles.nextElementSibling.addEventListener('click', function(event) {
+		$('#titles').on('change', function(event) {
 			addCorpus(titles.value);
 		});
 	}

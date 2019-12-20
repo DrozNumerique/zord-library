@@ -392,6 +392,14 @@ td.chapter{
 	color: black;
 }
 
+div#selected {
+	color: black ! important;
+}
+
+div#selected.empty {
+	color: lightgray ! important;
+}
+
 button.search {
 	background-color: #d73030;
 	border: none;
