@@ -1,7 +1,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>">Book Report <?php echo $type; ?> (R4) - <?php echo $models['counter']['reports'][$models['type']]['title']; ?></th>
+                    <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>">Book Report <?php echo $models['type']; ?> (R4) - <?php echo $models['counter']['reports'][$models['type']]['title']; ?></th>
                 </tr>
                 <tr>
                     <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>"><?php echo isset($models['counter']['context']) ? $models['counter']['context']['label'] : $models['counter']['user']['name'] ?></th>
