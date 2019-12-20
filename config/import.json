@@ -1,0 +1,57 @@
+{
+	"steps": [
+		"grant",
+		"medias",
+		"load",
+		"metadata",
+		"validate",
+		"adjust",
+		"slice",
+		"zoom",
+		"index",
+		"publish",
+		"facets",
+		"epub"
+	],
+	"types": {
+		"fragment": [
+	        "part",
+	        "title",
+	        "act",
+	        "appendix",
+	        "article",
+	        "book",
+	        "bibliography",
+	        "chapter",
+	        "colophon",
+	        "conclusion",
+	        "contents",
+	        "dedication",
+	        "glossary",
+	        "index",
+	        "introduction",
+	        "letter",
+	        "notes",
+	        "poem",
+	        "preface",
+	        "scene",
+	        "set",
+	        "toc"
+		],
+		"toc": [
+	        "section",
+	        "ssection",
+	        "sssection",
+	        "ssssection",
+	        "sssssection"
+		]
+	},
+	"contents": [
+		[
+			"index",
+			"bibliography",
+			"glossary",
+			"toc"
+		]
+	]
+}

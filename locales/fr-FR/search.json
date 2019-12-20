@@ -1,0 +1,53 @@
+{
+	"search": "Rechercher",
+	"query": "Terme(s)",
+	"results": "Résultats",
+	"in_book": "Vous faites une recherche dans le livre",
+	"refine": "Affiner votre recherche par...",
+	"source_date": "Date de la source",
+	"from": "à partir de",
+	"to": "jusqu'à",
+	"year": "l'année",
+	"include_index": "Inclure les index, glossaires, bibliographies et sommaires",
+	"page_size": "Nombre de résultats par page",
+	"history": {
+		"previous": "Précédente",
+		"next": "Suivante",
+		"replay": "Rejouer",
+		"delete": "Supprimer",
+		"clear":  "Vider",
+		"copy":  "Copier"
+	},
+	"books": "Ouvrages",
+	"facets": {
+		"category": "Catégories",
+		"creator": "Auteurs",
+		"editor": "Éditeurs"
+	},
+	"operators": {
+		"AND": "Toutes les facettes",
+		"OR": "Au moins une facette"
+	},
+	"empty": "Aucun résultat avec ces critères",
+	"scopes": {
+		"facets": "Facettes",
+		"corpus": "Corpus",
+		"history": "Historique"
+	},
+	"tips": {
+		"facets": "Sélectionnez un ou plusieurs critères parmi ceux disponibles",
+		"corpus": "Constituez un corpus de recherche restreint.<br>Sélectionnez vos titres dans les résultats préalables (case à droite) ou dans la liste ci-dessous",
+		"history": "La liste des requêtes est conservée jusqu'à la fermeture du navigateur"
+	},
+	"corpus": {
+		"list": "Liste des titres d'ouvrage",
+		"add": "Ajouter ce titre à ma sélection",
+		"select": "Corpus sélectionné",
+		"full": "complet",
+		"remove": "pour supprimer un titre, cliquez dessus"
+	},
+	"biblio": {
+		"styles": "Liste des styles bibliographiques"
+	},
+	"placeholder": "Sélectionner dans la liste ou utiliser la complétion automatique"
+}

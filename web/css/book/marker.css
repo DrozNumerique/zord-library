@@ -1,0 +1,8 @@
+#markerAnchorLeft, #markerAnchorRight  {
+	position:absolute;
+	top:-1000px;
+	margin:0;
+	color:#3E5067;
+	font-family: sans-serif;
+	font-size: 8px;
+}

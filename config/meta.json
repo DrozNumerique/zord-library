@@ -1,0 +1,77 @@
+{
+	"title": [
+		{
+			"name": "DC.title"
+		}
+	],
+	"creator": [
+		{
+			"name": "DC.creator"
+		},
+		{
+			"name": "author"
+		}
+	],
+	"editor": [
+		{
+			"name": "DC.contributor"
+		}
+	],
+	"subject": [
+		{
+			"name": "DC.subject"
+		},
+		{
+			"name": "keywords"
+		}
+	],
+	"description": [
+		{
+			"name": "DC.description"
+		},
+		{
+			"name": "description"
+		}
+	],
+	"publisher": [
+		{
+			"name": "DC.publisher"
+		}
+	],
+	"rights" : [
+		{
+			"name": "DC.rights"
+		},
+		{
+			"name": "copyright"
+		}
+	],
+	"date": [
+		{
+			"name": "DC.date",
+			"scheme": "W3CDTF"
+		}
+	],
+	"language": [
+		{
+			"name": "DC.language",
+			"scheme": "RFC3066"
+		}
+	],
+	"relation": [
+		{
+			"name": "DC.relation.isPartOf"
+		}
+	],
+	"uri": [
+		{
+			"name": "DC.identifier",
+			"scheme": "URI"
+		}
+	],
+	"ref_url": [
+		{
+			"name": "ref_url"
+		}
+	]
+}

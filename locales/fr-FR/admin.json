@@ -1,0 +1,69 @@
+{
+	"menu": {
+		"import": "Importation",
+		"publish": "Publication",
+		"users": "Utilisateurs",
+		"counter" : "Compteurs"
+	},
+	"tab": {
+		"import": {
+			"title": "Ouvrages numérisés",
+			"input": "Selectionner un fichier de données...",
+			"submit": "Importer",
+			"stop": "Arrêter"
+		},
+		"publish": {
+			"title": "Publication des ouvrages",
+			"list": "Publications...",
+			"submit": "Valider",
+			"context": {
+				"name": "Nom",
+				"title": "Titre",
+				"secure": "Sécurisé",
+				"host": "Domaine",
+				"path": "Chemin",
+				"urls": "URLs"
+			},
+			"books": "Ouvrages",
+			"book": {
+				"id": "ISBN",
+				"title": "Titre"
+			},
+			"select": "Sélectionné",
+			"show": "Consulter en ligne",
+			"epub": "Télécharger l'ePub"
+		},
+		"users": {
+			"title": "Gestion des utilisateurs",
+			"login": "Identifiant",
+			"name": "Nom",
+			"email": "Courriel",
+			"profile": "Profil...",
+			"counter": "Rapport...",
+			"roles": "Rôles",
+			"addresses": "Adresses IP",
+			"role": "Rôle",
+			"context": "Contexte",
+			"start": "Depuis",
+			"end": "Jusqu'à",
+			"ip": "Adresse(s) IP",
+			"mask": "Masque",
+			"include": "Inclure",
+			"exclude": "Exclure",
+			"submit": "Valider",
+			"match": "correspond déjà à l'adresse IP",
+			"mail": {
+				"error": "Echec de l'envoi du mail d'activation",
+				"to": "Destinataire",
+				"activation": "Lien d'activation"
+			}
+		}
+	},
+	"list": {
+		"create": "Ajouter",
+		"delete": "Supprimer",
+		"update": "Modifier",
+		"add": "Ajouter",
+		"remove": "Enlever"
+	}
+}

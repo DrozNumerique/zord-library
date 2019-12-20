@@ -1,0 +1,80 @@
+#ariadne {
+	margin: auto;
+	font-size: 0.9em;
+	top: -20px;
+	height: 23px;
+	position: relative;
+	background: white;
+	line-height: 24px;
+}
+
+#ariadne span {
+	cursor:pointer;
+}
+
+#ariadne .ariadne-content > span:hover {
+	color:#315382;
+}
+
+#ariadne .ariadne-current:before {
+	content :" › ";
+}
+
+#ariadne .ariadne-content {
+	width: 810px;
+	display: inline-block;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+#ariadne .ariadne-previous:before {
+	display: inline-block;
+	position: relative;
+	width: 20px;
+	content: "◀";
+	font-size: 15px;
+	color: #C0392B;
+	top: -7px;
+	text-align: left;
+}
+
+#ariadne .ariadne-next:before {
+	display: inline-block;
+	position: relative;
+	width: 20px;
+	content: "▶";
+	font-size: 15px;
+	text-align: right;
+	color: #C0392B;
+	top: -7px;
+}
+
+#ariadne button {
+	border: 0;
+	padding: 1px 12px;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 0.9em;
+	text-transform: uppercase;
+}
+
+#ariadne button.on {
+	color:#FFFFFF;
+	background-color:#6E97CB;
+}
+
+#ariadne button.off {
+	color:#6C757E;
+	background-color:#DCDCDC;
+}
+
+#ariadne button:hover {
+	color:#FFFFFF;
+	background-color:#C03938;
+}
+
+#ariadne select {
+	color:#FFFFFF;
+	background-color:#6E97CB;
+}

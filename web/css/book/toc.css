@@ -1,0 +1,22 @@
+#toc ul {
+	padding-left: 0;
+	margin-left: 0;
+	list-style-type: none;
+}
+
+#toc li {
+	padding:2px 0 2px 15px;
+	cursor:pointer;
+}
+
+#toc li li li {
+	border-left: 1px solid lightgray;
+}
+
+#toc ul span:hover {
+	background:#D6E8FF;
+}
+
+#toc .part-select {
+	color: #C0392B;
+}

@@ -1,0 +1,53 @@
+{
+	"search": "Search",
+	"query": "Term(s)",
+	"results": "Results",
+	"in_book": "Searching in the book",
+	"refine": "Refine your search with...",
+	"source_date": "Source date",
+	"from": "from",
+	"to": "to",
+	"year": "year",
+	"include_index": "Include indexes, glossaries, bibliographies and tables of content",
+	"page_size": "Results number per page",
+	"history": {
+		"previous": "Previous",
+		"next": "Next",
+		"replay": "Replay",
+		"delete": "Delete",
+		"clear":  "Clear",
+		"copy":  "Copy"
+	},
+	"books": "Books",
+	"facets": {
+		"category": "Categories",
+		"creator": "Authors",
+		"editor": "Editors"
+	},
+	"operators": {
+		"AND": "All facets",
+		"OR": "At least one facet"
+	},
+	"empty": "No result with these criteria",
+	"scopes": {
+		"facets": "Facets",
+		"corpus": "Corpus",
+		"history": "History"
+	},
+	"tips": {
+		"facets": "Select one or more criteria among available facets",
+		"corpus": "Build a restricted corpus.<br>Select your books in previous results (right cell) or in following list",
+		"history": "Requests list is kept until browser close"
+	},
+	"corpus": {
+		"list": "List of book titles",
+		"add": "Add this book to my selection",
+		"select": "Selected corpus",
+		"full": "full",
+		"remove": "to remove a book, click on title"
+	},
+	"biblio": {
+		"styles": "List of bibliographic styles"
+	},
+	"placeholder": "Select options in list or use automatic completion"
+}

@@ -1,0 +1,40 @@
+{
+	"menu": {
+		"home": "Home",
+		"search": "Search",
+		"quotes" : "My quotes",
+		"help" : "Help",
+		"counter" : "Counter",
+		"records" : "Records",
+		"admin" : "Admin",
+		"login": "Login",
+		"logout": "Logout"
+	},
+	"ariadne": {
+		"chapter" : {
+			"previous" : "Previous Chapter",
+			"next" : "Next Chapter"
+		}
+	},
+	"download": {
+		"failed": "Unable to download file"
+	},
+	"upload": {
+		"done": "Upload done",
+		"progress": "Upload in progress"
+	},
+	"process": {
+		"wait": "Waiting for process to start",
+		"init": "Running process",
+		"stopped": "Process stopped",
+		"closed": "Process closed"
+	},
+	"admin": {
+		"context": {
+			"delete": {
+				"confirm": "Confirm context deletion"
+			}
+		}
+	},
+	"zord" : "engined by ꓜꓳꓤꓷ"
+}

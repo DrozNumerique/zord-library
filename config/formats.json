@@ -1,0 +1,6 @@
+{
+	"rdf_bibliontology": {
+		"type": "application/rdf+xml",
+		"docs": "http://bibliontology.com/"
+	}
+}

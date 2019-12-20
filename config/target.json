@@ -1,0 +1,171 @@
+{
+	"Data": {
+		"response": "DATA",
+		"chosen": {}
+	},
+	"Account": {
+		"response": "VIEW",
+		"activate": {
+			"parameters": {
+				"code": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"connection": {
+			"parameters": {
+				"lasthref": "FILTER_VALIDATE_URL"
+			}
+		},
+		"connect": {
+			"parameters": {
+				"login": "FILTER_DEFAULT",
+				"password": "FILTER_FLAG_NONE",
+				"lasthref": "FILTER_VALIDATE_URL"
+			}
+		},
+		"disconnect": {}
+	},
+	"Book": {
+		"response": "VIEW",
+		"home": {
+			"shortcut": "default"
+		},
+		"search": {
+			"shortcut": "search",
+			"parameters": {
+				"criteria": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"show": {
+			"shortcut": "book",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"part": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"records": {
+			"shortcut": "records",
+			"parameters": {
+				"books": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"metadata": {
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"file": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"epub": {
+			"response": "DOWNLOAD",
+			"shortcut": "epub",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"quotes": {
+			"response": "DOWNLOAD",
+			"shortcut": "quotes",
+			"parameters": {
+				"markers": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"reference": {
+			"response": "DATA",
+			"parameters": {
+				"book": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"facets": {
+			"response": "DATA",
+			"parameters": {
+				"key": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"titles": {
+			"response": "DATA"
+		},
+		"unapi": {
+			"shortcut": "unapi",
+			"parameters": {
+				"id": "FILTER_SANITIZE_NUMBER_INT"
+			}
+		},
+		"counter": {
+			"shortcut": "counter",
+			"parameters": {
+				"user": "FILTER_SANITIZE_STRING",
+				"start": "FILTER_SANITIZE_STRING",
+				"end": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"criteria": {
+			"response": "DATA",
+			"parameters": {
+				"criteria": "FILTER_SANITIZE_STRING"
+			}
+		}
+	},
+	"Admin": {
+		"response": "VIEW",
+		"auth": {
+			"connect": true,
+			"role": "admin"
+		},
+		"index": {
+			"shortcut": "admin",
+			"parameters": {
+				"tab": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"import": {
+			"response": "DATA"
+		},
+		"account": {
+			"parameters": {
+				"operation": "FILTER_SANITIZE_STRING",
+				"login": "FILTER_SANITIZE_STRING",
+				"name": "FILTER_SANITIZE_STRING",
+				"email": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"profile": {
+			"parameters": {
+				"user": "FILTER_SANITIZE_STRING",
+				"roles": "FILTER_SANITIZE_STRING",
+				"ips": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"context": {
+			"parameters": {
+				"operation": "FILTER_SANITIZE_STRING",
+				"name": "FILTER_SANITIZE_STRING",
+				"title": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"publish": {
+			"parameters": {
+				"context": "FILTER_SANITIZE_STRING",
+				"urls": "FILTER_SANITIZE_STRING",
+				"books": "FILTER_SANITIZE_STRING"
+			}
+		}
+	},
+	"Process": {
+		"response": "VIEW",
+		"auth": {
+			"connect": true,
+			"role": "admin"
+		},
+		"status": {
+			"response": "DATA",
+			"parameters": {
+				"pid": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"kill": {
+			"response": "DATA",
+			"parameters": {
+				"pid": "FILTER_SANITIZE_STRING"
+			}
+		}
+	}
+}

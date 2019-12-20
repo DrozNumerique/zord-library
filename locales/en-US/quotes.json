@@ -1,0 +1,14 @@
+{
+	"export": "Download",
+	"title" : "Citations",
+	"clear" : "Clear",
+	"label_addnote" : "Add a comment",
+	"label_delcitation" : "Delete",
+	"clear_tooltip" : "Delete all quotes",
+	"styles_tooltip" : "List of citations styles",
+	"export_tooltip" : "Download quotes in Word format",
+	"citation_help" : [
+		"In the book page, select the text with your mouse to quote. Click the \" Citation\" button that appears in the right margin. Add a comment if necessary",
+		"All your quotes will be recorded on this page and you can export them to Word in the style you choose."
+	]
+}

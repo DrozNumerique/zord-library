@@ -1,0 +1,150 @@
+{
+	"home": {
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/shelves.js"
+			}
+		]
+	},
+	"search": {
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/search.css"
+			}
+		],
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/CSL.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/biblio.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/search.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/shelves.js"
+			},
+			{
+				"type": "text/javascript",
+				"template": "/portal/page/search/script/var"
+			}
+		]
+	},
+	"records": {
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/records.js"
+			}
+		]
+	},
+	"quotes": {
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/quotes.css"
+			}
+		],
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/quotes.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/biblio.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/CSL.js"
+			},
+			{
+				"type": "text/javascript",
+				"template": "/portal/page/quotes/script/label"
+			}
+		]
+	},
+	"book": {
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/book/toc.css"
+			},
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/book/tools.css"
+			},
+			{
+				"type": "text/css",
+				"media": "screen",
+				"href": "/library/css/book/temoin.css"
+			},
+			{
+				"type": "text/css",
+				"media": "screen",
+				"href": "/library/css/book/ariadne.css"
+			},
+			{
+				"type": "text/css",
+				"media": "screen",
+				"href": "/library/css/book/marker.css"
+			}
+		],
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"template": "/portal/page/book/script/var"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/book.js"
+			},
+			{
+				"type": "text/javascript",
+				"src": "/library/js/biblio.js"
+			}
+		]
+	},
+	"counter": {
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/counter.js"
+			}
+		]
+	},
+	"admin": {
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/admin.css"
+			}
+		],
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"src": "/library/js/admin/common.js"
+			}
+		]
+	},
+	"error": {
+		"scripts": [
+			{
+				"type": "text/javascript",
+				"template": "/portal/page/error/script/alert"
+			}
+		]
+	}
+}

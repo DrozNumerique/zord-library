@@ -1,0 +1,18 @@
+div.highlight {
+	border-bottom: 1px #CC6459 solid ! important;
+	cursor:pointer ! important;
+	background-color: white ! important;
+	color:#CC6459;
+}
+
+div.highlight:before {
+	content: "◂ ";
+}
+
+div.highlight:after {
+	content: " ▸";
+}
+
+div.print {
+	display:none;
+}

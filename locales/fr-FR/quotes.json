@@ -1,0 +1,14 @@
+{
+	"export" : "Télécharger",
+	"title" : "Citations",
+	"clear" : "Vider",
+	"label_addnote" : "Ajouter une note",
+	"label_delcitation" : "Supprimer la citation",
+	"clear_tooltip" : "Effacer toutes les citations",
+	"styles_tooltip" : "Listes des styles pour les citations",
+	"export_tooltip" : "Télécharger les citations au format Word",
+	"citation_help" : [
+		"Dans la page d'un livre, sélectionnez avec votre souris le texte à citer. Cliquez sur le bouton \"Citation\" qui apparaît dans la marge de droite. Ajoutez un commentaire au besoin.",
+		"Toutes vos citations seront enregistrées sur la présente page et vous pourrez les exporter au format Word dans le style que vous aurez choisi."
+	]
+}

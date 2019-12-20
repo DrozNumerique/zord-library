@@ -1,0 +1,80 @@
+@page {
+    margin: 25mm 0 25mm 0;
+}
+
+@page :first {
+    margin: 5mm 0 25mm 0;
+}
+
+@media print {
+
+    body {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        color: black;
+        margin:0;
+        padding:0;
+    }
+
+    /* --------------------------------- Hide --------------------------------- */
+    #header, #navbar, #footer, #dialogs, #toc, #tools, #markerAnchorLeft, #markerAnchorRight {
+        display:none;
+    }
+
+    /* ---------------------------------- Book ---------------------------------- */
+    .print {
+        display: block !important;
+        border-bottom: 1px solid black;
+        width: 46em;
+        page-break-after: always;
+    }
+    
+    #parts {
+        margin:0 90px;
+        line-height:140%;
+        font-size:15px;
+    }
+
+    /* ---------------------------------- Citations ---------------------------------- */
+    .citation-block {
+        border: 1px solid gray;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .title {
+        margin-bottom: 2px;
+    }
+
+    .page {
+        font-size:0.8em;
+        margin:0 auto;
+    }
+
+    .citation:before {
+        content:"« ";
+        color:gray;
+    }
+    .citation:after {
+        content:" »";
+        color:gray;
+    }
+
+    .link {
+
+    }
+
+    div.tei {
+        width: 45em ! important;
+    }
+
+    /* --------------------------------- switch --------------------------------- */
+
+    .__swicthTemoin:after {
+        display:none ! important;
+    }
+
+    .__swicthTemoin:before {
+        display:none ! important;
+    }
+
+}

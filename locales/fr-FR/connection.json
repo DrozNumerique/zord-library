@@ -1,0 +1,7 @@
+{
+	"connect" : "Connexion",
+	"login" : "Identifiant : ",
+	"password" : "Mot de passe : ",
+	"confirm" : "Confirmation : ",
+	"forgot" : "Oublié ?"
+}

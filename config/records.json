@@ -1,0 +1,5 @@
+{
+	"MODS":      "modsCollection",
+	"MARC-XML": ["modsCollection","mods2marcxml"],
+	"UNIMARC" : ["modsCollection","mods2marcxml","marcxml2unimarc"]
+}

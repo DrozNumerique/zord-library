@@ -1,0 +1,89 @@
+{
+	"BookEntity": {
+		"table": "books",
+		"fields": [
+			"ean",
+	        "title",
+	        "subtitle",
+	        "creator",
+	        "editor",
+	        "category",
+	        "number",
+	        "date",
+	        "s_from",
+	        "s_to"
+        ],
+        "key": "ean",
+        "join": {
+        	"BookHasContextEntity": ["ean","book"],
+        	"BookHasPartEntity": ["ean","book"]
+        }
+    },
+	"BookHasPartEntity": {
+		"table": "book_has_part",
+		"fields": [
+			"book",
+	        "part",
+        	"count",
+        	"data"
+        ],
+        "key": [
+        	"book",
+        	"part"
+        ]
+    },
+	"BookHasContextEntity": {
+		"table": "book_has_context",
+		"fields": [
+	        "book",
+	        "context",
+	        "status"
+        ],
+        "key": [
+        	"book",
+        	"context"
+        ]
+    },
+	"BookHasFacetEntity": {
+		"table": "book_has_facet",
+		"fields": [
+	        "book",
+	        "facet",
+	        "value"
+        ],
+        "key": [
+        	"book",
+        	"facet",
+        	"value"
+        ],
+        "join": {
+        	"BookHasContextEntity": ["book","book"]
+        }
+    },
+	"UserHasQueryEntity": {
+		"table": "user_has_query",
+		"fields": [
+	        "user",
+	        "context",
+	        "book",
+	        "part",
+	        "when",
+	        "type"
+        ]
+    },
+	"ProcessEntity": {
+		"table": "process",
+		"fields": [
+	        "pid",
+	        "class",
+	        "user",
+	        "lang",
+	        "params",
+	        "start",
+	        "last",
+	        "step",
+	        "progress"
+        ],
+        "key": "pid"
+    }
+}

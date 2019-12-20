@@ -1,0 +1,10 @@
+{
+	"instances": "occurence(s)",
+	"source_date" : "Source",
+	"authors" : "Auteurs",
+	"title" : "Titre",
+	"editors" : "Éditeurs",
+	"publication_date" : "Publié",
+	"title_page": "Page de titre",
+	"chapter": "Chapitre"
+}

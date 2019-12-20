@@ -1,0 +1,23 @@
+body {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 15px;
+	margin:20px;
+	margin-left:40px;
+	padding:20px;
+}
+
+div.p[data-rendition="#noepub"] {
+	display: none ! important;
+}
+
+/*
+div.pb[id]:not([data-rend="temoin"]):before {
+	position:absolute;
+	left:20px;
+	display:inline ! important;
+}
+
+div.p > div.pb[id]:not([data-rend="temoin"]):after {
+	content:"|";
+}
+*/

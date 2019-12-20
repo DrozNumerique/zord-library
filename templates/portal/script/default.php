@@ -1,0 +1,6 @@
+		var DEFAULT_CSL_STYLE          = '<?php echo DEFAULT_CSL_STYLE; ?>';
+		var DEFAULT_SEARCH_SCOPE       = '<?php echo DEFAULT_SEARCH_SCOPE; ?>';
+		var DEFAULT_SEARCH_OPERATOR    = '<?php echo DEFAULT_SEARCH_OPERATOR; ?>';
+		var DEFAULT_SEARCH_TYPE        = '<?php echo DEFAULT_SEARCH_TYPE; ?>';
+		var DEFAULT_SEARCH_SOURCE_FROM = '<?php echo DEFAULT_SEARCH_SOURCE_FROM; ?>';
+		var DEFAULT_SEARCH_SOURCE_TO   = '<?php echo DEFAULT_SEARCH_SOURCE_TO; ?>';

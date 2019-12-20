@@ -1,0 +1,149 @@
+{
+	"steps": {
+		"grant": "Vérification des accès",
+		"medias": "Copie des médias inclus",
+		"metadata": "Recupération des métadonnées",
+		"load": "Chargement du document",
+		"validate": "Validation du document",
+		"adjust": "Ajustement du document",
+		"slice": "Découpage du document",
+		"zoom": "Génération des tuiles",
+		"index": "Indexation du document",
+		"publish": "Publication dans le contexte",
+		"facets": "Mise à jour des listes de valeurs indexées",
+		"epub": "Création de la version ePub",
+		"status": {
+			"begin": "début",
+			"OK": "fait",
+			"KO": "échec",
+			"unknown": "Appel à une opération inconnue"
+		}
+	},
+	"books": {
+		"nodata": "Pas de données sur les ouvrages à importer",
+		"start": "Début de traitement pour ${X} ouvrages(s)",
+		"end": "Fin de traitement pour ${X} ouvrages(s) (${Y} complet(s))",
+		"book": "Ouvrage",
+		"updated": "mis à jour",
+		"unchanged": "inchangé",
+		"titlePage": "Page de titre"
+	},
+	"messages": {
+		"line": "Ligne",
+		"grant": {
+			"error": {
+				"noadmin": "Cet ouvrage est déjà publié dans le contexte ${context} (${name}) dont vous n'êtes pas administrateur"
+			}
+		},
+		"medias": {
+			"info": {
+				"nomedia": "Pas de média pour cet ouvrage dans cette livraison"
+			},
+			"error": {
+				"copy": "Impossible de copier ${source} vers ${target}"
+			}
+		},
+		"load": {
+			"warning": {
+				"missing": "Pas de fichier XML/TEI"
+			}
+		},
+		"metadata": {
+			"info": {
+				"from": {
+					"header": "Depuis l'en-tête du fichier XML/TEI"
+				}
+			},
+			"error": {
+				"missing": "Il manque les métadonnées de cet ouvrage"
+			}
+		},
+		"validate": {
+			"error": {
+				"nodata": "Données incomplètes",
+				"id": "Mauvais format pour l'attribut xml:id [${id}]",
+				"type": "'${type}' n'est pas un type valide",
+				"ref": "Référence vide pour [${target}]",
+				"missing": "Il manque la ressource suivante : ",
+				"nested": "La balise <ref target='${nested}'> est incluse dans la balise <ref target='${parent}'>",
+				"page": {
+					"temoin": "Mauvais attribut (ed) pour une page 'temoin' : ",
+					"id": "Il manque un identifiant (xml:id) pour une page : ",
+					"number": "Il manque un numero (n) pour une page : "
+				},
+				"note": {
+					"page": "Il manque un numéro de page préalable pour une note : ",
+					"id": "Il manque un identifiant (xml:id) pour une note : ",
+					"name": "Il manque un nom (n) pour une note : "
+				}
+			}
+		},
+		"adjust": {
+			"error": {
+				"nodata": "Données incomplètes",
+				"noxsl": "Pas de processeur XSLT pour "
+			}
+		},
+		"slice": {
+			"error": {
+				"nodata": "Données incomplètes",
+				"notitle": "Il manque un titre",
+				"embed": "Problème d'imbrication avec l'élément [${type}] : ${title}"
+			}
+		},
+		"zoom": {
+			"info": {
+				"none": "Pas de découpage en tuiles requis",
+				"processor": "Traitement d'images par ",
+				"convert": "Commande de conversion : "
+			},
+			"error": {
+				"process": "Impossible d'enregistrer le descripteur de tuiles'"
+			}
+		},
+		"index": {
+			"error": {
+				"nodata": "Données incomplètes",
+				"delete": "Impossible de supprimer les données existantes",
+				"add": "Impossible d'ajouter les données de ${$part}"
+			}
+		},
+		"publish": {
+			"info": {
+				"status": {
+					"yes": "OUI",
+					"no": "NON",
+					"new": "NOUVEAU"
+				},
+				"none": "Rien à publier"
+			}
+		},
+		"epub": {
+			"info": {
+				"noepub": "Pas de déclinaisons ePub",
+				"ok": "Aucune erreur ou avertissement",
+				"cover": "Couverture : "
+			},
+			"error": {
+				"open": "Imposible d'ouvrir le fichier ${file}",
+				"close": "Imposible de fermer le fichier ${file}",
+				"cover": {
+					"missing": "Pas de couverture fournie",
+					"MAX": {
+						"WIDTH": "Largeur trop grande",
+						"HEIGHT": "Hauteur trop grande"
+					},
+					"MIN": {
+						"WIDTH": "Largeur trop petite",
+						"HEIGHT": "Hauteur trop petite"
+					}
+				}
+			}
+		},
+		"facets": {
+			"info": {
+				"update": "Lancement de la mise à jour des listes de valeurs pour les facettes de recherche..."
+			}
+		}
+	}
+}

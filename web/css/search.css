@@ -1,0 +1,404 @@
+#searchPanel {
+	font-size: 0.8em;
+	width: 850px;
+	margin-bottom:50px;
+}
+
+#searchControls, #searchRefine {
+	margin: 7px;
+}
+
+#searchControls div.caption {
+	margin-top: 10px;
+	color: #C03938;
+}
+
+#searchRefine > label {
+	cursor: pointer;
+}
+
+#searchRefine > label:after {
+	color: #C03938;
+}
+
+#searchRefine.opened > label:after {
+	content: '▲';
+}
+
+#searchRefine.closed > label:after {
+	content: '▼';
+}
+
+div.scope {
+	display: table-cell;
+	color: gray;
+	border: solid 1px gray;
+	border-bottom: 0;
+	padding: 5px;
+	margin: 5px;
+}
+
+div.scope.current {
+	color: white;
+	background: gray;
+}
+
+#search_scope div.scope {
+	border-left: 0;
+}
+
+#search_scope div.scope:first-child {
+	border-left: solid 1px gray;
+}
+
+div.block {
+	display: none;
+	margin: auto;
+	padding: 10px;
+	border: solid 1px gray;
+}
+
+div.block.current {
+	display: block;
+}
+
+div.block > div {
+	margin-top: 10px;
+}
+
+#search_source_from,
+#search_source_to {
+	padding: 5px;
+	border:1px solid gray;
+}
+
+#search_source_from:focus,
+#search_source_to:focus  {
+	outline:0;
+}
+
+#search_source {
+	margin-top: 15px;
+}
+
+#search_type {
+	margin-top: 10px;
+}
+
+#search_size {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+#search_history {
+	margin-top:15px;
+	padding: 5px;
+	width: 90%;
+	border: solid 1px gray;
+}
+
+#search_scope {
+	display: table-row;
+}
+
+#search_facets {
+	list-style:none;
+	margin:0;
+	padding:0;
+	display: table;
+	width: 100%;
+}
+
+#search_facets li {
+	display: block;
+}
+
+#search_button {
+	text-align: center;
+}
+
+#searchSize {
+	margin-top: 15px;
+	width: 6em;
+}
+
+#books {
+	list-style:none;
+	margin:0;
+	padding:0;
+	display: table;
+	width: 100%;
+}
+
+#books > li {
+	padding: 5px;
+	cursor: zoom-out;
+	border: 1px gray dashed;
+	border-bottom: 0;
+	margin-left: 20px;
+	color: black;
+}
+
+#books > li:first-child {
+	margin-top: 10px;
+}
+
+#books > li:last-child {
+	border-bottom: 1px gray dashed ! important;
+}
+
+.table {
+	width: 90%;
+	display: table;
+}
+
+.table > div {
+	display: table-row;
+}
+
+.table > div > * {
+	display: table-cell;
+}
+
+#searchHistoryPanel {
+	width: 100%;
+}
+
+#searchHistoryDisplay {
+	color: white !important;
+	border: solid 1px;
+	padding: 5px 0px 15px 0px;
+	width: calc(100% - 3px);
+	height: 10em;
+	resize: vertical;
+	border-radius: 0;
+	text-align: left;
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance: none;
+	background-color:#6E97CB;
+}
+
+#searchHistoryDisplay > div {
+	text-align: center;
+}
+
+#searchHistoryDisplay > li {
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+#searchHistoryDisplay > li > ul > li {
+	margin-left: -20px;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
+#searchHistoryControls {
+	width: 100%;
+}
+
+#searchHistoryControls > div > div {
+	text-align: center;
+	padding: 5px;
+	color: white;
+	width: 16.66%;
+	background-color:#6E97CB;
+	cursor:pointer;
+	border: solid 1px;
+}
+
+td.search {
+	color: white;
+}
+
+td.search.selected {
+	color: black !important;
+}
+
+/* -------- instances -------- */
+
+/* header */
+.instances_header {
+	width: 850px;
+	position: relative;
+	bottom: -10px;
+	display:none;
+	margin:auto;
+	border-bottom: 1px solid black;
+	font-size: .8em;
+}
+
+.instances_header span {
+	display: table-cell;
+	color: black;
+	padding: 3px;
+	text-align: center;
+	border-left:1px solid white;
+}
+
+.instances > section {
+    width: 850px;
+    margin: auto;
+}
+
+/* title book */
+.instances > section > header {
+	text-align: center;
+	margin: 1ex 0 0.5ex 0;
+}
+
+.instances h1 {
+	display:table;
+	width: 850px;
+	margin:auto;
+	font-weight:normal;
+	font-size:16px;
+}
+
+.instances h1 > span {
+	font-size: 0.8em;
+	padding: 3px;
+	display:table-cell;
+	vertical-align:middle;
+	color:#6A737E;
+	border: 1px solid lightgray;
+}
+
+/* title chapter */
+table tbody.occurrences td{
+    color:#161616;
+}
+
+td.chapter{
+    border-top:0;
+    border-bottom:0;
+}
+
+.parts .part header,
+.matches .part header {
+	width:850px;
+	display:block;
+	margin:auto;
+}
+
+.parts .part header h3,
+.matches .part header h3 {
+	text-align: left;
+	font-size: 12px;
+	font-weight:normal;
+	padding: 0px;
+	margin:0px;
+}
+
+.matches .part header h3 span.instances {
+	cursor:pointer;
+	color:#C03938
+}
+
+.matches .part .match {
+	margin-left: 5px;
+	color:#C03938;
+}
+
+.matches .part {
+	width: 850px;
+	overflow: hidden;
+	margin:auto;
+}
+
+/* texte occurrences */
+.matches .snip {
+	white-space: nowrap;
+	margin-top:5px;
+	font-size: 0.9em;
+	cursor:pointer;
+	color:#6C747F;
+	width: 3000px;
+	margin-left: -1012px;
+	padding: 3px 0;
+}
+
+.matches .snip > .left {
+	width: 1496px;
+	display: inline-block;
+	text-align: right;
+}
+
+.matches .snip > .right {
+	width: 1500px;
+	display: inline-block;
+	text-align: left;
+}
+
+.matches .snip b {
+	margin-left:0.25em;
+	color: #C03938;
+}
+
+.matches .match .tooltip {
+	visibility: hidden;
+	width: 830px;
+	height: 40px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	margin-top: -87px;
+	padding: 10px;
+	position: absolute;
+	display: block;
+	background: white;
+	white-space: normal;
+	border: 1px solid #6E97CB;
+	transition: all .01s linear .3s;
+	-webkit-transition: all .01s linear .3s;
+	-moz-transition: all .01s linear .3s;
+	-ms-transition: all .01s linear .3s;
+}
+
+.matches .snip .tooltip:after {
+	position: absolute;
+	bottom: -8px;
+	left: 50%;
+	margin-left: -8px;
+	width: 0;
+	border-top: 8px solid #6E97CB;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+	content: " ";
+	font-size: 0;
+	line-height: 0;
+}
+
+.matches .snip:hover .tooltip {
+	visibility:visible;
+}
+
+#fetch {
+	margin: 20px;
+}
+
+#first, #previous, #next, #last {
+	color: gray;
+	cursor: pointer;
+}
+
+#first.disabled, #previous.disabled, #next.disabled, #last.disabled {
+	color: lightgray;
+	cursor: default;
+}
+
+#resultSet {
+	color: black;
+}
+
+button.search {
+	background-color: #d73030;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	padding: 10px;
+	text-transform: uppercase;
+	font-size: 1em;
+}

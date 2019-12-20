@@ -1,0 +1,57 @@
+#tools {
+	position: fixed;
+	top:0;
+	margin-top:126px;
+	right: 0;
+	width: 40px;
+	height:100%;
+	background:#f4f4f4;
+	z-index:10000;
+	border-left: 1px solid rgb(187, 184, 184);
+	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#tools i,
+#tools a {
+	display: inline-block;
+	margin:5px auto;
+	font-size: 25px;
+	cursor: pointer;
+	color: #6E97CB;
+	text-decoration: none;
+}
+
+#tools i > i,
+#tools a > i {
+	font-size: 0.4em ! important;
+	left: -2px;
+	color: orange;
+}
+
+#tools i:hover,
+#tools a:hover,
+#tools i:hover > i,
+#tools a:hover > i {
+	color: #C03938;
+}
+
+#tools i.__disabled,
+#tools a.__disabled,
+#tools i.__disabled > i,
+#tools a.__disabled > i {
+	color: gainsboro;
+}
+
+#tools i.__activated,
+#tools a.__activated,
+#tools i.__activated > i,
+#tools a.__activated > i {
+	color: #C03938;
+}
+

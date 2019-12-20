@@ -1,0 +1,28 @@
+{
+	"search_back" : "Retour aux résultats",
+	"misprint" : "Signaler une coquille",
+	"cite" : "Citer ce livre",
+	"references" : "Cacher/afficher les références",
+	"get_book" : "Trouver ce livre",
+	"quote" : "Sélectionnez le texte à citer puis cliquez ici",
+	"page" : "page",
+	"line" : "ligne",
+	"section" : "section",
+	"message": {
+		"unknown": "Pas d'ouvrage correspondant à [${isbn}]",
+		"noreader": {
+			"anyBook": "Vous n'avez pas accès à lecture des ouvrages de ce corpus",
+			"anyContext": "Vous n'avez pas accès à lecture de cet ouvrage",
+			"thisContext": "Vous n'avez pas accès à lecture de cet ouvrage dans ce contexte"
+		}
+	},
+	"dialogs": {
+		"comment" : "Enregistrer la citation",
+		"addnote" : "Ajouter une note",
+		"cancel" : "Annuler",
+		"ok" : "Ok",
+		"add_citation" : "L'enregistrement à été ajouté à votre page de citations",
+		"bug" : "Signaler une coquille",
+	    "bug_save" : "La coquille à bien été signalée à l'éditeur. Merci !"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"activate": "Activate account",
+	"wrong_confirm": "Wrong password confirmation",
+	"auth_failed": "Authentication failed",
+	"mail_sent": "Activation mail sent",
+	"mail_error": "Failed to sent activation mail",
+	"unknown_user": "Unknown user",
+	"click_here": "Click here to activate your Zord account",
+	"copy_paste": "Copy/Paste folowing URL in your browser to activate your Zord account"
+}

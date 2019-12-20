@@ -1,0 +1,1027 @@
+div.tei div.text div:not(.openseadragon-container), div.footnote-note div {
+	display:inline;
+}
+
+div.tei *[data-rendition="#right"] {
+	text-align: right;
+}
+
+div.tei *[data-rendition="#left"] {
+	text-align: left;
+}
+
+div.tei *[data-rendition="#center"] {
+	text-align: center;
+}
+
+/* -------------------------------- ab -------------------------------- */
+
+div.ab {
+	display:block ! important;
+	text-align: center;
+	margin: 1em auto;
+}
+
+div.ab > div.lb {
+	display: block ! important;
+	margin-top: -0.9em ! important;
+}
+
+/* -------------------------------- addrLine -------------------------------- */
+
+div.addrLine {
+	display:block ! important;
+}
+
+/* --------------------------------- address --------------------------------- */
+
+div.address {
+	font-style: normal;
+	line-height: 110%;
+}
+
+/* -------------------------------- argument -------------------------------- */
+
+div.argument {
+
+}
+/*
+[data-rend]
+	[data-0] => rights
+*/
+
+/* ---------------------------------- bibl ---------------------------------- */
+
+div.bibl {
+	display:block ! important;
+	text-indent:-25px;
+	padding-left:25px;
+	margin:3px 0;
+}
+
+/* --------------------------------- byline --------------------------------- */
+
+div.byline {
+	text-indent: 0;
+	display:block ! important;
+}
+
+/* --------------------------------- caption --------------------------------- */
+
+div.caption {
+	display:block ! important;
+	text-align: center;
+	margin-top:0.2em;
+	font-size: 0.9em;
+}
+
+/* ---------------------------------- date ---------------------------------- */
+
+div.date {
+
+}
+
+/* ---------------------------------- desc ---------------------------------- */
+
+div.desc {
+	display:block ! important;
+	text-align: center;
+	margin-top:0.2em;
+	margin-bottom: 2.2em;
+	font-size: 0.9em;
+}
+
+/* ----------------------------------- div ----------------------------------- */
+
+div.div[data-type="section"] {
+	margin: 25px 0;
+}
+
+/*
+[data-type]
+	[data-0] => chapter
+	[data-1] => section
+	[data-2] => index
+	[data-3] => article
+	[data-4] => part
+
+[data-rendition]
+		[data-0] => #div_theatre_dialog
+*/
+
+/* -------------------------------- docAuthor -------------------------------- */
+
+div.docAuthor {
+	display:block ! important;
+}
+
+/* ------------------------------- docEdition ------------------------------- */
+
+div.docEdition {
+
+}
+
+/* ------------------------------- docImprint ------------------------------- */
+
+div.docImprint > div.date {
+	display:block ! important;
+}
+
+/* -------------------------------- docTitle -------------------------------- */
+
+div.docTitle {
+	display:block ! important;
+}
+
+/* ---------------------------------- emph ---------------------------------- */
+
+div.emph {
+	font-style: oblique;
+}
+
+/* -------------------------------- epigraph -------------------------------- */
+
+div.epigraph {
+	text-align: right;
+	display: block ! important;
+	margin: 1em 0 2em auto;
+	max-width: 50%;
+	font-size: 0.8em;
+}
+
+div.epigraph div.p {
+	text-indent: 0;
+	margin: 0;
+	text-align: right;
+}
+
+/* --------------------------------- figure --------------------------------- */
+
+div.figure {
+	display: block ! important;
+	margin: auto;
+	text-align: center;
+}
+div.figure[data-rend="zoom"] {
+	width: 50em;
+	height: 400px;
+	background: whitesmoke;
+}
+
+div.figure[data-rend="zoom"] .navigator {
+	background: gainsboro ! important;
+	border: none ! important;
+}
+
+div.figure[data-rend="zoom"] .displayregion {
+	border: 1px solid #990000 ! important;
+}
+
+div.figure[data-rend="zoom"] img {
+	cursor: pointer ! important;
+	margin-left: 5px ! important;
+}
+
+/* ------------------------------ floatingText ------------------------------ */
+
+div.floatingText {
+	display:block ! important;
+	outline:1px solid orange;
+}
+/*
+[data-rend]
+	[data-0] => div
+	[data-1] => center
+	[data-2] => div_common_letter
+	[data-3] => div_theatre_stage_direction
+	[data-4] => div_section_suptitle
+
+[data-type]
+	[data-0] => div_common_pseudo_footnote
+*/
+/* --------------------------------- foreign --------------------------------- */
+
+div.foreign {
+
+}
+
+/* ---------------------------------- gloss ---------------------------------- */
+
+div.gloss {
+	display:inline ! important;
+	background:#ccd8ea;
+	padding:0 5px;
+	font-size:0.8em;
+	border-radius:4px;
+}
+
+/* --------------------------------- graphic --------------------------------- */
+
+div.graphic {
+
+}
+
+/* ---------------------------------- head ---------------------------------- */
+
+div.head,
+div.head[data-rendition="#chaptertitle"],
+div.head[data-type="prepagetitle"],
+div.head[data-type="prepageTitle"],
+div.head[data-type="prpagetitle"] {
+	display:block ! important;
+	color: #32455D;
+	line-height: 1.6em;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 130%;
+	padding-top: 1em;
+	margin-top: 0;
+	margin-bottom: 0.8em;
+	text-align: center;
+}
+
+div.head[data-rendition="#sectiontitle"] {
+	display:block ! important;
+	color: #32455D;
+	line-height: 1.6em;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 130%;
+	padding-top: 1em;
+	margin-bottom: 0.5em;
+	margin-top: 0;
+}
+
+div.head[data-rendition="#ssectiontitle"] {
+	display:block ! important;
+	color: #32455D;
+	line-height: 1.6em;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 110%;
+	padding-top: 0.6em;
+	margin-bottom: 0.3em;
+	margin-top: 0;
+	font-weight:bold;
+}
+
+div.head[data-rendition="#sssectiontitle"] {
+	margin-top:0.8em;
+	font-style: italic;
+	font-size:1.1em;
+	text-indent:15px;
+	padding-top: 0.6em;
+	margin-bottom: 0.3em;
+}
+div.head[data-rendition="ssssectiontitle"] {
+	margin-top:0.8em;
+	font-style: italic;
+	font-size:1em;
+	text-indent:25px;
+	padding-top: 0.6em;
+	margin-bottom: 0.3em;
+}
+div.head[data-rendition="sssssectiontitle"] {
+	margin-top:0.8em;
+	font-style: italic;
+	font-size:1em;
+	text-indent:30px;
+	padding-top: 0.6em;
+	margin-bottom: 0.3em;
+}
+
+div.div[data-type="part"] > div.head {
+	display:block ! important;
+	color: #32455D;
+	line-height: 1.6em;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 200%;
+	padding-top: 1em;
+	margin-top: 0;
+	margin-bottom: 2em;
+	text-align: center;
+}
+/*
+[data-type]
+	[data-0] => prepagetitle
+	[data-1] => chapter_number
+	[data-2] => chapter_subtitle
+	[data-3] => short
+	[data-4] => section_subtitle
+	[data-5] => prepageTitle
+	[data-6] => chapter_suptitle
+	[data-7] => sub
+	[data-8] => prpagetitle
+	[data-9] => chapterTitle
+
+[data-rendition]
+	[data-0] => #chaptertitle
+	[data-1] => #sectiontitle
+	[data-2] => #ssectiontitle
+
+	[data-3] => #sssectiontitle
+	[data-4] => #ssssectiontitle
+	[data-5] => #div_theatre_dialog_title
+	[data-6] => #sssssectiontitle
+*/
+/* ----------------------------------- hi ----------------------------------- */
+
+div.hi[data-rend="sup"], div.hi[data-rendition="sup"] {
+	vertical-align: super;
+	font-size: smaller;
+	line-height: normal;
+}
+
+div.hi[data-rend="sub"] {
+	vertical-align: sub;
+	font-size: smaller;
+	line-height: normal;
+}
+
+div.hi[data-rend="b"] {
+	font-weight:bold;
+}
+
+div.hi[data-rend="sc"] {
+	font-variant:small-caps;
+}
+
+div.hi[data-rend="small"] {
+	font-size:0.8em;
+}
+
+div.hi[data-rend="big"] {
+	font-size:1.2em;
+}
+
+div.hi[data-rend="underline"] {
+	text-decoration:underline;
+}
+
+div.hi[data-rend="i"], div.hi[data-rendition="i"] {
+	font-style: italic;
+}
+
+div.hi[data-rend="n"] {
+
+}
+/*
+[data-rend]
+	[data-0] => sup
+	[data-1] => b
+	[data-2] => sc
+	[data-3] => sub
+	[data-4] => n
+	[data-5] => small
+	[data-6] => i
+	[data-7] => underline
+	[data-8] => big
+*/
+/* ---------------------------------- item ---------------------------------- */
+
+div.item {
+	display: list-item ! important;
+	list-style-position: outside;
+	margin-left: 33px;
+}
+
+div.item > div.p {
+	text-indent:0;
+}
+
+/* ------------------------------------ l ------------------------------------ */
+
+div.l {
+	display: block ! important;
+	max-width: 100%;
+	text-indent: -130px;
+	padding-left: 130px;
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAYCAYAAADOMhxqAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYIBggYunC3+QAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAA1SURBVDjLY/z///9/BihgZGRkwAaQlDAwMZAIWAiZiA5ItmFUw6iGUQ301IA1T6OXHhSVGgAgbQ0tkvTZNQAAAABJRU5ErkJggg==');
+	background-repeat: no-repeat;
+	background-position: 118px 1.78em;
+	background-size: 0.5em;
+	line-height: 1.5em;
+}
+
+div.l:before {
+	content:"";
+	text-indent:0;
+	width:45px;
+	display:inline-block ! important;
+	font-size:0.8em;
+	color:gray;
+}
+
+div.l[data-rend="margin"]:before {
+	content:attr(data-n);
+}
+
+div.l[data-rend="margin"]:before {
+	content:attr(data-n);
+}
+
+div.l div.gloss {
+	position:absolute;
+	display:block ! important;
+	font-size:0.8em;
+	width:24em;
+	left:58%;
+	background:#ccd8ea;
+	padding:5px;
+	line-height:1.3em;
+	border-radius:8px;
+	margin-top: -26px;
+	text-indent:0;
+}
+
+@media screen and (max-width: 1135px) {
+	div.l div.gloss {
+		width: 18em;
+	}
+}
+
+/* ---------------------------------- label ---------------------------------- */
+
+div.label {
+
+}
+/*
+[data-rendition]
+	[data-0] => #sectionlabel
+*/
+
+/* ----------------------------------- lb ----------------------------------- */
+
+div.lb {
+	display:inline ! important;
+}
+
+div.p > div.lb:after {
+	content: "|";
+	color:gray;
+}
+
+div.lb[data-rend="margin"]:after {
+	color:#0043AB;
+}
+
+div.lb[data-rend="margin"]:before {
+	content: " " attr(data-n);
+	color: gray;
+	font-family:Arial, sans-serif;
+	font-size:10px;
+	font-style:normal;
+	text-indent:0;
+	margin-top:2px;
+}
+
+/* ----------------------------------- lg ----------------------------------- */
+
+div.lg {
+	display:block ! important;
+	margin:8px 0px 15px 0px;
+}
+
+/* ---------------------------------- list ---------------------------------- */
+
+div.list {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: square inside url('data:image/gif;base64,R0lGODlhBQAKAIABAAAAAP///yH5BAEAAAEALAAAAAAFAAoAAAIIjI+ZwKwPUQEAOw==');
+}
+
+div.list[data-type="ordered"] {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: none inside;
+	position: relative;
+}
+
+div.list[data-type="toc"],
+div.list[data-type="index"],
+div.list[data-type="gloss"] {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: none inside;
+	margin-bottom:1em;
+}
+
+div.list[data-type="gloss"] > div.label {
+	margin-top: 10px;
+	display: block ! important;
+}
+
+div.list[data-type="toc"] div.list,
+div.list[data-type="index"] div.list,
+div.list[data-type="gloss"] div.list {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: none inside;
+}
+
+div.div[data-type="toc"] div.list,
+div.div[data-type="index"] div.list {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: none inside;
+}
+
+/*
+[data-type]
+	[data-0] => index
+	[data-1] => toc
+	[data-2] => gloss
+	[data-3] => simple
+
+[data-rend]
+	[data-0] => l
+*/
+/* -------------------------------- listBibl -------------------------------- */
+
+div.listBibl {
+	display:block ! important;
+	padding:15px 0;
+}
+
+/* ---------------------------------- note ---------------------------------- */
+
+div.tei div.text div.note > * {
+	display: none ! important;
+}
+
+div.note {
+	position:relative;
+	font-size:0.9em;
+	line-height:1.2em;
+}
+
+div.note:before {
+	color:gray;
+	content:attr(data-n);
+	cursor:pointer;
+	position:relative;
+	top:-0.6em;
+	font-size:0.8em;
+}
+
+/*
+[data-type]
+	[data-0] => abstract
+	[data-1] => image
+	[data-2] => ref
+*/
+/* ----------------------------------- p ------------------------------------ */
+
+div.p {
+	display:block ! important;
+	margin:0;
+	text-indent: 15px;
+	text-align: justify;
+}
+
+div.p[data-rendition="#center"] {
+	text-align: center;
+}
+
+div.p[data-rendition="#right"] {
+	text-align: right;
+}
+
+div.p[data-rendition="#left"] {
+	text-align: left;
+}
+
+/* ----------------------------------- pb ----------------------------------- */
+
+div.pb {
+	padding:0;
+	margin:0;
+	font-size:10px;
+	font-style:normal;
+	text-indent:0;
+	font-weight:normal;
+}
+
+div.pb[id] {
+	margin-top: 20px;
+	color:gray;
+}
+
+div.pb[id]:before {
+	content: "p. " attr(data-n) "";
+	cursor:pointer;
+}
+
+div.pb[data-rend="temoin"] {
+	display: inline ! important;
+	color:#a40000;
+}
+
+div.pb[data-rend="temoin"]:before {
+	content: "[" attr(data-n) "]" ! important;
+}
+
+div.div[data-type="section"].noopAlone {
+	display:inline ! important;
+}
+
+div.div[data-type="section"].noopVariant {
+	display:block ! important;
+}
+
+div.div[data-type="section"].alone {
+	display:inline ! important;
+}
+
+div.div[data-type="section"].variant {
+	display:block ! important;
+}
+
+div.list[data-type="ordered"] > div.item:before {
+	display: inline-block ! important;
+	text-align: right;
+	position: absolute;
+	width: 80px;
+	margin-left: -87px;
+	content:attr(data-n);
+}
+
+div.pb[id][data-visavis="noopAlone"], div.pb[id][data-visavis="alone"] {
+	display:inline ! important;
+}
+
+div.pb[id][data-visavis="noopVariant"], div.pb[id][data-visavis="variant"] {
+	display:block ! important;
+}
+
+div.pb[id][data-visavis="noopAlone"]:before, div.pb[id][data-visavis="alone"]:before {
+	position:absolute;
+	right:60px;
+	display:inline ! important;
+}
+
+div.pb[id][data-visavis="noopVariant"]:before, div.pb[id][data-visavis="variant"]:before {
+	position:static;
+	display:block ! important;
+	text-align: center;
+}
+
+div.p > div.pb[id][data-visavis="noopAlone"]:after, div.p > div.pb[id][data-visavis="alone"]:after {
+	content:"|";
+}
+
+/* ---------------------------------- quote ---------------------------------- */
+
+div.quote {
+	display:block ! important;
+	padding-left:45px;
+	line-height:1.3em;
+	font-size:0.91em;
+	margin:10px 0;
+}
+
+div.quote div.p {
+	text-indent: 0;
+}
+/*
+[data-type]
+	[data-0] => div_common_citation
+
+[data-rendition]
+	[data-0] => #sectionlabel
+*/
+/* ----------------------------------- ref ----------------------------------- */
+
+div.ref {
+	text-decoration: none;
+	border-bottom: dotted 1px #999;
+	color: #0D3996;
+	cursor:pointer;
+	font-size: 15px;
+}
+
+div.ref[data-rendition="#notecall #app"], div.ref[data-rend="sup"], div.ref[data-rendition="sup"] {
+	border-bottom: none;
+	cursor:pointer;
+	position:relative;
+	top:-0.6em;
+	font-size:0.8em;
+}
+
+/* ----------------------------------- seg ----------------------------------- */
+
+div.seg {
+
+}
+
+div.seg[data-rendition="#interval"] div.note:before {
+	display:none ! important;
+}
+
+/*
+[data-rend]
+	[data-0] => b
+
+[data-rendition]
+	[data-0] => #index_book_page
+	[data-1] => #interval
+	[data-2] => #span_original_text_reference
+	[data-3] => #span_theatre_stage_direction
+	[data-4] => #span_character
+*/
+
+/* ---------------------------------- space --------------------------------- */
+
+div.space {
+
+}
+
+/* ---------------------------------- table ---------------------------------- */
+
+div.tei table {
+	border-spacing: 0.7em;
+	width: 100%;
+	margin-bottom: 1em;
+}
+
+div.tei table[data-rend="vis-a-vis"],
+div.tei table[data-rendition="vis-à-vis"]  {
+	table-layout: fixed;
+}
+
+div.tei table caption {
+	text-align: left;
+	margin-bottom: 0em;
+	color: #32455D;
+	line-height: 1.6em;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 130%;
+	padding-top: 1em;
+	margin-top: 0;
+}
+
+div.tei table tr[data-role="label"], div.tei table tr[data-rend="thead"] {
+	font-variant: small-caps;
+	font-size: 1.2em;
+}
+
+div.tei table td {
+	padding: 0 5px;
+	text-align: left;
+}
+
+div.tei table td[rowspan] {
+	vertical-align: top;
+}
+
+/* -------------------------------- titlePage -------------------------------- */
+
+div.titlePage {
+	text-align:center;
+}
+
+
+div.titlePage img {
+	width:200px !important;
+	height:212px !important;
+}
+
+div.titlePage div.byline {
+
+}
+
+div.titlePage div.docAuthor {
+	font-size: 28px;
+	font-variant: small-caps;
+	margin: 35px 0 10px 0;
+	color:#33455D;
+}
+
+div.titlePage > div.docImprint {
+	font-size: 80%;
+	line-height: 120%;
+	margin-top: 90px;
+	display: block ! important;
+}
+
+div.titlePage div.argument[data-rend="rights"],
+div.titlePage div.argument[data-rend="right"] {
+	display: block ! important;
+	margin: 2em 0 3em 0;
+	line-height: 140%;
+	font-size: 65%;
+}
+
+/* -------------------------------- titlePart -------------------------------- */
+
+div.titlePart[data-type="collection"], div.titlePart[data-type="collection-sub"] {
+	display:block ! important;
+	font-size:12px;
+	text-transform: uppercase;
+	color: #32455D;
+	margin:2px 0;
+	text-align:center;
+}
+
+div.titlePart[data-type="collection-sub-num"] {
+	display:block ! important;
+	font-size:12px;
+	text-transform: uppercase;
+	color: #32455D;
+	margin:2px 0;
+	text-align:center;
+}
+
+div.titlePart {
+	display:block ! important;
+	text-align:center;
+	color: #32455D;
+}
+
+div.titlePart[data-type="desc"] {
+	display:block ! important;
+	margin:35px 0;
+	color: #32455D;
+	font-size: 15px;
+	line-height: 1em;
+}
+
+div.titlePart[data-type="main"] {
+	color: #6e97cd;
+	font-size:30px;
+	margin: 10px 0;
+	line-height: 1em;
+}
+
+div.titlePart[data-type="sub"] {
+	color: #6e97cd;
+	font-size:20px;
+	margin: 10px 0;
+	line-height: 1em;
+}
+
+/*
+[data-type]
+	[data-0] => collection
+	[data-1] => main
+	[data-2] => sub
+	[data-3] => desc
+*/
+/* ------------------------------------ fw ----------------------------------- */
+
+div.fw {
+	display: none ! important;
+}
+
+/* --------------------------------- castItem -------------------------------- */
+
+div.castItem {
+	display: list-item ! important;
+	list-style-position: outside;
+	margin-left: 33px;
+}
+
+/* --------------------------------- castLList -------------------------------- */
+
+div.castList {
+	list-style-position: inside;
+	display:block ! important;
+	list-style: none inside;
+}
+
+/* ----------------------------------- role ---------------------------------- */
+
+div.role {
+	font-variant: small-caps;
+}
+
+/* --------------------------------- roleDesc -------------------------------- */
+
+div.roleDesc {
+	font-style: italic;
+}
+
+/* ---------------------------------- stage --------------------------------- */
+
+div.stage {
+	margin: 0.6em 0;
+	font-style: italic;
+	font-size: 0.9em;
+	display: block ! important;
+}
+
+/* ------------------------------------ sp ----------------------------------- */
+
+div.sp {
+	display: block ! important;
+	margin: 1.5em 0;
+}
+
+/* --------------------------------- speaker -------------------------------- */
+
+div.speaker {
+	display: block ! important;
+	padding-left: 9em;
+	font-variant: small-caps;
+}
+
+/* ----------------------------------- img ----------------------------------- */
+
+div.text img {
+	margin:auto;
+	max-width:100%;
+	display:block ! important;
+}
+
+/* -------------------------------- footnotes -------------------------------- */
+
+div.footnotes {
+	clear: both;
+	margin-left: 25px;
+}
+
+div.footnotes div.foot-page {
+	font-weight: bold;
+	font-size: 0.8em;
+	position: relative;
+	left: -25px;
+	margin: 20px 0 10px 0;
+}
+
+div.footnotes div.note div.p {
+	text-indent:0px;
+	padding:5px 5px 5px 10px;
+}
+
+div.footnotes div.note div.note div.p {
+	display:none ! important;
+}
+
+div.footnotes div.footnote-counter {
+	content:attr(data-n);
+	cursor:pointer;
+	vertical-align: inherit;
+	text-align:right;
+	width: 50px;
+	font-size: 0.9em;
+	left: -55px;
+	position: relative;
+	color:#31455D;
+	display: inline-block ! important;
+}
+
+div.footnotes div.note:before {
+	content:'';
+	font-size:0;
+}
+
+div.footnotes div.note div.note:before {
+	color: black;
+	content: attr(data-n);
+	cursor: pointer;
+	position: relative;
+	top: -0.3em;
+	font-size: 1em;
+}
+
+div.footnote-note {
+	border-left:1px solid gainsboro;
+	margin-top: -27px;
+	padding-top: 5px;
+}
+
+div.notesdouble div.footnote-counter {
+	position: relative ! important;
+	left: -35px ! important;
+}
+
+div.notesdouble div.footnote-note {
+		padding-top: 0px ! important;
+}
+
+div.notesdouble div.note div.p {
+	padding-left: 20px ! important;
+}
+
+div.footnote-select {
+	background:#FFFFEE;
+}
+
+/* --------------------------------- letter --------------------------------- */
+
+div.div[data-type="letter"] > div.head {
+	margin-top: 35px;
+}
+
+div.opener {
+	display: block ! important;
+	margin-bottom: 20px;
+}
+
+div.closer {
+	display: block ! important;
+	margin-top: 20px;
+}
+
+div.postscript {
+	display: block ! important;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}

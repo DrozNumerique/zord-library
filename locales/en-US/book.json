@@ -1,0 +1,28 @@
+{
+	"search_back": "Back to results",
+	"misprint" : "Report misprint",
+	"cite" : "Cite this book",
+	"references" : "Show/hide references",
+	"get_book" : "Find this book",
+	"quote" : "Select text for quote the click here",
+	"page" : "page",
+	"line" : "line",
+	"section" : "section",
+	"message": {
+		"unknown": "No book relative to [${isbn}]",
+		"noreader": {
+			"anyBook": "You are not allowed to read books in this context",
+			"anyContext": "You are not allowed to read this book",
+			"thisContext": "You are not allowed to read this book in this context"
+		}
+	},
+	"dialogs": {
+		"comment": "Register citation",
+		"addnote" : "Add note",
+		"cancel": "Cancel",
+		"ok": "Ok",
+		"add_citation": "The record has been added to your citations page",
+		"bug" : "Report misprint",
+		"bug_save" : "The misprint has been reported to the publisher. Thank you !"
+	}
+}

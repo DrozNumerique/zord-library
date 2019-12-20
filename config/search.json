@@ -1,0 +1,22 @@
+{
+	"scopes": [
+		"facets",
+		"corpus",
+		"history"
+	],
+	"facets": [
+		"category",
+		"creator",
+		"editor"
+	],
+	"filters": {
+		"source": "SourceDateFilter"
+	},
+	"fetch": [
+		"ean"
+	],
+	"sort": {
+		"ean": "ASC",
+		"count": "ASC"
+	}
+}

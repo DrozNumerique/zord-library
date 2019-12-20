@@ -1,0 +1,40 @@
+{
+	"menu": {
+		"home": "Accueil",
+		"search" : "Recherche",
+		"quotes" : "Mes citations",
+		"help" : "Aide",
+		"counter" : "Usage",
+		"records" : "Notices",
+		"admin" : "Admin",
+		"login" : "Connexion",
+		"logout" : " Déconnexion"
+	},
+	"ariadne": {
+		"chapter" : {
+			"previous" : "Chapitre précédent",
+			"next" : "Chapitre suivant"
+		}
+	},
+	"download": {
+		"failed": "Impossible de télécharger le fichier"
+	},
+	"upload": {
+		"done": "Téléversement terminé",
+		"progress": "Téléversement en cours"
+	},
+	"process": {
+		"wait": "En attente du démarrage du traitement",
+		"init": "Traitement en cours",
+		"stopped": "Traitement interrompu",
+		"closed": "Traitement terminé"
+	},
+	"admin": {
+		"context": {
+			"delete": {
+				"confirm": "Confirmer la suppression du context"
+			}
+		}
+	},
+	"zord" : "Propulsé par ꓜꓳꓤꓷ"
+}

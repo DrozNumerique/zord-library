@@ -1,0 +1,59 @@
+{
+	"header": {
+		"left": {
+			"url": "",
+			"image": ""
+		}
+	},
+	"banner": {
+		"image": ""
+	},
+	"styles": {
+		"font-awesome": {
+			"media": "screen",
+			"type": "text/css",
+			"href": "/library/css/font-awesome.css"
+		},
+		"portal": {
+			"media": "screen",
+			"type": "text/css",
+			"href": "/library/css/portal.css"
+		},
+		"table": {
+			"media": "screen",
+			"type": "text/css",
+			"href": "/library/css/table.css"
+		},
+		"chosen": {
+			"media": "screen",
+			"type": "text/css",
+			"href": "/library/css/chosen.css"
+		}
+	},
+	"scripts": {
+		"portal": {
+			"type": "text/javascript",
+			"src": "/library/js/portal.js"
+		},
+		"table": {
+			"type": "text/javascript",
+			"src": "/library/js/table.js"
+		},
+		"jquery": {
+			"type": "text/javascript",
+			"src": "/library/js/jquery.js"
+		},
+		"chosen": {
+			"type": "text/javascript",
+			"src": "/library/js/chosen.js"
+		},
+		"default": {
+			"type": "text/javascript",
+			"template": "/portal/script/default"
+		},
+		"switch": {
+			"type": "text/javascript",
+			"template": "/portal/script/switch"
+		}
+	}
+}

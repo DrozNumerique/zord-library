@@ -1,0 +1,30 @@
+{
+	"home": {
+		"type": "default"
+	},
+	"search": {
+		"type": "shortcut"
+	},
+	"help": {
+		"type": "page"
+	},
+	"quotes": {
+		"type": "page",
+		"class": [
+			"navcit",
+			"linkcit"
+		]
+	},
+	"counter": {
+		"type": "shortcut",
+		"connected": true
+	},
+	"records": {
+		"type": "shortcut",
+		"connected": true
+	},
+	"admin": {
+		"type": "shortcut",
+		"role": "admin"
+	}
+}
