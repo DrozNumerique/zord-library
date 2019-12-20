@@ -394,6 +394,7 @@ function displayTEI(selectorIndex) {
 		var pageSelector = 'div.' + ELS['pb']['elm'] + '[data-' + ELS['pb']['n'] + ']';
 		var pageSelectorNot = 'div.' + ELS['pb']['elm'] + '[data-' + ELS['pb']['n'] + ']:not([data-' + ELS['pb']['rend'] + '="temoin"])';
 		var ZOOM_SELECTOR = 'div.' + ELS['figure']['elm'] + '[data-' + ELS['figure']['rend'] + '="zoom"]';
+		var FACSIMILE_SELECTOR = 'div.' + ELS['figure']['elm'] + '[data-' + ELS['figure']['rend'] + '="facsimile"]';
 		var GRAPHIC_SELECTOR = 'div.' + ELS['graphic']['elm'];
 		var GRAPHIC_URL_ATTRIBUTE = 'data-' + ELS['graphic']['url'];
 		var selectorTemoin = 'div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="margin"], div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="temoin"], ' + pageSelector;
@@ -410,7 +411,7 @@ function displayTEI(selectorIndex) {
 			teiContents[1].style.display = 'block';
 		}
 		
-		var zooms = contentTEI.querySelectorAll(ZOOM_SELECTOR);
+		var zooms = contentTEI.querySelectorAll(ZOOM_SELECTOR + ',' + FACSIMILE_SELECTOR);
 		if (zooms.length > 0) {
 			[].forEach.call(zooms, function(zoom, index) {
 				var sources = [];

@@ -533,7 +533,7 @@ class Book extends Module {
             ]];
             $entity = (new UserHasRoleEntity())->retrieve([
                 'where' => [
-                    'role'    => 'reader',
+                    'role'    => ['in' => ['*','reader']],
                     'context' => $context
                 ],
                 'many'   => true
