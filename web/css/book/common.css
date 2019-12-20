@@ -162,22 +162,23 @@ div.figure {
 	margin: auto;
 	text-align: center;
 }
-div.figure[data-rend="zoom"] {
+
+div.figure[data-rend="zoom"], div.figure[data-rend="facsimile"] {
 	width: 50em;
 	height: 400px;
 	background: whitesmoke;
 }
 
-div.figure[data-rend="zoom"] .navigator {
+div.figure[data-rend="zoom"] .navigator, div.figure[data-rend="facsimile"] .navigator {
 	background: gainsboro ! important;
 	border: none ! important;
 }
 
-div.figure[data-rend="zoom"] .displayregion {
+div.figure[data-rend="zoom"] .displayregion, div.figure[data-rend="facsimile"] .displayregion {
 	border: 1px solid #990000 ! important;
 }
 
-div.figure[data-rend="zoom"] img {
+div.figure[data-rend="zoom"] img, div.figure[data-rend="facsimile"] img {
 	cursor: pointer ! important;
 	margin-left: 5px ! important;
 }
