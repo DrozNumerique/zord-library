@@ -987,6 +987,14 @@ class Book extends Module {
     
     private function classify($search = false) {
         $books = ($search !== false && isset($search['books'])) ? $search['books'] : null;
+        $entities = (new BookHasContextEntity())->retrieve([
+            'many'  => true,
+            'where' => ['context' => $this->context]
+        ]);
+        $status = [];
+        foreach ($entities as $entity) {
+            $status[$entity->book] = $entity->status;
+        }
         $entities = (new BookEntity())->retrieve([
             'many'  => true,
             'join'  => empty($books) ? 'BookHasContextEntity' : null,
@@ -995,76 +1003,72 @@ class Book extends Module {
         ]);
         $shelves = [];
         $locale  = [];
-        if ($entities) {
-            $books = [];
-            foreach($entities as $book) {
-                $isbn = $book->ean;
-                $books[$isbn] = [
-                    'isbn'     => $isbn,
-                    'status'   => $book->status,
-                    'source'   => ((empty($book->s_from) && empty($book->s_to)) || (!empty($book->s_from) && !empty($book->s_to) && $book->s_from == $book->s_to)) ? 2 : 1,
-                    'from'     => $book->s_from,
-                    'to'       => $book->s_to,
-                    'creator'  => Zord::objectToArray(json_decode($book->creator)),
-                    'title'    => $book->title,
-                    'subtitle' => $book->subtitle,
-                    'editor'   => Zord::objectToArray(json_decode($book->editor)),
-                    'date'     => $book->date,
-                    'category' => Zord::objectToArray(json_decode($book->category)),
-                    'number'   => $book->number,
-                    'readable' => $this->user->hasAccess($isbn, 'reader')
-                ];
+        $books = [];
+        foreach($entities as $book) {
+            $isbn = $book->ean;
+            $books[$isbn] = [
+                'isbn'     => $isbn,
+                'status'   => $status[$book->ean],
+                'source'   => ((empty($book->s_from) && empty($book->s_to)) || (!empty($book->s_from) && !empty($book->s_to) && $book->s_from == $book->s_to)) ? 2 : 1,
+                'from'     => $book->s_from,
+                'to'       => $book->s_to,
+                'creator'  => Zord::objectToArray(json_decode($book->creator)),
+                'title'    => $book->title,
+                'subtitle' => $book->subtitle,
+                'editor'   => Zord::objectToArray(json_decode($book->editor)),
+                'date'     => $book->date,
+                'category' => Zord::objectToArray(json_decode($book->category)),
+                'number'   => $book->number,
+                'readable' => $this->user->hasAccess($isbn, 'reader')
+            ];
+        }
+        $liner = Zord::value('plugin', ['liner',$this->context]);
+        if (!isset($liner)) {
+            $liner = Zord::value('plugin', 'liner');
+            if (!isset($liner) || !(is_string($liner))) {
+                $liner = 'DefaultLiner';
             }
-            $liner = Zord::value('plugin', ['liner',$this->context]);
-            if (!isset($liner)) {
-                $liner = Zord::value('plugin', 'liner');
-                if (!isset($liner) || !(is_string($liner))) {
-                    $liner = 'DefaultLiner';
+        }
+        $liner = new $liner($this->context, $this->lang);
+        $apart = $search === false;
+        $class = $search !== false ? 'search' : null;
+        $result = $liner->line($books, $apart, $class);
+        $shelves = $result['shelves'];
+        $locale = $result['locale'];
+        foreach($shelves as $name => $shelf) {
+            foreach($shelf['books'] as $index => $book) {
+                $shelves[$name]['books'][$index]['matches'] = isset($search['matches'][$book['isbn']]) ? $search['matches'][$book['isbn']] : [];
+                $shelves[$name]['books'][$index]['parts'] = isset($search['parts'][$book['isbn']]) ? $search['parts'][$book['isbn']] : [];
+            }
+        }
+        foreach($shelves as $name => $shelf) {
+            $count = 0;
+            foreach($shelf['books'] as $book) {
+                $count2 = 0;
+                foreach ($book['matches'] as $matches) {
+                    $count2 += count($matches);
                 }
+                $shelves[$name]['instances'][$book['isbn']] = $count2;
+                $count += $count2;
             }
-            $liner = new $liner($this->context, $this->lang);
-            $apart = $search === false;
-            $class = $search !== false ? 'search' : null;
-            $result = $liner->line($books, $apart, $class);
-            $shelves = $result['shelves'];
-            $locale = $result['locale'];
-            foreach($shelves as $name => $shelf) {
-                foreach($shelf['books'] as $index => $book) {
-                    $shelves[$name]['books'][$index]['matches'] = isset($search['matches'][$book['isbn']]) ? $search['matches'][$book['isbn']] : [];
-                    $shelves[$name]['books'][$index]['parts'] = isset($search['parts'][$book['isbn']]) ? $search['parts'][$book['isbn']] : [];
-                }
+            $shelves[$name]['instances']['total'] = $count;
+        }
+        $order = $shelves;
+        $keys = array_keys($locale);
+        $keys[-1]   = 'new';
+        $keys[9999] = 'other';
+        usort($order, function($first, $second) use ($keys) {
+            $x = (int) array_search($first['name'], $keys);
+            $y = (int) array_search($second['name'], $keys);
+            if ($x == $y) {
+                return 0;
+            } else {
+                return $x < $y ? -1 : 1;
             }
-            foreach($shelves as $name => $shelf) {
-                $count = 0;
-                foreach($shelf['books'] as $book) {
-                    $count2 = 0;
-                    foreach ($book['matches'] as $matches) {
-                        $count2 += count($matches);
-                    }
-                    $shelves[$name]['instances'][$book['isbn']] = $count2;
-                    $count += $count2;
-                }
-                $shelves[$name]['instances']['total'] = $count;
-            }
-            
-            $order = $shelves;
-            $keys = array_keys($locale);
-            $keys[-1]   = 'new';
-            $keys[9999] = 'other';
-            usort($order, function($first, $second) use ($keys) {
-                $x = (int) array_search($first['name'], $keys);
-                $y = (int) array_search($second['name'], $keys);
-                if ($x == $y) {
-                    return 0;
-                } else {
-                    return $x < $y ? -1 : 1;
-                }
-            });
-            $shelves = [];
-            foreach($order as $shelf) {
-                $shelves[$shelf['name']] = $shelf;
-            }
-                
+        });
+        $shelves = [];
+        foreach($order as $shelf) {
+            $shelves[$shelf['name']] = $shelf;
         }
         return [
             'search'  => $search,
