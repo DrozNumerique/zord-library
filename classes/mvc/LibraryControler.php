@@ -1,6 +1,6 @@
 <?php
 
-class ZordControler extends Controler {
+class LibraryControler extends Controler {
         
     public function findTarget($host, $path) {
         if (parse_url(OPENURL, PHP_URL_HOST) == $host) {

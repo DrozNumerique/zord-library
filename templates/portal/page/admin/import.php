@@ -21,7 +21,7 @@
                						<tr>
                        					<th style="width:auto;">
                        						<span class="sort" data-column="0">
-                       							<?php echo $locale->tab->publish->context->name; ?>
+                       							<?php echo $locale->tab->context->name; ?>
                        							<i class="fa fa-sort fa-fw" title="<?php echo $locale->tab->publish->select; ?>"></i>
                        						</span>
                        					</th>

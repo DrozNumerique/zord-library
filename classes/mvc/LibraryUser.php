@@ -1,6 +1,6 @@
 <?php
 
-class ZordUser extends User {
+class LibraryUser extends User {
     
     public $access = [];
     

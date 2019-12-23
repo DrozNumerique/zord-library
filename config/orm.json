@@ -1,4 +1,12 @@
 {
+	"UserEntity": {
+        "join": {
+        	"UserHasQueryEntity": ["login", "user"]
+        },
+        "elements": {
+        	"UserHasQueryEntity": ["queries", "user"]
+        }
+	},
 	"BookEntity": {
 		"table": "books",
 		"fields": [
@@ -16,7 +24,13 @@
         "key": "ean",
         "join": {
         	"BookHasContextEntity": ["ean","book"],
-        	"BookHasPartEntity": ["ean","book"]
+        	"BookHasPartEntity": ["ean","book"],
+        	"BookHasFacetEntity": ["ean","book"]
+        },
+        "elements": {
+        	"BookHasContextEntity": ["contexts", "book"],
+        	"BookHasPartEntity": ["parts", "book"],
+        	"BookHasFacetEntity": ["facets", "book"]
         }
     },
 	"BookHasPartEntity": {
@@ -70,20 +84,5 @@
 	        "when",
 	        "type"
         ]
-    },
-	"ProcessEntity": {
-		"table": "process",
-		"fields": [
-	        "pid",
-	        "class",
-	        "user",
-	        "lang",
-	        "params",
-	        "start",
-	        "last",
-	        "step",
-	        "progress"
-        ],
-        "key": "pid"
     }
 }

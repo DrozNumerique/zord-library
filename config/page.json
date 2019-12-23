@@ -115,28 +115,5 @@
 				"src": "/library/js/biblio.js"
 			}
 		]
-	},
-	"admin": {
-		"styles": [
-			{
-				"media": "screen",
-				"type": "text/css",
-				"href": "/library/css/admin.css"
-			}
-		],
-		"scripts": [
-			{
-				"type": "text/javascript",
-				"src": "/library/js/admin/common.js"
-			}
-		]
-	},
-	"error": {
-		"scripts": [
-			{
-				"type": "text/javascript",
-				"template": "/portal/page/error/script/alert"
-			}
-		]
 	}
 }

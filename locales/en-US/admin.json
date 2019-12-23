@@ -1,9 +1,7 @@
 {
 	"menu": {
 		"import": "Import",
-		"publish": "Publish",
-		"users": "Accounts",
-		"counter" : "Counter"
+		"publish": "Publish"
 	},
 	"tab": {
 		"import": {
@@ -16,14 +14,6 @@
 			"title": "Books management",
 			"list": "Publish...",
 			"submit": "OK",
-			"context": {
-				"name": "Name",
-				"title": "Title",
-				"secure": "Secure",
-				"host": "Host",
-				"path": "Path",
-				"urls": "URLs"
-			},
 			"books": "Books",
 			"book": {
 				"id": "ISBN",
@@ -32,43 +22,6 @@
 			"select": "Selected",
 			"show": "Read online",
 			"epub": "Download ePub"
-		},
-		"users": {
-			"title": "Accounts management",
-			"login": "Login",
-			"name": "Name",
-			"email": "Email",
-			"create": "Create",
-			"delete": "Delete",
-			"update": "Update",
-			"profile": "Profile...",
-			"counter": "Counter...",
-			"roles": "Roles",
-			"addresses": "IP Addresses",
-			"role": "Role",
-			"context": "Context",
-			"start": "Start",
-			"end": "End",
-			"ip": "IP Address(es)",
-			"mask": "Mask",
-			"include": "Include",
-			"exclude": "Exclude",
-			"add": "Add",
-			"remove": "Remove",
-			"submit": "OK",
-			"match": "already matches IP address",
-			"mail": {
-				"error": "Fail to send activation e-mail",
-				"to": "To",
-				"activation": "Activation link "
-			}
 		}
-	},
-	"list": {
-		"create": "Create",
-		"delete": "Delete",
-		"update": "Update",
-		"add": "Add",
-		"remove": "Remove"
 	}
 }

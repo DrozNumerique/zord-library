@@ -1,21 +1,5 @@
 var folded = true;
 
-function checkContext(operation, data) {
-	if (operation == 'delete') {
-		return confirm(LOCALE['admin']['context']['delete']['confirm']);
-	}
-	if (data == undefined || data == null) {
-		return false;
-	}
-	if (data.name == undefined || data.name == null || data.name.length == 0) {
-		return false;
-	}
-	if (data.title == undefined || data.title == null || data.title.length == 0) {
-		return false;
-	}
-	return true;
-}
-
 function listBooks(button) {
 	button.classList.add(folded ? 'fa-compress' : 'fa-expand');
 	button.classList.remove(folded ? 'fa-expand' : 'fa-compress');
@@ -24,20 +8,9 @@ function listBooks(button) {
 	});
 }
 
-function getPublish() {
-	var urls = [];
+function getData() {
 	var books = [];
 	var context = document.getElementById('context').value;
-	var urlsElement = document.getElementById('urls');
-	if (urlsElement) {
-		[].forEach.call(urlsElement.querySelectorAll('.data'), function(entry) {
-			urls.push({
-				secure:entry.children[0].firstElementChild.value == 'yes' ? true : false,
-				host:entry.children[1].firstElementChild.value,
-				path:entry.children[2].firstElementChild.value
-			}); 
-		});
-	}
 	var booksElement = document.getElementById('books');
 	if (booksElement) {
 		[].forEach.call(booksElement.querySelectorAll('.data'), function(entry) {
@@ -49,12 +22,11 @@ function getPublish() {
 			}
 		});
 	}
-	var publish = {
+	var data = {
 		context:context,
-		urls:JSON.stringify(urls),
 		books:JSON.stringify(books)
 	};
-	return publish;
+	return data;
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -62,13 +34,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var submitPublish = document.getElementById('submit-publish');
 	if (submitPublish != undefined) {
 		submitPublish.addEventListener("click", function(event) {
-			var publish = getPublish();
+			var data = getData();
 			invokeZord({
 				module:'Admin',
 				action:'publish',
-				name:publish.context,
-				urls:publish.urls,
-				books:publish.books,
+				name:data.context,
+				books:data.books,
 				before:function() {
 					$dialog.wait();
 				},
@@ -92,8 +63,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			});
 		});
 	});
-	
-	
+		
 	var expandList = document.getElementById('expand-list');
 	if (expandList != undefined) {
 		expandList.addEventListener("click", function(event) {
@@ -102,31 +72,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 		listBooks(expandList);
 	}
-
-	attach(['publish'], function(entry, operation) {
-		var data = {
-			name:entry.parentNode.children[0].firstElementChild.value,
-			title:entry.parentNode.children[1].firstElementChild.value
-		};
-		if (checkContext(operation, data)) {
-			invokeZord({
-				module:'Admin',
-				action:'context',
-				operation:operation,
-				name:data.name,
-				title:data.title,
-				before:function() {
-					if (operation == 'publish') {
-						$dialog.wait();
-					}
-				},
-				after:function() {
-					if (operation == 'publish') {
-						$dialog.hide();
-					}
-				}
-			});
-		}
-	});
 
 });

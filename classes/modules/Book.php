@@ -497,25 +497,6 @@ class Book extends Module {
     }
     
     public function counter() {
-        $user = null;
-        $context = null;
-        if ($this->user->isConnected() || $this->user->isManager()) {
-            $user = $this->user;
-            $list = $user->getContext('counter', false);
-            if (count($list) == 1) {
-                $context = $list[0];
-            }
-        }
-        if ($this->user->isManager()) {
-            if (isset($this->params['user'])) {
-                $user = new User($this->params['user']);
-            } else if (isset($this->params['context'])) {
-                $context = $this->params['context'];
-            }
-        }
-        if (!isset($user)) {
-            return $this->page('home');
-        }
         if (isset($this->params['id']) && isset($this->params['type'])) {
             if (isset($_SESSION['__ZORD__']['__LIBRARY__']['__COUNTER__'][$this->params['id']])) {
                 return $this->view('/counter', ['type' => $this->params['type'], 'counter' => $_SESSION['__ZORD__']['__LIBRARY__']['__COUNTER__'][$this->params['id']]], 'application/vnd.ms-excel', false);
@@ -523,30 +504,30 @@ class Book extends Module {
                 return $this->page('home');
             }
         }
-        $users = [];
-        if (!isset($context)) {
+        $user    = null;
+        $context = null;
+        if ($this->user->isManager()) {
+            if (isset($this->params['user'])) {
+                $user = new User($this->params['user']);
+            } else if (isset($this->params['context'])) {
+                $context = $this->params['context'];              
+            }
+        } else if ($this->user->isConnected()) {
+            $user = $this->user;
+        }
+        if (!isset($user) && !isset($context) && !$this->user->isManager()) {
+            return $this->page('home');
+        }
+        if (isset($user)) {
             $result = ['user' => [
                 'login' => $user->login,
                 'name'  => $user->name
             ]];
-            $users = [$user->login];
-        } else {
+        } else if (isset($context)) {
             $result = ['context' => [
                 'id'    => $context,
                 'label' => Zord::getLocaleValue('title', Zord::value('context',$context), $this->lang)
             ]];
-            $entity = (new UserHasRoleEntity())->retrieve([
-                'where' => [
-                    'role'    => ['in' => ['*','reader']],
-                    'context' => $context
-                ],
-                'many'   => true
-            ]);
-            if ($entity) {
-                foreach ($entity as $entry) {
-                    $users[] = $entry->user;
-                }
-            }
         }
         $year = date("Y");
         $start = isset($this->params['start']) ? $this->params['start'] : $year.'-01-01';
@@ -564,64 +545,53 @@ class Book extends Module {
                 $result['months'][] = $month->format('Y-m');
             }
             $result['books'] = [];
-            $list = '(';
-            $index = 0;
-            foreach ($users as $entry) {
-                $list = $list."`user` = '".$entry."'";
-                if ($index < count($users) - 1) {
-                    $list = $list." OR ";
-                }
-                $index++;
-            }
-            $list = $list.')';
+            $select = isset($user) ? ['key' => 'user', 'value' => $user->login] : (isset($context) ? ['key' => 'context', 'value' => $context] : null);
             foreach (Zord::value('report', 'types') as $type => $title) {
                 $result['reports'][$type]['title'] = $title;
                 $result['reports'][$type]['books'] = [];
                 $hits = (new UserHasQueryEntity())->retrieve([
+                    'many'  => true,
                     'where' => [
-                        'raw' => $list." AND `type` = ? AND `when` BETWEEN ? AND ? ORDER BY `when` ASC",
+                        'raw' => (isset($select) ? "`".$select['key']."` = '".$select['value']."' AND " : '')."`type` = ? AND `when` BETWEEN ? AND ? ORDER BY `when` ASC",
                         'parameters' => [$type, $start->format('Y-m-d'), $end->format('Y-m-d')]
-                    ],
-                    'many'   => true
+                    ]
                 ]);
-                if ($hits) {
-                    foreach ($hits as $hit) {
-                        $month   = (new DateTime($hit->when))->format('Y-m');
-                        $book    = $hit->book;
-                        $context = $hit->context;
-                        $metadata = Library::data($book, 'meta', 'array');
-                        if ($metadata) {
-                            $result['books'][$book] = $metadata['title'];
-                        }
-                        if (!isset($result['reports'][$type]['books'][$book])) {
-                            $result['reports'][$type]['books'][$book] = [];
-                        }
-                        if (!isset($result['reports'][$type]['context'])) {
-                            $result['reports'][$type]['context'] = [];
-                        }
-                        if (!isset($result['reports'][$type]['counts']['months'][$month]['books'][$book])) {
-                            $result['reports'][$type]['counts']['months'][$month]['books'][$book] = 0;
-                        }
-                        if (!isset($result['reports'][$type]['counts']['months'][$month]['total'])) {
-                            $result['reports'][$type]['counts']['months'][$month]['total'] = 0;
-                        }
-                        if (!isset($result['reports'][$type]['counts']['books'][$book])) {
-                            $result['reports'][$type]['counts']['books'][$book] = 0;
-                        }
-                        if (!isset($result['reports'][$type]['counts']['total'])) {
-                            $result['reports'][$type]['counts']['total'] = 0;
-                        }
-                        if (!in_array($context, $result['reports'][$type]['books'][$book])) {
-                            $result['reports'][$type]['books'][$book][] = $context;
-                        }
-                        if (!in_array($context, $result['reports'][$type]['context'])) {
-                            $result['reports'][$type]['context'][] = $context;
-                        }
-                        $result['reports'][$type]['counts']['months'][$month]['books'][$book]++;
-                        $result['reports'][$type]['counts']['months'][$month]['total']++;
-                        $result['reports'][$type]['counts']['books'][$book]++;
-                        $result['reports'][$type]['counts']['total']++;;
+                foreach ($hits as $hit) {
+                    $month   = (new DateTime($hit->when))->format('Y-m');
+                    $book    = $hit->book;
+                    $context = $hit->context;
+                    $metadata = Library::data($book, 'meta', 'array');
+                    if ($metadata) {
+                        $result['books'][$book] = Library::title($metadata);
                     }
+                    if (!isset($result['reports'][$type]['books'][$book])) {
+                        $result['reports'][$type]['books'][$book] = [];
+                    }
+                    if (!isset($result['reports'][$type]['context'])) {
+                        $result['reports'][$type]['context'] = [];
+                    }
+                    if (!isset($result['reports'][$type]['counts']['months'][$month]['books'][$book])) {
+                        $result['reports'][$type]['counts']['months'][$month]['books'][$book] = 0;
+                    }
+                    if (!isset($result['reports'][$type]['counts']['months'][$month]['total'])) {
+                        $result['reports'][$type]['counts']['months'][$month]['total'] = 0;
+                    }
+                    if (!isset($result['reports'][$type]['counts']['books'][$book])) {
+                        $result['reports'][$type]['counts']['books'][$book] = 0;
+                    }
+                    if (!isset($result['reports'][$type]['counts']['total'])) {
+                        $result['reports'][$type]['counts']['total'] = 0;
+                    }
+                    if (!in_array($context, $result['reports'][$type]['books'][$book])) {
+                        $result['reports'][$type]['books'][$book][] = $context;
+                    }
+                    if (!in_array($context, $result['reports'][$type]['context'])) {
+                        $result['reports'][$type]['context'][] = $context;
+                    }
+                    $result['reports'][$type]['counts']['months'][$month]['books'][$book]++;
+                    $result['reports'][$type]['counts']['months'][$month]['total']++;
+                    $result['reports'][$type]['counts']['books'][$book]++;
+                    $result['reports'][$type]['counts']['total']++;;
                 }
             }
         }

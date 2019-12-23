@@ -1,4 +1,5 @@
 {
-	"Controler": "ZordControler",
-	"User": "ZordUser"
+	"Controler": "LibraryControler",
+	"User": "LibraryUser",
+	"Admin": "LibraryAdmin"
 }

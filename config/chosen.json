@@ -1,9 +1,0 @@
-{
-	"standard": {
-		"width": "100%"
-	},
-	"no-single": {
-		"width": "100%",
-		"disable_search_threshold": 10
-	}
-}
