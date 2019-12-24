@@ -260,10 +260,6 @@ class Book extends Module {
         return $this->error(404);
     }
     
-    public function home() {
-        return $this->page('home', $this->classify());
-    }
-    
     public function search() {
         $facets = [];
         foreach ($this->facets() as $facet) {
