@@ -959,7 +959,7 @@ class Book extends Module {
         return !empty($books) ? $search : [];
     }
     
-    private function classify($search = false) {
+    public function classify($search = false) {
         $books = ($search !== false && isset($search['books'])) ? $search['books'] : null;
         $entities = (new BookHasContextEntity())->retrieve([
             'many'  => true,

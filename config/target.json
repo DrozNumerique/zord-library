@@ -1,9 +1,6 @@
 {
 	"Book": {
 		"response": "VIEW",
-		"home": {
-			"shortcut": "default"
-		},
 		"search": {
 			"shortcut": "search",
 			"parameters": {
