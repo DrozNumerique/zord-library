@@ -1,12 +1,13 @@
 {
+	"favicon": "/library/img/favicon.ico",
 	"header": {
 		"left": {
-			"url": "",
-			"image": ""
+			"url": "http://www.droz.org",
+			"image": "/library/img/librairie_droz.jpg"
 		}
 	},
 	"banner": {
-		"image": ""
+		"image": "/library/img/zord.png"
 	},
 	"styles": {
 		"library": {
@@ -19,6 +20,14 @@
 		"library": {
 			"type": "text/javascript",
 			"src": "/library/js/portal.js"
+		},
+		"default": {
+			"type": "text/javascript",
+			"template": "/portal/script/default"
+		},
+		"switch": {
+			"type": "text/javascript",
+			"template": "/portal/script/switch"
 		}
 	}
 }
