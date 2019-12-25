@@ -30,7 +30,7 @@
 <?php foreach ($models['books'][$status] as $book) { ?>
 			<tr>
 				<td class="t_check"><input value="<?php echo $book['isbn']; ?>" data-type="check" type="checkbox"></td>
-				<td class="t_id" data-isbn="<?php echo $book['isbn']; ?>"><a href="<?php echo $baseURL.'Book/metadata?isbn='.$book['isbn'].'&file=header.xml'; ?>"><?php echo $book['isbn']; ?></a></td>
+				<td class="t_id" data-isbn="<?php echo $book['isbn']; ?>"><a href="<?php echo $baseURL.'Book/header?isbn='.$book['isbn']; ?>"><?php echo $book['isbn']; ?></a></td>
 				<td class="t_person" data-author_ss="<?php echo implode('|', $book['authors']); ?>"><?php echo Library::listActors($book['authors'], 'HTML'); ?></td>
 				<td class="t_title" data-sort="<?php echo $book['title']; ?>"><a href="<?php echo $baseURL.'book/'.$book['isbn']; ?>"><?php echo $book['title']; ?></a></td>
 				<td class="t_person" data-editor_ss="<?php echo implode('|', $book['editors']); ?>"><?php echo Library::listActors($book['editors'], 'HTML'); ?></td>
