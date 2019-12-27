@@ -303,17 +303,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 		});
 	}
-
-	window.addEventListener("selectLoaded", function(event) {
-		selects = document.querySelectorAll('select[data-loading]');
-		var loaded = true;
-		[].forEach.call(selects, function(select) {
-			loaded = (select.dataset.loading == 'true') ? false : loaded;
-		});
-		if (loaded) {
-			activateChosen();
-		}
-	});
 	
 	[].forEach.call(document.querySelectorAll('div[data-scope="' + searchScope + '"]'), function(element) {
 		element.classList.add('current');
