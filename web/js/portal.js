@@ -66,7 +66,6 @@ window.addEventListener("load", function(event) {
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-	
 	window.addEventListener('resize', function(event) {
 		setWindowHeight();
 		toScroll();
@@ -90,5 +89,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			lang:this.value
 		});
 	});
+	
+	counter = document.getElementById('menu_counter');
+	if (counter) {
+		counter.addEventListener('click', function() {
+			$dialog.wait();
+		});
+	}
 	
 });
