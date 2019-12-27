@@ -928,6 +928,7 @@ class Import extends ProcessExecutor {
                 return $header;
             }
         }
+        $this->warn(3, $this->locale->messages->metadata->warning->from->nodata);
         return false;
     }
     
@@ -1303,7 +1304,9 @@ class Import extends ProcessExecutor {
         $metaFile = Library::data($isbn, 'meta');
         $previous = Zord::arrayFromJSONFile($metaFile);
         foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
-            $metadata[$keep] = $previous[$keep];
+            if (isset($previous[$keep])) {
+                $metadata[$keep] = $previous[$keep];
+            }
         }
         file_put_contents($metaFile, Zord::json_encode($metadata));
         $book = [

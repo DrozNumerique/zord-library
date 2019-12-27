@@ -54,6 +54,11 @@
 					"header": "Depuis l'en-tête du fichier XML/TEI"
 				}
 			},
+			"warning": {
+				"from": {
+					"nodata": "Pas de métadonnées depuis cette source"
+				}
+			},
 			"error": {
 				"missing": "Il manque les métadonnées de cet ouvrage"
 			}

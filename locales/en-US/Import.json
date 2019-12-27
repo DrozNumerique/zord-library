@@ -54,6 +54,11 @@
 					"header": "From XML/TEI header"
 				}
 			},
+			"warning": {
+				"from": {
+					"nodata": "No metadata from this source"
+				}
+			},
 			"error": {
 				"missing": "Missing metadata for this book"
 			}
