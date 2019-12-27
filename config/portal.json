@@ -1,0 +1,43 @@
+{
+	"switches": {
+		"select": {
+			"no": {
+				"icon":"fa-check",
+				"color":"white",
+				"next":"new"
+			},
+			"new": {
+				"icon":"fa-star",
+				"color":"black",
+				"next":"yes"
+			},
+			"yes": {
+				"icon":"fa-check",
+				"color":"black",
+				"next":"no"
+			}
+		},
+		"manage": {
+			"no": {
+				"icon":"fa-check",
+				"color":"white",
+				"next":"new"
+			},
+			"new": {
+				"icon":"fa-star",
+				"color":"black",
+				"next":"yes"
+			},
+			"yes": {
+				"icon":"fa-check",
+				"color":"black",
+				"next":"del"
+			},
+			"del": {
+				"icon":"fa-remove",
+				"color":"black",
+				"next":"no"
+			}
+		}
+	}
+}
