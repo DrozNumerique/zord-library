@@ -1,18 +1,18 @@
 var searchRefine   = getContextProperty('search.refine', false);
 var searchHistory  = getContextProperty('search.history', []);
 var searchIndex    = getContextProperty('search.index', 0);
-var searchScope    = getContextProperty('search.scope', DEFAULT_SEARCH_SCOPE);
+var searchScope    = getContextProperty('search.scope', PORTAL.default.search.scope);
 var searchFacets   = getContextProperty('search.facets', undefined);
 var searchTitles   = getContextProperty('search.titles', undefined);
 var searchCriteria = getContextProperty('search.criteria', {
 	filters: {
-		contentType: DEFAULT_SEARCH_TYPE,
+		contentType: PORTAL.default.search.type,
 		source: {
-			from: DEFAULT_SEARCH_SOURCE_FROM,
-			to: DEFAULT_SEARCH_SOURCE_TO
+			from: PORTAL.default.search.source.from,
+			to: PORTAL.default.search.source.to
 		}
 	},
-	operator: DEFAULT_SEARCH_OPERATOR
+	operator: PORTAL.default.search.operator
 });
 
 function saveHistory() {
@@ -98,7 +98,7 @@ function refreshHistory(only) {
 							}
 							if (reference == null) {
 								$.get(
-									BASEURL + 'Book/reference',
+									BASEURL[CONTEXT] + '/Book/reference',
 								    {isbn: text},
 								    function(result) {
 								    	reference = result;

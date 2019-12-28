@@ -56,10 +56,6 @@ class LibraryControler extends Controler {
                     $title = $config['title'];
                 }
                 $models['portal']['menu']['context'][$name] = $title;
-                $models['portal']['switches'][] = [
-                    'name' => $name,
-                    'url'  => Zord::getContextURL($name)
-                ];
             }
         }
         foreach (Zord::getConfig('lang') as $name => $value) {

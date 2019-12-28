@@ -1,5 +1,19 @@
 {
-	"switches": {
+	"default": {
+		"csl": {
+			"style": "modern-language-association"
+		},
+		"search": {
+			"scope": "facets",
+			"type": 0,
+			"operator": "AND",
+			"source": {
+				"from": "",
+				"to": ""
+			}
+		}
+	},
+	"states": {
 		"select": {
 			"no": {
 				"icon":"fa-check",

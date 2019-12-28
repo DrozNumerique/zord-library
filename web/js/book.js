@@ -303,7 +303,7 @@ function displayTEI(selectorIndex) {
 						previous.style.visibility = "visible";
 						previous.setAttribute('data-part', ARIADNE[index - 1].link);
 						previous.setAttribute('data-id', ARIADNE[index - 1].id);
-						previous.setAttribute('title', LOCALE['ariadne']['chapter']['previous'] + ' : ' + ARIADNE[index - 1].title);
+						previous.setAttribute('title', PORTAL.locales[LANG].ariadne.chapter.previous + ' : ' + ARIADNE[index - 1].title);
 					} else {
 						previous.style.visibility = "hidden";
 					}
@@ -313,7 +313,7 @@ function displayTEI(selectorIndex) {
 						next.style.visibility = "visible";
 						next.setAttribute('data-part', ARIADNE[index + 1].link);
 						next.setAttribute('data-id', ARIADNE[index + 1].id);
-						next.setAttribute('title', LOCALE['ariadne']['chapter']['next'] + ' : ' + ARIADNE[index + 1].title);
+						next.setAttribute('title', PORTAL.locales[LANG].ariadne.chapter.next + ' : ' + ARIADNE[index + 1].title);
 					} else {
 						next.style.visibility = "hidden";
 					}
@@ -527,7 +527,7 @@ function displayTEI(selectorIndex) {
 			if (id != undefined) {
 				part += '#' + id;
 			}
-			window.location.href = BASEURL + 'book/' + part;
+			window.location.href = BASEURL[CONTEXT] + '/book/' + part;
 			if (hash == id) {
 				var event = document.createEvent("HTMLEvents");
 				event.initEvent("hashchange", true, false);
@@ -588,7 +588,7 @@ function displayTEI(selectorIndex) {
 								zord_type : 'page',
 								page : attrN,
 								book : BOOK,
-								zord_url : BASEURL + 'book/' + BOOK + '/' + PART + '#' + event.target.id
+								zord_url : BASEURL[CONTEXT] + '/book/' + BOOK + '/' + PART + '#' + event.target.id
 							});
 						}
 					}
@@ -603,7 +603,7 @@ function displayTEI(selectorIndex) {
 				zord_citation : '',
 				page : null,
 				book : BOOK,
-				zord_url : BASEURL + 'book/' + BOOK
+				zord_url : BASEURL[CONTEXT] + '/book/' + BOOK
 			});
 		});
 		
@@ -637,7 +637,7 @@ function displayTEI(selectorIndex) {
 						zord_citation : html,
 						page : page,
 						book : BOOK,
-						zord_url : BASEURL + 'book/' + BOOK + '/' + PART + id
+						zord_url : BASEURL[CONTEXT] + '/book/' + BOOK + '/' + PART + id
 					});
 				}
 			}

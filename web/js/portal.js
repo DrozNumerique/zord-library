@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		
 	document.getElementById('switchContext').addEventListener("change", function() {
 		form = this.parentNode;
-		form.action = SWITCH[this.value];
+		form.action = BASEURL[this.value];
 		form.submit();
 	});
 	

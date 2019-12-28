@@ -68,7 +68,7 @@ function getCSLEngine(name, style, lang) {
 function getCSLParam(key) {
 	params = getSessionProperty(CSL_PARAMS, {
 		'lang':  LANG,
-		'style': DEFAULT_CSL_STYLE
+		'style': PORTAL.default.csl.style
 	});
 	return params[key];
 }

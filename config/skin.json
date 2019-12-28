@@ -1,5 +1,4 @@
 {
-	"favicon": "/library/img/favicon.ico",
 	"header": {
 		"left": {
 			"url": "http://www.droz.org",
@@ -20,14 +19,6 @@
 		"library": {
 			"type": "text/javascript",
 			"src": "/library/js/portal.js"
-		},
-		"default": {
-			"type": "text/javascript",
-			"template": "/portal/script/default"
-		},
-		"switch": {
-			"type": "text/javascript",
-			"template": "/portal/script/switch"
 		}
 	}
 }

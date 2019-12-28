@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 								checkUpload();
 							} else {
 								setTimeout(function() {
-									step.innerHTML = LOCALE['process']['wait'];
+									step.innerHTML = PORTAL.locales[LANG].process.wait;
 									wait.style.display = 'block';
 								}, 500);
 							}
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					if (wait.style.display == 'block') {
 						wait.style.display = 'none';
 						reportLine('info',  0, '',     true);
-						reportLine('error', 0, LOCALE['process']['stopped'], true);
+						reportLine('error', 0, PORTAL.locales[LANG].process.stopped, true);
 						reportLine('info',  0, '',     true);
 					}
 					return;
@@ -110,9 +110,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 							progress.innerHTML = result.progress + '%';
 						}
 						if (result.step == 'closed') {
-							step.innerHTML = LOCALE['process']['closed'];
+							step.innerHTML = PORTAL.locales[LANG].process.closed;
 						} else if (result.step == 'init') {
-							step.innerHTML = LOCALE['process']['init'];
+							step.innerHTML = PORTAL.locales[LANG].process.init;
 						} else {
 							step.innerHTML = result.step;
 						}
