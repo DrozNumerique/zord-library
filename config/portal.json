@@ -14,15 +14,12 @@
 		}
 	},
 	"states": {
-		"select": {
+		"publish": {
 			"no" : "hidden",
 			"new": "fa-star",
 			"yes": "fa-check"
 		},
-		"manage": {
-			"no" : "hidden",
-			"new": "fa-star",
-			"yes": "fa-check",
+		"delete": {
 			"del": "fa-remove"
 		}
 	}
