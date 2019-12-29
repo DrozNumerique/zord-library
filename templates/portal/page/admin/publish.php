@@ -33,9 +33,9 @@
                         			<input name="title" data-isbn="<?php echo $book['isbn']; ?>" type="hidden" value="<?php echo $book['isbn']; ?>"/>
                         			<span class="content" title="<?php echo $locale->tab->publish->epub; ?>"><?php echo $book['title']; ?></span>
                         		</td>
-                        		<td class="<?php echo $user->isManager() ? 'manage' : 'select'; ?>">
+                        		<td class="state" data-type="<?php echo $user->isManager() ? 'manage' : 'select'; ?>">
           							<input name="check" data-empty="no" type="hidden" value="<?php echo $book['status']; ?>"/>
-          							<i class="fa <?php echo $book['status'] === 'new' ? 'fa-star' : 'fa-check'; ?> fa-fw" style="color:<?php echo $book['status'] !== 'no' ? 'black' : 'white'; ?>;"></i>
+          							<i class="display fa <?php echo $book['status'] === 'new' ? 'fa-star' : 'fa-check'; ?> fa-fw <?php echo $book['status'] == 'no' ? 'hidden' : ''; ?>"></i>
                         		</td>
                         	</tr>
 <?php } ?>

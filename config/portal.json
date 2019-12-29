@@ -16,40 +16,33 @@
 	"states": {
 		"select": {
 			"no": {
-				"icon":"fa-check",
-				"color":"white",
+				"display":"hidden",
 				"next":"new"
 			},
 			"new": {
-				"icon":"fa-star",
-				"color":"black",
+				"display":"fa-star",
 				"next":"yes"
 			},
 			"yes": {
-				"icon":"fa-check",
-				"color":"black",
+				"display":"fa-check",
 				"next":"no"
 			}
 		},
 		"manage": {
 			"no": {
-				"icon":"fa-check",
-				"color":"white",
+				"display":"hidden",
 				"next":"new"
 			},
 			"new": {
-				"icon":"fa-star",
-				"color":"black",
+				"display":"fa-star",
 				"next":"yes"
 			},
 			"yes": {
-				"icon":"fa-check",
-				"color":"black",
+				"display":"fa-check",
 				"next":"del"
 			},
 			"del": {
-				"icon":"fa-remove",
-				"color":"black",
+				"display":"fa-remove",
 				"next":"no"
 			}
 		}
