@@ -15,36 +15,15 @@
 	},
 	"states": {
 		"select": {
-			"no": {
-				"display":"hidden",
-				"next":"new"
-			},
-			"new": {
-				"display":"fa-star",
-				"next":"yes"
-			},
-			"yes": {
-				"display":"fa-check",
-				"next":"no"
-			}
+			"no" : "hidden",
+			"new": "fa-star",
+			"yes": "fa-check"
 		},
 		"manage": {
-			"no": {
-				"display":"hidden",
-				"next":"new"
-			},
-			"new": {
-				"display":"fa-star",
-				"next":"yes"
-			},
-			"yes": {
-				"display":"fa-check",
-				"next":"del"
-			},
-			"del": {
-				"display":"fa-remove",
-				"next":"no"
-			}
+			"no" : "hidden",
+			"new": "fa-star",
+			"yes": "fa-check",
+			"del": "fa-remove"
 		}
 	}
 }
