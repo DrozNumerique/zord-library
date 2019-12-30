@@ -1000,8 +1000,8 @@ class Book extends Module {
             }
         }
         $liner = new $liner($this->context, $this->lang);
-        $apart = $search === false;
-        $class = $search !== false ? 'search' : null;
+        $apart = ($search === false);
+        $class = ($search !== false ? 'search' : null);
         $result = $liner->line($books, $apart, $class);
         $shelves = $result['shelves'];
         $locale = $result['locale'];

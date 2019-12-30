@@ -27,10 +27,10 @@ abstract class Liner {
     
     public function line($books, $apart = true, $classes = null) {
         foreach ($books as $book) {
-            $apart = $this->apart($book, $apart);
-            if ($apart) {
-                $this->shelves[$apart]['apart'] = true;
-                $this->shelves[$apart]['books'][] = $book;
+            $shelf = $this->apart($book, $apart);
+            if ($shelf) {
+                $this->shelves[$shelf]['apart'] = true;
+                $this->shelves[$shelf]['books'][] = $book;
             } else {
                 if ($this->store($book) === false) {
                     $this->shelves['other']['books'][] = $book;
