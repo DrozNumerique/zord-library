@@ -121,7 +121,7 @@
 </ul>
 <h3>Paramètres de recherche</h3>
 <ul>
-	<li><b>Chercher dans tous les livres</b>. La barre de recherche de la <a href="<?php echo $baseURL; ?>/page/search">page Recherche</a> lance la recherche sur l’ensemble des livres.</li>
+	<li><b>Chercher dans tous les livres</b>. La barre de recherche de la <a href="<?php echo $baseURL; ?>/search">page Recherche</a> lance la recherche sur l’ensemble des livres.</li>
 	<li><b>Filtrer par sous-collection(s)</b>. La recherche peut être limitée à une ou plusieurs sous-collections (cocher les cases correspondantes, sous la barre de recherche dans le menu "Filtres").</li>
 	<li><b>Filtrer par date</b>. La recherche peut être limitée à une période grâce aux deux champs <i>Date de la source</i>. De fait cette La recherche chronologique porte sur les seuls textes historiques (les études académiques en sont exclues) et peut être couplée avec les filtres de sous-collection.</li>
 	<li><b>Exclure/inclure les index, glossaires et bibliographies</b>. Par défaut les index, glossaires et bibliographies sont exclus du champ de la recherche. Pour les y inclure, cochez la case correspondante dans le menu "Filtres".</li>

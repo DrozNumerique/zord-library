@@ -110,7 +110,7 @@
 </ul>
 <h3>Search parameters</h3>
 <ul>
-  <li><b>All texts</b>. The search bar of the Research page finds results in the entire text base.</li>
+  <li><b>All texts</b>. The search bar of the <a href="<?php echo $baseURL; ?>/search">Research page</a> finds results in the entire text base.</li>
   <li><b>Filter by collection(s)</b>. Search may be restricted to one or more collections (check the box of the desired collection(s) below the search bar).</li>
   <li><b>Filter by date</b>. Search may be restricted to a time period using the two fields for <i>Year</i>. Chronological search is restricted to the historical texts (modern studies are excluded). Chronological search may be combined with a collection filter.</li>
   <li><b>Search in one book</b>. When browsing a book, the search bar on the left will search in that book only.</li>
