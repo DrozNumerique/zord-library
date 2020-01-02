@@ -167,7 +167,7 @@ function getSelected(select) {
 
 function getCriteria() {
 	var query = document.getElementById('queryInput').value;
-	var operator = DEFAULT_SEARCH_OPERATOR;
+	var operator = PORTAL.default.search.operator;
 	[].forEach.call(['AND','OR'], function(value) {
 		radio = document.getElementById('search_operator_' + value);
 		if (radio.checked) {
