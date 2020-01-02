@@ -53,7 +53,7 @@
 								<td class="t_date source" style="display:<?php echo $book['source'] != 2 ? 'table-cell' : 'none'; ?>;"><?php echo $book['to']; ?></td>
 								<td class="t_person authors"><?php echo Library::listActors($book['creator'], 'HTML'); ?></td>
 								<td class="t_title title">
-									<a href="<?php echo $baseURL.'book/'.$book['isbn'].(isset($models['search']) ? '?search='.$models['search'] : ''); ?>" class="content"><i class="fa fa-<?php echo $book['readable'] ? 'unlock-alt' : 'lock'; ?> fa-fw" style="color: <?php echo $book['readable'] ? 'green' : '#C0392B'; ?>;"></i><?php echo Library::title($book['title'], $book['subtitle']); ?></a>
+									<a href="<?php echo $baseURL.'/book/'.$book['isbn'].(isset($models['search']) ? '?search='.$models['search'] : ''); ?>" class="content"><i class="fa fa-<?php echo $book['readable'] ? 'unlock-alt' : 'lock'; ?> fa-fw" style="color: <?php echo $book['readable'] ? 'green' : '#C0392B'; ?>;"></i><?php echo Library::title($book['title'], $book['subtitle']); ?></a>
 								</td>
 								<td class="t_person editors"><?php echo Library::listActors($book['editor'], 'HTML'); ?></td>
 								<td class="t_date date"><?php echo $book['date']; ?></td>
