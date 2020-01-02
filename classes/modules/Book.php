@@ -823,10 +823,10 @@ class Book extends Module {
             $client = new SolrClient(Zord::value('connection', ['solr','zord']));
             $query  = new SolrQuery();
             if (!isset($criteria['scope']) || empty($criteria['scope'])) {
-                $criteria['scope'] = DEFAULT_SEARCH_SCOPE;
+                $criteria['scope'] = Zord::value('portal', ['default','search','scope']);
             }
             if (!isset($criteria['operator']) || empty($criteria['operator'])) {
-                $criteria['operator'] = DEFAULT_SEARCH_OPERATOR;
+                $criteria['operator'] = Zord::value('portal', ['default','search','operator']);
             }
             if ($criteria['scope'] == 'corpus' && is_array($criteria['filters']['ean']) && isset($this->user->login)) {
                 foreach ($criteria['filters']['ean'] as $book) {
