@@ -527,7 +527,7 @@ function displayTEI(selectorIndex) {
 			if (id != undefined) {
 				part += '#' + id;
 			}
-			window.location.href = BASEURL[CONTEXT] + '/book/' + part;
+			window.location.href = BASEURL['zord'] + 'book/' + part;
 			if (hash == id) {
 				var event = document.createEvent("HTMLEvents");
 				event.initEvent("hashchange", true, false);
@@ -588,7 +588,7 @@ function displayTEI(selectorIndex) {
 								zord_type : 'page',
 								page : attrN,
 								book : BOOK,
-								zord_url : BASEURL[CONTEXT] + '/book/' + BOOK + '/' + PART + '#' + event.target.id
+								zord_url : BASEURL['zord'] + 'book/' + BOOK + '/' + PART + '#' + event.target.id
 							});
 						}
 					}
@@ -603,7 +603,7 @@ function displayTEI(selectorIndex) {
 				zord_citation : '',
 				page : null,
 				book : BOOK,
-				zord_url : BASEURL[CONTEXT] + '/book/' + BOOK
+				zord_url : BASEURL['zord'] + 'book/' + BOOK
 			});
 		});
 		
@@ -637,7 +637,7 @@ function displayTEI(selectorIndex) {
 						zord_citation : html,
 						page : page,
 						book : BOOK,
-						zord_url : BASEURL[CONTEXT] + '/book/' + BOOK + '/' + PART + id
+						zord_url : BASEURL['zord'] + 'book/' + BOOK + '/' + PART + id
 					});
 				}
 			}

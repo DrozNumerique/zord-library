@@ -98,7 +98,7 @@ function refreshHistory(only) {
 							}
 							if (reference == null) {
 								$.get(
-									BASEURL[CONTEXT] + '/Book/reference',
+									BASEURL['zord'] + 'Book/reference',
 								    {isbn: text},
 								    function(result) {
 								    	reference = result;
