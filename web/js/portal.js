@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	document.getElementById('switchLang').addEventListener("change", function() {
 		invokeZord({
-			module:'Controler',
+			module:'Portal',
 			action:'last',
 			type:'VIEW',
 			lang:this.value

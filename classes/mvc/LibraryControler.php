@@ -18,7 +18,7 @@ class LibraryControler extends Controler {
     }
 
     public function models() {
-	$models = parent::models();
+	    $models = parent::models();
         $skin = Zord::getSkin($this->context);
         if (isset($skin->header->right->text)) {
             $models['portal']['header']['right']['text'] = $skin->header->right->text;
