@@ -35,9 +35,9 @@
                                 <?php   if ($user->hasRole('admin', $name)) { ?>
                                     <tr class="sort">
                                     	<td><?php echo $name; ?></td>
-                                    	<td class="<?php echo $user->isManager() ? 'manage' : 'select'; ?>">
+                                    	<td class="state" data-type="publish">
                       						<input name="<?php echo $name; ?>" data-empty="no" type="hidden" value="no"/>
-                      						<i class="fa fa-check fa-fw" style="color:white;"></i>
+                      						<i class="display fa hidden fa-fw"></i>
                                     	</td>
                                     </tr>
                    				<?php   } ?>
