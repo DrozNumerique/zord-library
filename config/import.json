@@ -1,18 +1,20 @@
 {
-	"steps": [
-		"grant",
-		"medias",
-		"load",
-		"metadata",
-		"validate",
-		"adjust",
-		"slice",
-		"zoom",
-		"index",
-		"publish",
-		"facets",
-		"epub"
-	],
+	"steps": {
+		"__RESET__": [
+			"grant",
+			"medias",
+			"load",
+			"metadata",
+			"validate",
+			"adjust",
+			"slice",
+			"zoom",
+			"index",
+			"publish",
+			"facets",
+			"epub"
+		]
+	},
 	"types": {
 		"fragment": [
 	        "part",

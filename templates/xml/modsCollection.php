@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
 <?php 
     	foreach ($models['books'] as $isbn) {
-    	    $metadata = Library::data($isbn, 'meta', 'array');
+    	    $metadata = Store::data($isbn, 'meta', 'array');
 ?>
 	<mods>
 		<typeOfResource>text</typeOfResource>

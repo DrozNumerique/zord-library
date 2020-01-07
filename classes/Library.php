@@ -17,94 +17,49 @@ class Library {
         'IV' => 4,
         'I'  => 1,
     );
-	
-	public static function data($isbn, $type = 'path', $format = 'path') {
-	    $base = DATA_FOLDER.'zord'.DS.$isbn;
-	    $path = null;
-	    $data = null;
-	    switch ($type) {
-	        case 'path': {
-	            $path = $base.DS;
-	            break;
-	        }
-	        case 'temp': {
-	            $path = $base.'.tmp'.DS;
-	            break;
-	        }
-	        case 'book': {
-	            $path = $base.DS.'book.xml';
-	            break;
-	        }
-	        case 'meta': {
-	            $path = $base.DS.'metadata.json';
-	            break;
-	        }
-	        case 'head': {
-	            $path = $base.DS.'header.xml';
-	            break;
-	        }
-	        case 'toc': {
-	            $path = $base.DS.'toc.xhtml';
-	            break;
-	        }
-	        default: {
-	            $path = $base.DS.$type.'.xhtml';
-	            break;
-	        }
-	    }
-	    if (isset($path)) {
-    	    switch ($format) {
-    	        case 'path': {
-    	            $data = $path;
-    	            break;
-    	        }
-    	        case 'content': {
-    	            $data = file_get_contents($path);
-    	            break;
-    	        }
-    	        case 'object': {
-    	            $data = json_decode(file_get_contents($path));
-    	            break;
-    	        }
-    	        case 'array': {
-    	            $data = Zord::arrayFromJSONFile($path);
-    	            break;
-    	        }
-    	        case 'document': {
-    	            $data = new DOMDocument();
-    	            $data->load($path);
-    	            break;
-    	        }
-    	        case 'xml': {
-    	            $data = simplexml_load_string(file_get_contents($path), "SimpleXMLElement", LIBXML_NOCDATA);
-    	            break;
-    	        }
-    	    }
-	    }
-	    return $data;
-	}
-	
-	public static function media($isbn, $names = null, $types = ['jpg','png']) {
-	    if (!isset($names)) {
-	        return DATA_FOLDER.'medias'.DS.$isbn.DS;
-	    }
-	    if (!is_array($names)) {
-	        $names = [$names];
-	    }
-	    if (!is_array($types)) {
-	        $types = [$types];
-	    }
-	    foreach ($names as $name) {
-	        foreach ($types as $ext) {
-	            $media = 'medias'.DS.$isbn.DS.$name.'.'.$ext;
-	            if (file_exists(DATA_FOLDER.$media)) {
-	                return $media;
-	            }
-	        }
-	    }
-	    return false;
-	}
-	
+    
+    public static function books($context) {
+        $books = [];
+        $entity = (new BookHasContextEntity())->retrieve([
+            'many'  => true,
+            "where" => ['context' => $context]
+        ]);
+        $status = [];
+        foreach ($entity as $entry) {
+            $status[$entry->book] = $entry->status;
+        }
+        $entity = (new BookEntity())->retrieve();
+        foreach($entity as $book) {
+            $books[] = [
+                'isbn'     => $book->ean,
+                'status'   => isset($status[$book->ean]) ? $status[$book->ean] : 'no',
+                'title'    => self::title($book->title, $book->subtitle)
+            ];
+        }
+        return $books;
+    }
+    
+    public static function title($title, $subtitle = null, $maxlength = null, $separator = '. ') {
+        if (is_array($title)) {
+            if (isset($title['subtitle'])) {
+                $subtitle = $title['subtitle'];
+            }
+            if (isset($title['title'])) {
+                $title = $title['title'];
+            } else {
+                $title = null;
+            }
+        }
+        $title = isset($title) ? $title : '';
+        if (isset($subtitle) && !empty($subtitle)) {
+            $title .= (empty($title) ? '' : $separator).$subtitle;
+        }
+        if (is_int($maxlength)) {
+            $title = mb_substr($title, 0, $maxlength).(mb_strlen($title) > $maxlength ? "…" : '');
+        }
+        return $title;
+    }
+    
 	public static function listActors($actors, $type, $max = 3) {
 	    $tooMany = count($actors) > $max;
 	    $glue = '';
@@ -181,27 +136,6 @@ class Library {
 	        }
 	    }
 	}
-	
-	public static function title($title, $subtitle = null, $maxlength = null, $separator = '. ') {
-	    if (is_array($title)) {
-	        if (isset($title['subtitle'])) {
-	            $subtitle = $title['subtitle'];
-	        }
-	        if (isset($title['title'])) {
-	            $title = $title['title'];
-	        } else {
-	            $title = null;
-	        }
-	    }
-	    $title = isset($title) ? $title : '';
-	    if (isset($subtitle) && !empty($subtitle)) {
-	        $title .= (empty($title) ? '' : $separator).$subtitle;
-	    }
-	    if (is_int($maxlength)) {
-	        $title = mb_substr($title, 0, $maxlength).(mb_strlen($title) > $maxlength ? "…" : '');
-	    }
-	    return $title;
-	}
 
 	public static function year($date) {
 	    return substr(explode('-', $date.'')[0], 0, 4);
@@ -238,7 +172,7 @@ class Library {
 	}
 	
 	public static function reference($isbn, $page = '') {
-	    $metadata = self::data($isbn, 'meta', 'array');
+	    $metadata = Store::data($isbn, 'meta', 'array');
 	    $reference = [
 	        'type' => 'book',
 	        'id'   => uniqid('Zref_'),
@@ -287,9 +221,5 @@ class Library {
 	    }
 	    $reference['page'] = $page;
 	    return $reference;
-	}
-	
-	public static function getImportFolder() {
-	    return Zord::liveFolder('import');
 	}
 }

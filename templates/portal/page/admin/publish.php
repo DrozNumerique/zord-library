@@ -23,7 +23,7 @@
                				</tr>
                			</thead>
                			<tbody>
-<?php foreach (LibraryAdmin::books($context) as $book) { ?>
+<?php foreach (Library::books($context) as $book) { ?>
                         	<tr class="data sort" data-included="<?php echo $book['status'] !== 'no' ? 'yes' : 'no'; ?>">
                         		<td>
                         			<input name="book" data-isbn="<?php echo $book['isbn']; ?>" type="hidden" value="<?php echo $book['isbn']; ?>"/>

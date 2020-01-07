@@ -1,12 +1,4 @@
 {
-	"UserEntity": {
-        "join": {
-        	"UserHasQueryEntity": ["login", "user"]
-        },
-        "elements": {
-        	"UserHasQueryEntity": ["queries", "user"]
-        }
-	},
 	"BookEntity": {
 		"table": "books",
 		"fields": [
@@ -33,6 +25,18 @@
         	"BookHasFacetEntity": ["facets", "book"]
         }
     },
+	"BookHasContextEntity": {
+		"table": "book_has_context",
+		"fields": [
+	        "book",
+	        "context",
+	        "status"
+        ],
+        "key": [
+        	"book",
+        	"context"
+        ]
+    },
 	"BookHasPartEntity": {
 		"table": "book_has_part",
 		"fields": [
@@ -44,18 +48,6 @@
         "key": [
         	"book",
         	"part"
-        ]
-    },
-	"BookHasContextEntity": {
-		"table": "book_has_context",
-		"fields": [
-	        "book",
-	        "context",
-	        "status"
-        ],
-        "key": [
-        	"book",
-        	"context"
         ]
     },
 	"BookHasFacetEntity": {
@@ -74,6 +66,14 @@
         	"BookHasContextEntity": ["book","book"]
         }
     },
+	"UserEntity": {
+        "join": {
+        	"UserHasQueryEntity": ["login", "user"]
+        },
+        "elements": {
+        	"UserHasQueryEntity": ["queries", "user"]
+        }
+	},
 	"UserHasQueryEntity": {
 		"table": "user_has_query",
 		"fields": [

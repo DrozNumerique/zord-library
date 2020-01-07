@@ -5,7 +5,7 @@
          xmlns:foaf="http://xmlns.com/foaf/0.1/"
          xmlns:address="http://schemas.talis.com/2005/address/schema#">
   <bibo:Book rdf:about="http://calvin.droz.org/9782600024181">
-    <dc:title><?php echo Library::title(isset($models['metadata']['title']) ? $models['metadata']['title'] : '', isset($models['metadata']['subtitle']) ? $models['metadata']['subtitle'] : ''); ?></dc:title>
+    <dc:title><?php echo Library::title($models['metadata']); ?></dc:title>
 <?php if (isset($models['metadata']['description'])) { ?>
 <?php   if (is_array($models['metadata']['description'])) { ?>
 <?php     foreach ($models['metadata']['description'] as $lang => $description) { ?>

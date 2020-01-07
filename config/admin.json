@@ -1,13 +1,4 @@
 {
-	"import":  {
-		"scope": "context",
-		"scripts": [
-			{
-				"src": "/library/js/admin/import.js",
-				"type": "text/javascript"
-			}
-		]
-	},
 	"publish":  {
 		"scope": "context",
 		"scripts": [

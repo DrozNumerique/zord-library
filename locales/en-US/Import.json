@@ -1,4 +1,6 @@
 {
+	"titlePage": "Title Page",
+	"line": "Line",
 	"steps": {
 		"grant": "Checking authorizations",
 		"medias": "Copying included medias",
@@ -11,36 +13,12 @@
 		"index": "Indexing document",
 		"publish": "Publishing in context",
 		"facets": "Updating indexed values lists",
-		"epub": "Generating ePub format",
-		"status": {
-			"begin": "begin",
-			"OK": "done",
-			"KO": "failed",
-			"unknown": "Call to unknown step"
-		}
-	},
-	"books": {
-		"nodata": "No book data to import",
-		"start": "Start processing ${X} book(s)",
-		"end": "End processing ${X} book(s) (${Y} succeded)",
-		"book": "Book",
-		"updated": "updated",
-		"unchanged": "unchanged",
-		"titlePage": "Title Page"
+		"epub": "Generating ePub format"
 	},
 	"messages": {
-		"line": "Line",
 		"grant": {
 			"error": {
 				"noadmin": "This book is already published in context ${context} (${name}) whom you are no administrator"
-			}
-		},
-		"medias": {
-			"info": {
-				"nomedia": "No media for this book in this package"
-			},
-			"error": {
-				"copy": "Unable to copy ${source} to ${target}"
 			}
 		},
 		"load": {
@@ -58,9 +36,6 @@
 				"from": {
 					"nodata": "No metadata from this source"
 				}
-			},
-			"error": {
-				"missing": "Missing metadata for this book"
 			}
 		},
 		"validate": {

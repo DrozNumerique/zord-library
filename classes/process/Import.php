@@ -1,29 +1,18 @@
 <?php
 
-class Import extends ProcessExecutor {
+class LibraryImport extends Import {
 
-    protected $parameters = [];
-    protected $folder     = null;
     protected $adjust     = NS_ADJUST;
     protected $prefix     = NS_PREFIX;
     protected $namespace  = NS_URL;
     protected $xmlns      = ' xmlns:'.NS_PREFIX.'="'.NS_URL.'"';
     protected $publish    = null;
-    protected $books      = null;
-    protected $steps      = null;
-    protected $until      = null;
-    protected $continue   = IMPORT_CONTINUE;
-    protected $execute    = true;
     protected $base       = [];
     
-    protected $count    = 0;
     protected $size     = 0;
     protected $total    = 0;
-    protected $progress = 0;
     protected $facets   = [];
-    protected $success  = 0;
     
-    protected $done     = false;
     protected $xml      = null;
     protected $document = null;
     protected $adjusted = null;
@@ -35,103 +24,42 @@ class Import extends ProcessExecutor {
     protected $toc      = null;
     protected $tocXPath = null;
     protected $page     = null;
-    protected $error    = null;
     
-    public function __construct() {
-        $this->class  = 'Import';
-        $this->folder = Library::getImportFolder();
+    protected function book($isbn, $metadata) {
+        return [
+            "ean"      => $isbn,
+            "title"    => isset($metadata['title']) ? $metadata['title'] : '',
+            "subtitle" => isset($metadata['subtitle']) ? $metadata['subtitle'] : '',
+            "creator"  => isset($metadata['creator']) ? $metadata['creator'] : [],
+            "editor"   => isset($metadata['editor']) ? $metadata['editor'] : [],
+            "category" => isset($metadata['category']) ? $metadata['category'] : [],
+            "number"   => isset($metadata['category_number']) ? $metadata['category_number'] : '',
+            "date"     => isset($metadata['date']) ? $metadata['date'] : '',
+            "s_from"   => isset($metadata['creation_date_from']) ? $metadata['creation_date_from'] : '',
+            "s_to"     => isset($metadata['creation_date_to']) ? $metadata['creation_date_to'] : ''
+        ];
     }
     
-    public function execute($parameters = []) {
-        try {
-            $this->configure($parameters);
-        } catch (Throwable $thrown) {
-            $this->report(0, 'bold', $thrown);
-            return;
-        }
-        if (count($this->books) == 0) {
-            $this->report(0, 'warn', $this->locale->books->nodata);
-            $this->report();
-        } else {
-            try {
-                $this->preBooks();
-            } catch (Throwable $thrown) {
-                $this->report(0, 'bold', $thrown);
-                return;
-            }
-            $this->report(0, 'info', Zord::substitute($this->locale->books->start, [
-                'X' => count($this->books), 
-            ]));
-            $this->report();
-            foreach ($this->books as $isbn) {
-                $score = $this->locale->books->book.' '.($this->count + 1).' / '.count($this->books);
-                try {
-                    $this->resetBook($isbn);
-                    $this->progress(round(100 * $this->progress));
-                    $this->step($score);
-                } catch (Throwable $thrown) {
-                    $this->report(0, 'bold', $thrown);
-                    continue;
+    protected function parts($isbn, $metadata) {
+        $parts = [];
+        if (isset($metadata['parts'])) {
+            foreach ($metadata['parts'] as &$part) {
+                if ($part['index']) {
+                    $part['content'] = explode("\n", wordwrap(trim(preg_replace(
+                        '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
+                            '<br/>', ' ',
+                            Store::data($isbn, $part['name'], 'content')
+                        )), ENT_QUOTES | ENT_XML1, 'UTF-8')
+                    )), INDEX_MAX_CONTENT_LENGTH));
+                    $parts[] = $part;
                 }
-                $this->report(0, 'info', "┌──────────────────────┐");
-                $this->report(0, 'info', "│ ISBN : " . $isbn . " │");
-                $this->report(0, 'info', "└──────────────────────┘");
-                $this->report(1, 'info', $score);
-                foreach ($this->steps as $step) {
-                    $this->report(1, 'info', Zord::str_pad($this->locale->steps->$step, 50, "."));
-                    if ($this->handle($this->execute, true, $isbn, $step)) {
-                        try {
-                            if (method_exists($this, $step)) {
-                                $this->done = $this->$step($isbn);
-                            } else {
-                                $this->report(1, 'info', Zord::str_pad('', 50 - mb_strlen($this->locale->steps->status->KO), "."), false);
-                                $this->report(0, 'KO', $this->locale->steps->status->KO);
-                                $this->report(2, 'error', $this->locale->steps->status->unknown);
-                                if (!$this->handle($this->continue, false, $isbn, $step)) break;
-                            }
-                        } catch(Throwable $thrown) {
-                            $this->report(1, 'info', Zord::str_pad('', 50 - mb_strlen($this->locale->steps->status->KO), "."), false);
-                            $this->report(0, 'KO', $this->locale->steps->status->KO);
-                            $this->report(2, 'bold', $thrown);
-                            $this->done = false;
-                            if (!$this->handle($this->continue, false, $isbn, $step)) break;
-                        }
-                        $this->report(1, 'info', Zord::str_pad('', 50 - mb_strlen($this->done ? $this->locale->steps->status->OK : $this->locale->steps->status->KO), "."), false);
-                        $this->report(0, $this->done ? 'OK' : 'KO', $this->done ? $this->locale->steps->status->OK : $this->locale->steps->status->KO);
-                        if ((!$this->done && !$this->handle($this->continue, false, $isbn, $step)) || $step == $this->until) {
-                            break;
-                        }
-                    }
-                }
-                $this->report();
-                if ($this->done) {
-                    $this->success++;
-                } else if (!$this->handle($this->continue, false, $isbn))  {
-                    break;
-                }
-            }
-            $this->report(0, 'info', Zord::substitute($this->locale->books->end, [
-                'X' => count($this->books),
-                'Y' => $this->success
-            ]));
-            $this->report();
-            try {
-                $this->postBooks();
-            } catch (Throwable $thrown) {
-                $this->report(0, 'bold', $thrown);
-                return;
             }
         }
+        return $parts;
     }
     
     protected function configure($parameters = []) {
-        $this->parameters = $parameters;
-        if (isset($parameters['folder'])) {
-            $this->folder = $parameters['folder'];
-            if (substr($this->folder, -strlen(DS), strlen(DS)) != DS) {
-                $this->folder = $this->folder.DS;
-            }
-        }
+        parent::configure($parameters);
         if (isset($parameters['publish'])) {
             $this->publish = $parameters['publish'];
         }
@@ -143,12 +71,6 @@ class Import extends ProcessExecutor {
         }
         if (!isset($this->publish) && file_exists($this->folder.'publish.json')) {
             $this->publish = Zord::arrayFromJSONFile($this->folder.'publish.json');
-        }
-        if (isset($parameters['books'])) {
-            $this->books = $parameters['books'];
-            if (!is_array($this->books)) {
-                $this->books = [$this->books];
-            }
         }
         if (!isset($this->books)) {
             $set = $this->folder.'*';
@@ -164,21 +86,6 @@ class Import extends ProcessExecutor {
                 }
             }
         }
-        if (isset($parameters['steps'])) {
-            $this->steps = $parameters['steps'];
-            if (!is_array($this->steps)) {
-                $this->steps = [$this->steps];
-            }
-        }
-        if (!isset($this->steps)) {
-            $this->steps = Zord::value('import', 'steps');
-        }
-        if (isset($parameters['until'])) {
-            $this->until = $parameters['until'];
-        }
-        if (isset($parameters['continue'])) {
-            $this->continue = $parameters['continue'];
-        }
     }
     
     protected function preBooks() {
@@ -192,12 +99,8 @@ class Import extends ProcessExecutor {
         }
     }
     
-    protected function postBooks() {}
-    
     protected function resetBook($isbn) {
-        $this->count++;
-        $this->done = false;
-        $this->progress = $this->count / count($this->books);
+        parent::resetBook($isbn);
         $text = $this->folder.$isbn.'.xml';
         if ($this->total > 0 && file_exists($text)) {
             $this->size += filesize($text);
@@ -214,14 +117,6 @@ class Import extends ProcessExecutor {
         $this->idCount = 1;
         $this->page = null;
         $this->dones = [];
-        $folder = Library::data($isbn);
-        if (!file_exists($folder)) {
-            mkdir($folder);
-        }
-        $this->error = LOGS_FOLDER.$isbn.'.error.log';
-        if (file_exists($this->error)) {
-            unlink($this->error);
-        }
     }
     
     protected function grant($isbn) {
@@ -249,41 +144,6 @@ class Import extends ProcessExecutor {
         return true;
     }
     
-    protected function medias($isbn) {
-        $result = true;
-        $folder = $this->folder.$isbn;
-        if (file_exists($folder) && is_dir($folder)) {
-            $target = Library::media($isbn);
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), RecursiveIteratorIterator::SELF_FIRST);
-            if ($iterator->current()) {
-                $this->info(2, $target);
-                foreach ($iterator as $file) {
-                    if (is_dir($file)) {
-                        continue;
-                    }
-                    $name = substr($file, strlen($folder) + 1);
-                    $this->info(3, $name);
-                    $dir = dirname($target.$name);
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    if (!copy($file, $target.$name)) {
-                        $this->logError('medias', Zord::substitute($this->locale->messages->medias->error->copy, [
-                            'source' => $file,
-                            'target' => $target
-                        ]));
-                        $result = false;
-                    }
-                }
-            } else {
-                $this->info(2, $this->locale->messages->medias->info->nomedia);
-            }
-        } else {
-            $this->info(2, $this->locale->messages->medias->info->nomedia);
-        }
-        return $result;
-    }
-    
     protected function load($isbn) {
         if (file_exists($this->xml)) {
             $this->document = new DOMDocument();
@@ -298,9 +158,161 @@ class Import extends ProcessExecutor {
     
     protected function metadata($isbn) {
         if ($header = $this->header($isbn)) {
-            file_put_contents(Library::data($isbn, 'head'), $header);
-            $this->createBook($isbn, $header);
-            return true;
+            file_put_contents(Store::data($isbn, 'head'), $header);
+            $header = simplexml_load_string($header);
+            $uuid = md5($header);
+            $metadata = [
+                'ean'    => $isbn,
+                'format' => 'text/html',
+                'uuid'   => substr($uuid, 0, 8).'-'.substr($uuid, 8, 4).'-'.substr($uuid, 12, 4).'-'.substr($uuid, 16, 4).'-'.substr($uuid, 20, 12),
+                'uri'    => OPENURL.'?id='.$isbn,
+            ];
+            if (isset($header->fileDesc->titleStmt->title)) {
+                foreach ($header->fileDesc->titleStmt->title as $title) {
+                    $metadata[isset($title['type']) && $title['type'] == 'sub' ? 'subtitle' : 'title'] = Library::compact($title);
+                }
+            }
+            if (isset($header->fileDesc->titleStmt->author)) {
+                $metadata['creator'] = [];
+                foreach ($header->fileDesc->titleStmt->author as $author) {
+                    if (!in_array($author['key'].'', $metadata['creator'])) {
+                        $metadata['creator'][] = $author['key'].'';
+                    }
+                }
+            }
+            if (isset($header->fileDesc->titleStmt->editor)) {
+                $metadata['editor'] = [];
+                foreach ($header->fileDesc->titleStmt->editor as $editor) {
+                    if (!in_array($editor['key'].'', $metadata['editor'])) {
+                        $metadata['editor'][] = $editor['key'].'';
+                    }
+                }
+            }
+            if (isset($header->fileDesc->seriesStmt) && null !== $header->fileDesc->seriesStmt->attributes('xml', true) && isset($header->fileDesc->seriesStmt->attributes('xml', true)['id'])) {
+                $metadata['category'] = [$header->fileDesc->seriesStmt->attributes('xml', true)['id'].''];
+            }
+            if (isset($header->fileDesc->seriesStmt['n'])) {
+                $metadata['category_number'] = $header->fileDesc->seriesStmt['n'].'';
+            }
+            if (isset($header->fileDesc->extent->measure)) {
+                foreach ($header->fileDesc->extent->measure as $measure) {
+                    $metadata['page'.($measure['unit'].'' != 'pages' ? '_'.$measure['unit'].'' : '')]  = $measure['quantity'].'';
+                }
+            }
+            if (isset($header->profileDesc->abstract)) {
+                foreach ($header->profileDesc->abstract as $abstract) {
+                    if (null !== $abstract->attributes('xml', true) && isset($abstract->attributes('xml', true)['lang'])) {
+                        $metadata['description'][$abstract->attributes('xml', true)['lang'].''] = $abstract->p.'';
+                    }
+                }
+            }
+            if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher)) {
+                $metadata['publisher'] = $header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher.'';
+            }
+            if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace) && !empty($header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace.'')) {
+                $metadata['pubplace'] = $header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace.'';
+            }
+            if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher)) {
+                $metadata['rights'] = '© '.$header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher;
+            }
+            if (isset($header->fileDesc->sourceDesc->biblFull->seriesStmt->title)) {
+                $relation = [];
+                foreach ($header->fileDesc->sourceDesc->biblFull->seriesStmt->title as $line) {
+                    $type = isset($line['type']) ? $line['type'].'' : '';
+                    if ($type == 'num') {
+                        $metadata['collection_number'] = $line.'';
+                    } else if ($type == 'main') {
+                        $relation[] = $line.'';
+                    }
+                }
+                $metadata['relation'] = implode(", ", $relation);
+            }
+            if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->date)) {
+                $metadata['date'] = Library::year($header->fileDesc->sourceDesc->biblFull->publicationStmt->date['when']);
+            }
+            if (isset($header->fileDesc->notesStmt->note)) {
+                foreach ($header->fileDesc->notesStmt->note as $note) {
+                    $type = $note['type'].'';
+                    if ($type == "ref") {
+                        $metadata['ref_n'] = $note->ref['n'].'';
+                        $metadata['ref_url'] = $note->ref['target'].'';
+                    }
+                    if ($type == "image") {
+                        $metadata['ref_cover'] = $note->graphic['url'].'';
+                    }
+                }
+            }
+            if (isset($header->profileDesc->creation->date)) {
+                if (isset($header->profileDesc->creation->date['when']) && !empty($header->profileDesc->creation->date['when'].'')) {
+                    $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['when']);
+                    $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['when']);
+                }
+                if (isset($header->profileDesc->creation->date['notBefore']) && !empty($header->profileDesc->creation->date['notBefore'].'')) {
+                    $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['notBefore']);
+                }
+                if (isset($header->profileDesc->creation->date['notAfter']) && !empty($header->profileDesc->creation->date['notAfter'].'')) {
+                    $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['notAfter']);
+                }
+                if (isset($header->profileDesc->creation->date['from']) && !empty($header->profileDesc->creation->date['from'].'')) {
+                    $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['from']);
+                }
+                if (isset($header->profileDesc->creation->date['to']) && !empty($header->profileDesc->creation->date['to'].'')) {
+                    $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['to']);
+                }
+            }
+            if (isset($header->profileDesc->langUsage->language)) {
+                $metadata['language'] = $header->profileDesc->langUsage->language['ident'].'';
+            } else {
+                $metadata['language'] = explode('-', $this->lang)[0];
+            }
+            if (isset($header->profileDesc->textClass)) {
+                if (isset($header->profileDesc->textClass->keywords)) {
+                    foreach ($header->profileDesc->textClass->keywords as $keywords) {
+                        $scheme = $keywords['scheme'].'';
+                        $subjectCodes = [];
+                        $scheme = mb_strtoupper($scheme);
+                        $lang = (null !== $keywords->attributes('xml', true) && isset($keywords->attributes('xml', true)['lang'])) ? '_'.mb_strtoupper($keywords->attributes('xml', true)['lang'].'') : '';
+                        foreach ($keywords->term as $term){
+                            $subjectCodes[] = mb_strtoupper(trim($term.''));
+                        }
+                        $metadata['subjectCodes'][$scheme.$lang] = $subjectCodes;
+                    }
+                }
+            }
+            $publications = [];
+            if (isset($header->fileDesc->sourceDesc->biblFull)) {
+                $publications[] = $header->fileDesc->sourceDesc->biblFull;
+            }
+            if (isset($header->fileDesc)) {
+                $publications[] = $header->fileDesc;
+            }
+            foreach($publications as $publication) {
+                if (isset($publication->publicationStmt->idno)) {
+                    foreach($publication->publicationStmt->idno as $idno) {
+                        $type = ''.$idno['type'];
+                        $value = ''.$idno;
+                        switch($type) {
+                            case 'EAN_ePUB': {
+                                $metadata['epub'] = $value;
+                                break;
+                            }
+                            case 'EAN_pdf': {
+                                $metadata['pdf'] = $value;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            $metaFile = Store::data($isbn, 'meta');
+            $previous = Zord::arrayFromJSONFile($metaFile);
+            foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
+                if (isset($previous[$keep])) {
+                    $metadata[$keep] = $previous[$keep];
+                }
+            }
+            file_put_contents($metaFile, Zord::json_encode($metadata));
+            return parent::metadata($isbn);
         } else {
             $this->logError('metadata', $this->locale->messages->metadata->error->missing);
             return false;
@@ -327,7 +339,7 @@ class Import extends ProcessExecutor {
                 }
                 $result = false;
             }
-            $this->metadata = Library::data($isbn, 'meta', 'array');
+            $this->metadata = Store::data($isbn, 'meta', 'array');
             $this->metadata['medias'] = [];
             $this->metadata['zoom'] = [];
             $page = null;
@@ -464,7 +476,7 @@ class Import extends ProcessExecutor {
                     }
                 }
             }
-            file_put_contents(Library::data($isbn, 'meta'), Zord::json_encode($this->metadata));
+            file_put_contents(Store::data($isbn, 'meta'), Zord::json_encode($this->metadata));
         } else {
             $this->logError('validate', $this->locale->messages->validate->error->nodata);
             $result = false;
@@ -496,7 +508,7 @@ class Import extends ProcessExecutor {
             
     protected function slice($isbn) {
         $result = true;
-        $this->metadata = Library::data($isbn, 'meta', 'array');
+        $this->metadata = Store::data($isbn, 'meta', 'array');
         foreach(['parts','refs','ariadne','visavis'] as $name) {
             $this->metadata[$name] = [];
         }
@@ -510,14 +522,14 @@ class Import extends ProcessExecutor {
                         
             $titlePage = $this->adjXPath->query('//'.$this->prefix.':front/'.$this->prefix.':titlePage')[0];
             $titlePage->setAttribute('id', PART_ID_PREFIX.$this->idCount);
-            $title = isset($this->metadata['title']) && !empty($this->metadata['title']) ? $this->metadata['title'] : $this->locale->books->titlePage;
+            $title = isset($this->metadata['title']) && !empty($this->metadata['title']) ? $this->metadata['title'] : $this->locale->titlePage;
             $this->addPart('home', 'title', $title, 'front', 'front', 1, $titlePage);            
             foreach (['front','body','back'] as $tag) {
                 $this->scan($tag, $tag, 1);
             }
             
-            $folder    = Library::data($isbn);
-            $tmpFolder = Library::data($isbn, 'temp');
+            $folder    = Store::data($isbn);
+            $tmpFolder = Store::data($isbn, 'temp');
             Zord::resetFolder($tmpFolder);
             
             foreach ($this->metadata['parts'] as &$part) {
@@ -557,7 +569,7 @@ class Import extends ProcessExecutor {
             
             Zord::deleteRecursive($folder);
             rename($tmpFolder, $folder);
-            file_put_contents(Library::data($isbn, 'book'),  $book->saveXML());
+            file_put_contents(Store::data($isbn, 'book'),  $book->saveXML());
             
             (new BookHasPartEntity())->delete([
                 'where' => ['book' => $isbn],
@@ -570,7 +582,7 @@ class Import extends ProcessExecutor {
                     'count' => $part['count'],
                     'data'  => $part
                 ]);
-                $ref = Library::data($isbn, $part['ref']);
+                $ref = Store::data($isbn, $part['ref']);
                 if (!file_exists($ref) || strpos(file_get_contents($ref), 'id="'.$part['id'].'"') === false) {
                     $this->xmlError('slice', $part['line'], $this->locale->messages->slice->error->embed, [
                         'type'  => $part['type'],
@@ -587,7 +599,7 @@ class Import extends ProcessExecutor {
     }
     
     protected function zoom($isbn) {
-        $metadata = Library::data($isbn, 'meta', 'array');
+        $metadata = Store::data($isbn, 'meta', 'array');
         $zoom = isset($metadata['zoom']) ? $metadata['zoom'] : [];
         if (!empty($zoom)) {
             $deepzoom = new Deepzoom(Zord::getConfig('zoom'));
@@ -615,7 +627,7 @@ class Import extends ProcessExecutor {
         
     protected function index($isbn) {
         $result = true;
-        $metadata = Library::data($isbn, 'meta', 'array');
+        $metadata = Store::data($isbn, 'meta', 'array');
         $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
         if (isset($metadata) && isset($parts)) {
             $index = new SolrClient(Zord::value('connection', ['solr','zord']));
@@ -627,7 +639,7 @@ class Import extends ProcessExecutor {
                         $part['content'] = explode("\n", wordwrap(trim(preg_replace(
                             '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
                                 '<br/>', ' ',
-                                Library::data($isbn, $part['name'], 'content')
+                                Store::data($isbn, $part['name'], 'content')
                             )), ENT_QUOTES | ENT_XML1, 'UTF-8')
                         )), INDEX_MAX_CONTENT_LENGTH));
                         $document = new SolrInputDocument();
@@ -717,7 +729,7 @@ class Import extends ProcessExecutor {
             'many'  => true,
             'where' => ['book' => $isbn]
         ]);
-        $metadata = Library::data($isbn, 'meta', 'array');
+        $metadata = Store::data($isbn, 'meta', 'array');
         $this->createSearchFacets($isbn, $metadata);
         if (isset($metadata['parts'])) {
             foreach ($metadata['parts'] as $part) {
@@ -729,13 +741,13 @@ class Import extends ProcessExecutor {
     
     protected function epub($isbn) {
         $result = true;
-        $metadata = Library::data($isbn, 'meta', 'array');
+        $metadata = Store::data($isbn, 'meta', 'array');
         $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
         $medias = isset($metadata['medias']) ? $metadata['medias'] : [];
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
             $ean = $metadata['epub'];
             $this->info(2, 'ISBN : '.$ean);
-            $cover = Library::media($isbn, ['epub_cover','titlepage','frontcover']);
+            $cover = Store::media($isbn, ['epub_cover','titlepage','frontcover']);
             $cover = DATA_FOLDER.($cover === false ? 'epub'.DS.'cover.jpg' : $cover);
             if (!file_exists($cover)) {
                 $this->logError('epub', $this->locale->messages->epub->error->cover->missing);
@@ -789,7 +801,7 @@ class Import extends ProcessExecutor {
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
-                        $part['text'] = Library::data($isbn, $part['name'], 'content');
+                        $part['text'] = Store::data($isbn, $part['name'], 'content');
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
                         $partXPath = new DOMXPath($partDoc);
@@ -1055,7 +1067,7 @@ class Import extends ProcessExecutor {
                     $anchor = $partText->createElement('a');
                     $matches = [];
                     if (preg_match('/#(\d{13}):(.*)/', $target, $matches)) {
-                        $metadata = Library::data($matches[1], 'meta', 'array');
+                        $metadata = Store::data($matches[1], 'meta', 'array');
                         if (isset($metadata['refs'])) {
                             $extRefs = $metadata['refs'];
                             if (isset($extRefs['#'.$matches[2]])) {
@@ -1143,190 +1155,11 @@ class Import extends ProcessExecutor {
             (isset($part['synch']) && ($allvisavis || !isset($part['corresp'])));
     }
     
-    protected function logError($step, $message) {
-        parent::error(2, $message, true);
-        file_put_contents($this->error, '['.$step.'] '.$message."\n", FILE_APPEND);
-    }
-    
     protected function xmlError($step, $element, $message, $parameters = null) {
         if (isset($parameters) && is_array($parameters)) {
             $message = Zord::substitute($message, $parameters);
         }
-        $this->logError($step, $this->locale->messages->line.' '.(is_int($element) ? $element : $element->getLineNo()).' : '.$message);
-    }
-    
-    private function createBook($isbn, $header) {
-        $header = simplexml_load_string($header);
-        $uuid = md5($header);
-        $metadata = [
-            'ean'    => $isbn,
-            'format' => 'text/html',
-            'uuid'   => substr($uuid, 0, 8).'-'.substr($uuid, 8, 4).'-'.substr($uuid, 12, 4).'-'.substr($uuid, 16, 4).'-'.substr($uuid, 20, 12),
-            'uri'    => OPENURL.'?id='.$isbn,
-        ];
-        if (isset($header->fileDesc->titleStmt->title)) {
-            foreach ($header->fileDesc->titleStmt->title as $title) {
-                $metadata[isset($title['type']) && $title['type'] == 'sub' ? 'subtitle' : 'title'] = Library::compact($title);
-            }
-        }
-        if (isset($header->fileDesc->titleStmt->author)) {
-            $metadata['creator'] = [];
-            foreach ($header->fileDesc->titleStmt->author as $author) {
-                if (!in_array($author['key'].'', $metadata['creator'])) {
-                    $metadata['creator'][] = $author['key'].'';
-                }
-            }
-        }
-        if (isset($header->fileDesc->titleStmt->editor)) {
-            $metadata['editor'] = [];
-            foreach ($header->fileDesc->titleStmt->editor as $editor) {
-                if (!in_array($editor['key'].'', $metadata['editor'])) {
-                    $metadata['editor'][] = $editor['key'].'';
-                }
-            }
-        }
-        if (isset($header->fileDesc->seriesStmt) && null !== $header->fileDesc->seriesStmt->attributes('xml', true) && isset($header->fileDesc->seriesStmt->attributes('xml', true)['id'])) {
-            $metadata['category'] = [$header->fileDesc->seriesStmt->attributes('xml', true)['id'].''];
-        }
-        if (isset($header->fileDesc->seriesStmt['n'])) {
-            $metadata['category_number'] = $header->fileDesc->seriesStmt['n'].'';
-        }
-        if (isset($header->fileDesc->extent->measure)) {
-            foreach ($header->fileDesc->extent->measure as $measure) {
-                $metadata['page'.($measure['unit'].'' != 'pages' ? '_'.$measure['unit'].'' : '')]  = $measure['quantity'].'';
-            }
-        }
-        if (isset($header->profileDesc->abstract)) {
-            foreach ($header->profileDesc->abstract as $abstract) {
-                if (null !== $abstract->attributes('xml', true) && isset($abstract->attributes('xml', true)['lang'])) {
-                    $metadata['description'][$abstract->attributes('xml', true)['lang'].''] = $abstract->p.'';
-                }
-            }
-        }
-        if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher)) {
-            $metadata['publisher'] = $header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher.'';
-        }
-        if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace) && !empty($header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace.'')) {
-            $metadata['pubplace'] = $header->fileDesc->sourceDesc->biblFull->publicationStmt->pubPlace.'';
-        }
-        if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher)) {
-            $metadata['rights'] = '© '.$header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher;
-        }
-        if (isset($header->fileDesc->sourceDesc->biblFull->seriesStmt->title)) {
-            $relation = [];
-            foreach ($header->fileDesc->sourceDesc->biblFull->seriesStmt->title as $line) {
-                $type = isset($line['type']) ? $line['type'].'' : '';
-                if ($type == 'num') {
-                    $metadata['collection_number'] = $line.'';
-                } else if ($type == 'main') {
-                    $relation[] = $line.'';
-                }
-            }
-            $metadata['relation'] = implode(", ", $relation);
-        }
-        if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->date)) {
-            $metadata['date'] = Library::year($header->fileDesc->sourceDesc->biblFull->publicationStmt->date['when']);
-        }
-        if (isset($header->fileDesc->notesStmt->note)) {
-            foreach ($header->fileDesc->notesStmt->note as $note) {
-                $type = $note['type'].'';
-                if ($type == "ref") {
-                    $metadata['ref_n'] = $note->ref['n'].'';
-                    $metadata['ref_url'] = $note->ref['target'].'';
-                }
-                if ($type == "image") {
-                    $metadata['ref_cover'] = $note->graphic['url'].'';
-                }
-            }
-        }
-        if (isset($header->profileDesc->creation->date)) {
-            if (isset($header->profileDesc->creation->date['when']) && !empty($header->profileDesc->creation->date['when'].'')) {
-                $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['when']);
-                $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['when']);
-            }
-            if (isset($header->profileDesc->creation->date['notBefore']) && !empty($header->profileDesc->creation->date['notBefore'].'')) {
-                $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['notBefore']);
-            }
-            if (isset($header->profileDesc->creation->date['notAfter']) && !empty($header->profileDesc->creation->date['notAfter'].'')) {
-                $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['notAfter']);
-            }
-            if (isset($header->profileDesc->creation->date['from']) && !empty($header->profileDesc->creation->date['from'].'')) {
-                $metadata['creation_date_from'] = Library::year($header->profileDesc->creation->date['from']);
-            }
-            if (isset($header->profileDesc->creation->date['to']) && !empty($header->profileDesc->creation->date['to'].'')) {
-                $metadata['creation_date_to'] = Library::year($header->profileDesc->creation->date['to']);
-            }
-        }
-        if (isset($header->profileDesc->langUsage->language)) {
-            $metadata['language'] = $header->profileDesc->langUsage->language['ident'].'';
-        } else {
-            $metadata['language'] = explode('-', $this->lang)[0];
-        }
-        if (isset($header->profileDesc->textClass)) {
-            if (isset($header->profileDesc->textClass->keywords)) {
-                foreach ($header->profileDesc->textClass->keywords as $keywords) {
-                    $scheme = $keywords['scheme'].'';
-                    $subjectCodes = [];
-                    $scheme = mb_strtoupper($scheme);
-                    $lang = (null !== $keywords->attributes('xml', true) && isset($keywords->attributes('xml', true)['lang'])) ? '_'.mb_strtoupper($keywords->attributes('xml', true)['lang'].'') : '';
-                    foreach ($keywords->term as $term){
-                        $subjectCodes[] = mb_strtoupper(trim($term.''));
-                    }
-                    $metadata['subjectCodes'][$scheme.$lang] = $subjectCodes;
-                }
-            }
-        }
-        $publications = [];
-        if (isset($header->fileDesc->sourceDesc->biblFull)) {
-            $publications[] = $header->fileDesc->sourceDesc->biblFull;
-        }
-        if (isset($header->fileDesc)) {
-            $publications[] = $header->fileDesc;
-        }
-        foreach($publications as $publication) {
-            if (isset($publication->publicationStmt->idno)) {
-                foreach($publication->publicationStmt->idno as $idno) {
-                    $type = ''.$idno['type'];
-                    $value = ''.$idno;
-                    switch($type) {
-                        case 'EAN_ePUB': {
-                            $metadata['epub'] = $value;
-                            break;
-                        }
-                        case 'EAN_pdf': {
-                            $metadata['pdf'] = $value;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        $metaFile = Library::data($isbn, 'meta');
-        $previous = Zord::arrayFromJSONFile($metaFile);
-        foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
-            if (isset($previous[$keep])) {
-                $metadata[$keep] = $previous[$keep];
-            }
-        }
-        file_put_contents($metaFile, Zord::json_encode($metadata));
-        $book = [
-            "ean"      => $isbn,
-            "title"    => isset($metadata['title']) ? $metadata['title'] : '',
-            "subtitle" => isset($metadata['subtitle']) ? $metadata['subtitle'] : '',
-            "creator"  => isset($metadata['creator']) ? $metadata['creator'] : [],
-            "editor"   => isset($metadata['editor']) ? $metadata['editor'] : [],
-            "category" => isset($metadata['category']) ? $metadata['category'] : [],
-            "number"   => isset($metadata['category_number']) ? $metadata['category_number'] : '',
-            "date"     => isset($metadata['date']) ? $metadata['date'] : '',
-            "s_from"   => isset($metadata['creation_date_from']) ? $metadata['creation_date_from'] : '',
-            "s_to"     => isset($metadata['creation_date_to']) ? $metadata['creation_date_to'] : ''
-        ];
-        $entity = (new BookEntity())->retrieve($isbn);
-        if ($entity) {
-            (new BookEntity())->update($isbn, $book);
-        } else {
-            (new BookEntity())->create($book);
-        }
+        $this->logError($step, $this->locale->line.' '.(is_int($element) ? $element : $element->getLineNo()).' : '.$message);
     }
     
     private function createSearchFacets($isbn, $source) {
@@ -1346,31 +1179,6 @@ class Import extends ProcessExecutor {
                 }
             }
         }
-    }
-    
-    private function handle($operation, $default, $isbn, $step = null) {
-        if ($operation === !$default) {
-            return !$default;
-        } else if (is_array($operation)) {
-            if (isset($operation[$isbn])) {
-                if ($operation[$isbn] === !$default) {
-                    return !$default;
-                } else if (is_array($operation[$isbn])) {
-                    if (isset($operation[$isbn][$step]) && $operation[$isbn][$step] === !$default) {
-                        return !$default;
-                    }
-                }
-            } else if (isset($step) && isset($operation[$step])) {
-                if ($operation[$step] === !$default) {
-                    return !$default;
-                } else if (is_array($operation[$step])) {
-                    if (isset($operation[$step][$isbn]) && $operation[$step][$isbn] === !$default) {
-                        return !$default;
-                    }
-                }
-            }
-        }
-        return $default;
     }
     
     private function loadXML(&$document, $content) {
