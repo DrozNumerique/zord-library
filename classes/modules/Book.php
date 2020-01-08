@@ -715,6 +715,28 @@ class Book extends Module {
         return $result;
     }
     
+    public function notify() {
+        $bug = [];
+        if (isset($this->params['bug'])) {
+            $bug = Zord::objectToArray(json_decode($this->params['bug']));
+            $mail = new PHPMailer();
+            $mail->SetFrom(WEBMASTER_MAIL_ADDRESS, WEBMASTER_MAIL_NAME);
+            $mail->addAddress(WEBMASTER_MAIL_ADDRESS, WEBMASTER_MAIL_NAME);
+            $mail->Subject = NOTIFY_BUG_SUBJECT;
+            $mail->isHTML(true);
+            $mail->Body = (new View('/mail/bug', [
+                'url'   => $bug['zord_url'],
+                'quote' => $bug['zord_citation'],
+                'note'  => $bug['zord_note']
+            ], $this->controler, $this->locale))->render();
+            $mail->AltBody = $this->locale->click_here.' : '.$bug['zord_url'];
+            if (!$mail->Send()) {
+                $bug['error'] = $mail->ErrorInfo;
+            }
+        }
+        return $bug;
+    }
+    
     private function inContext($type, $where = null) {
         return (new $type())->retrieve([
             'many'  => true,

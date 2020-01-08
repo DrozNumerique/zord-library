@@ -5,6 +5,7 @@
 	"references" : "Cacher/afficher les références",
 	"get_book" : "Trouver ce livre",
 	"quote" : "Sélectionnez le texte à citer puis cliquez ici",
+	"click_here": "Cliquer ici pour visualiser la coquille",
 	"page" : "page",
 	"line" : "ligne",
 	"section" : "section",

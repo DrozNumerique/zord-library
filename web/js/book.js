@@ -44,10 +44,7 @@ window.$quote = {
 							{
 								module : 'Book',
 								action : 'notify',
-								bug : JSON.stringify(data),
-								callback : function(result) {
-									console.log(result);
-								}
+								bug : JSON.stringify(data)
 							}
 						);
 						break;
