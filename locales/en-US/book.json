@@ -6,6 +6,7 @@
 	"get_book" : "Find this book",
 	"quote" : "Select text for quote then click here",
 	"click_here": "Click here to see bug",
+	"notify_bug": "Bug notification",
 	"page" : "page",
 	"line" : "line",
 	"section" : "section",

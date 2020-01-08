@@ -722,7 +722,7 @@ class Book extends Module {
             $mail = new PHPMailer();
             $mail->SetFrom(WEBMASTER_MAIL_ADDRESS, WEBMASTER_MAIL_NAME);
             $mail->addAddress(WEBMASTER_MAIL_ADDRESS, WEBMASTER_MAIL_NAME);
-            $mail->Subject = NOTIFY_BUG_SUBJECT;
+            $mail->Subject = $this->locale->notify_bug;
             $mail->isHTML(true);
             $mail->Body = (new View('/mail/bug', [
                 'url'   => $bug['zord_url'],

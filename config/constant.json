@@ -15,6 +15,5 @@
     "NS_ADJUST": "prefixTEI",
     "GRAPHIC_MAX_HEIGHT": 500,
     "SEARCH_SLIDE": false,
-    "IMPORT_CONTINUE": false,
-    "NOTIFY_BUG_SUBJECT": "Zord Bug Notification"
+    "IMPORT_CONTINUE": false
 }
