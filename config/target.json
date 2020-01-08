@@ -74,6 +74,12 @@
 			"parameters": {
 				"criteria": "FILTER_SANITIZE_STRING"
 			}
+		},
+		"notify": {
+			"response": "DATA",
+			"parameters": {
+				"bug": "FILTER_SANITIZE_STRING"
+			}
 		}
 	}
 }

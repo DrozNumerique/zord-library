@@ -609,7 +609,7 @@ class Book extends Module {
     public function titles() {
         $titles = [];
         foreach ($this->inContext('BookEntity') as $book) {
-            $titles[$book->ean] = Store::title($book->title, $book->subtitle);
+            $titles[$book->ean] = Library::title($book->title, $book->subtitle);
         }
         Zord::sort($titles);
         return $titles;
