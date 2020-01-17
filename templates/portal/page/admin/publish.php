@@ -1,7 +1,10 @@
-   				<input type="hidden" id="context" value="<?php echo $context; ?>"/>
+<?php $context = $_REQUEST['ctx'] ?? $context; ?>
 				<div align="center">
-           			<div class="admin-panel-title"><?php echo Zord::getLocaleValue('title', Zord::value('context', $context), $lang); ?></div>
-            		<div class="admin-panel-title"><?php echo $locale->tab->publish->books; ?></div>
+					<select id="context">
+<?php foreach (Zord::getConfig('context') as $name => $data) { ?>
+						<option value="<?php echo $name; ?>" <?php echo $name == $context ? 'selected' : ''; ?>><?php echo Zord::getLocaleValue('title', Zord::value('context', $name), $lang); ?></option>
+<?php } ?>
+					</select>
                		<table id="books" class="admin-table">
                			<thead>
                				<tr>

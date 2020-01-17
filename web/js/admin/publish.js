@@ -72,5 +72,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 		listBooks(expandList);
 	}
+	
+	document.getElementById('context').addEventListener('change', function(event) {
+		invokeZord({
+			module:'Admin',
+			action:'index',
+			tab:'publish',
+			ctx:event.target.value
+		});
+	});
 
 });
