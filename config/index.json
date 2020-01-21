@@ -1,6 +1,5 @@
 {
 	"fields": {
-		"ean": "string",
 		"title": "string",
 		"date": "string",
 		"creation_date_from": "string",
@@ -16,27 +15,5 @@
 	"default": {
 		"creation_date_from": "",
 		"creation_date_to": ""
-	},
-	"suffix": {
-        "content" : "",
-        "boolean" : "_b",
-        "booleans": "_bs",
-        "string"  : "_s",
-        "strings" : "_ss",
-        "text"    : "_t",
-        "texts"   : "_txt",
-        "english" : "_en",
-        "float"   : "_f",
-        "floats"  : "_fs",
-        "double"  : "_d",
-        "doubles" : "_ds",
-        "long"    : "_l",
-        "longs"   : "_ls",
-        "integer" : "_i",
-        "integers": "_is",
-        "date"    : "_dt",
-        "dates"   : "_dts",
-        "location": "_p",
-        "currency": "_c"
 	}
 }

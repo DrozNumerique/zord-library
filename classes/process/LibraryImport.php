@@ -25,37 +25,26 @@ class LibraryImport extends Import {
     protected $tocXPath = null;
     protected $page     = null;
     
-    protected function book($isbn, $metadata) {
-        return [
-            "ean"      => $isbn,
-            "title"    => isset($metadata['title']) ? $metadata['title'] : '',
-            "subtitle" => isset($metadata['subtitle']) ? $metadata['subtitle'] : '',
-            "creator"  => isset($metadata['creator']) ? $metadata['creator'] : [],
-            "editor"   => isset($metadata['editor']) ? $metadata['editor'] : [],
-            "category" => isset($metadata['category']) ? $metadata['category'] : [],
-            "number"   => isset($metadata['category_number']) ? $metadata['category_number'] : '',
-            "date"     => isset($metadata['date']) ? $metadata['date'] : '',
-            "s_from"   => isset($metadata['creation_date_from']) ? $metadata['creation_date_from'] : '',
-            "s_to"     => isset($metadata['creation_date_to']) ? $metadata['creation_date_to'] : ''
-        ];
-    }
-    
-    protected function parts($isbn, $metadata) {
+    protected function sources($ean) {
+        $metadata = Store::data($ean, 'meta', 'array');
         $parts = [];
         if (isset($metadata['parts'])) {
-            foreach ($metadata['parts'] as &$part) {
+            foreach ($metadata['parts'] as $part) {
                 if ($part['index']) {
                     $part['content'] = explode("\n", wordwrap(trim(preg_replace(
                         '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
                             '<br/>', ' ',
-                            Store::data($isbn, $part['name'], 'content')
+                            Store::data($ean, $part['name'], 'content')
                         )), ENT_QUOTES | ENT_XML1, 'UTF-8')
                     )), INDEX_MAX_CONTENT_LENGTH));
                     $parts[] = $part;
                 }
             }
         }
-        return $parts;
+        return [
+            'docs' => $parts,
+            'meta' => $metadata
+        ];
     }
     
     protected function configure($parameters = []) {
@@ -88,10 +77,10 @@ class LibraryImport extends Import {
         }
     }
     
-    protected function preBooks() {
+    protected function preRefs() {
         if (in_array('slice', $this->steps)) {
-            foreach ($this->books as $isbn) {
-                $text = $this->folder.$isbn.'.xml';
+            foreach ($this->books as $ean) {
+                $text = $this->folder.$ean.'.xml';
                 if (file_exists($text)) {
                     $this->total = $this->total + filesize($text);
                 }
@@ -99,14 +88,14 @@ class LibraryImport extends Import {
         }
     }
     
-    protected function resetBook($isbn) {
-        parent::resetBook($isbn);
-        $text = $this->folder.$isbn.'.xml';
+    protected function resetRef($ean) {
+        parent::resetRef($ean);
+        $text = $this->folder.$ean.'.xml';
         if ($this->total > 0 && file_exists($text)) {
             $this->size += filesize($text);
             $this->progress = $this->size / $this->total;
         }
-        $this->xml = $this->folder.$isbn.'.xml';
+        $this->xml = $this->folder.$ean.'.xml';
         $this->document = null;
         $this->adjusted = null;
         $this->metadata = null;
@@ -119,9 +108,9 @@ class LibraryImport extends Import {
         $this->dones = [];
     }
     
-    protected function grant($isbn) {
+    protected function grant($ean) {
         $entity = (new BookHasContextEntity())->retrieve([
-            'where' => ['book' => $isbn],
+            'where' => ['book' => $ean],
             'many'   => true
         ]);
         if ($entity) {
@@ -144,7 +133,7 @@ class LibraryImport extends Import {
         return true;
     }
     
-    protected function load($isbn) {
+    protected function load($ean) {
         if (file_exists($this->xml)) {
             $this->document = new DOMDocument();
             $this->loadXML($this->document, $this->xml);
@@ -156,16 +145,16 @@ class LibraryImport extends Import {
         return true;
     }
     
-    protected function metadata($isbn) {
-        if ($header = $this->header($isbn)) {
-            file_put_contents(Store::data($isbn, 'head'), $header);
+    protected function metadata($ean) {
+        if ($header = $this->header($ean)) {
+            file_put_contents(Store::data($ean, 'head'), $header);
             $header = simplexml_load_string($header);
             $uuid = md5($header);
             $metadata = [
-                'ean'    => $isbn,
+                'ean'    => $ean,
                 'format' => 'text/html',
                 'uuid'   => substr($uuid, 0, 8).'-'.substr($uuid, 8, 4).'-'.substr($uuid, 12, 4).'-'.substr($uuid, 16, 4).'-'.substr($uuid, 20, 12),
-                'uri'    => OPENURL.'?id='.$isbn,
+                'uri'    => OPENURL.'?id='.$ean,
             ];
             if (isset($header->fileDesc->titleStmt->title)) {
                 foreach ($header->fileDesc->titleStmt->title as $title) {
@@ -304,7 +293,7 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            $metaFile = Store::data($isbn, 'meta');
+            $metaFile = Store::data($ean, 'meta');
             $previous = Zord::arrayFromJSONFile($metaFile);
             foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
                 if (isset($previous[$keep])) {
@@ -312,14 +301,31 @@ class LibraryImport extends Import {
                 }
             }
             file_put_contents($metaFile, Zord::json_encode($metadata));
-            return parent::metadata($isbn);
+            $book = [
+                "ean"      => $ean,
+                "title"    => isset($metadata['title']) ? $metadata['title'] : '',
+                "subtitle" => isset($metadata['subtitle']) ? $metadata['subtitle'] : '',
+                "creator"  => isset($metadata['creator']) ? $metadata['creator'] : [],
+                "editor"   => isset($metadata['editor']) ? $metadata['editor'] : [],
+                "category" => isset($metadata['category']) ? $metadata['category'] : [],
+                "number"   => isset($metadata['category_number']) ? $metadata['category_number'] : '',
+                "date"     => isset($metadata['date']) ? $metadata['date'] : '',
+                "s_from"   => isset($metadata['creation_date_from']) ? $metadata['creation_date_from'] : '',
+                "s_to"     => isset($metadata['creation_date_to']) ? $metadata['creation_date_to'] : ''
+            ];
+            if ((new BookEntity())->retrieve($ean)) {
+                (new BookEntity())->update($ean, $book);
+            } else {
+                (new BookEntity())->create($book);
+            }
+            return true;
         } else {
             $this->logError('metadata', $this->locale->messages->metadata->error->missing);
             return false;
         }
     }
     
-    protected function validate($isbn) {
+    protected function validate($ean) {
         $result = true;
         if (file_exists($this->xml) && isset($this->document)) {
             $errors = shell_exec(Zord::substitute(RELAXNG_COMMAND, [
@@ -339,7 +345,7 @@ class LibraryImport extends Import {
                 }
                 $result = false;
             }
-            $this->metadata = Store::data($isbn, 'meta', 'array');
+            $this->metadata = Store::data($ean, 'meta', 'array');
             $this->metadata['medias'] = [];
             $this->metadata['zoom'] = [];
             $page = null;
@@ -409,7 +415,7 @@ class LibraryImport extends Import {
                         case 3: {
                             $url = $element->getAttribute('url');
                             if (substr($url, 0, 4) !== 'http') {
-                                $imgFile = DATA_FOLDER.str_replace('/', DS, $this->url($isbn, $element, 'url', true));
+                                $imgFile = DATA_FOLDER.str_replace('/', DS, $this->url($ean, $element, 'url', true));
                                 $this->metadata['medias'][$url] = $imgFile;
                                 if (!file_exists($imgFile)) {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->missing.$url);
@@ -476,7 +482,7 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            file_put_contents(Store::data($isbn, 'meta'), Zord::json_encode($this->metadata));
+            file_put_contents(Store::data($ean, 'meta'), Zord::json_encode($this->metadata));
         } else {
             $this->logError('validate', $this->locale->messages->validate->error->nodata);
             $result = false;
@@ -484,7 +490,7 @@ class LibraryImport extends Import {
         return $result;
     }
     
-    protected function adjust($isbn) {
+    protected function adjust($ean) {
         if (!isset($this->document)) {
             $this->logError('adjust', $this->locale->messages->adjust->error->nodata);
             return false;
@@ -506,9 +512,9 @@ class LibraryImport extends Import {
         return true;
     }
             
-    protected function slice($isbn) {
+    protected function slice($ean) {
         $result = true;
-        $this->metadata = Store::data($isbn, 'meta', 'array');
+        $this->metadata = Store::data($ean, 'meta', 'array');
         foreach(['parts','refs','ariadne','visavis'] as $name) {
             $this->metadata[$name] = [];
         }
@@ -517,7 +523,7 @@ class LibraryImport extends Import {
             $this->toc = new DOMDocument();
             $this->toc->preserveWhiteSpace = false;
             $this->toc->formatOutput = true;
-            $this->toc->loadXML(Zord::substitute(file_get_contents(Zord::getComponentPath('xml'.DS.'toc.xhtml')), ['isbn' => $isbn]));
+            $this->toc->loadXML(Zord::substitute(file_get_contents(Zord::getComponentPath('xml'.DS.'toc.xhtml')), ['isbn' => $ean]));
             $this->tocXPath = new DOMXPath($this->toc);
                         
             $titlePage = $this->adjXPath->query('//'.$this->prefix.':front/'.$this->prefix.':titlePage')[0];
@@ -528,17 +534,17 @@ class LibraryImport extends Import {
                 $this->scan($tag, $tag, 1);
             }
             
-            $folder    = Store::data($isbn);
-            $tmpFolder = Store::data($isbn, 'temp');
+            $folder    = Store::data($ean);
+            $tmpFolder = Store::data($ean, 'temp');
             Zord::resetFolder($tmpFolder);
             
             foreach ($this->metadata['parts'] as &$part) {
-                $result &= $this->handlePart($part, $isbn, $tmpFolder);
+                $result &= $this->handlePart($part, $ean, $tmpFolder);
                 foreach (['node','parent','part','content'] as $useless) {
                     unset($part[$useless]);
                 }
             }
-            $book = DATA_FOLDER.'books'.DS.$isbn.'.xml';
+            $book = DATA_FOLDER.'books'.DS.$ean.'.xml';
             if ($this->xml !== $book) {
                 copy($this->xml, $book);
             }
@@ -569,20 +575,20 @@ class LibraryImport extends Import {
             
             Zord::deleteRecursive($folder);
             rename($tmpFolder, $folder);
-            file_put_contents(Store::data($isbn, 'book'),  $book->saveXML());
+            file_put_contents(Store::data($ean, 'book'),  $book->saveXML());
             
             (new BookHasPartEntity())->delete([
-                'where' => ['book' => $isbn],
+                'where' => ['book' => $ean],
                 'many'   => true
             ]);
             foreach ($this->metadata['parts'] as &$part) {
                 (new BookHasPartEntity())->create([
-                    'book'  => $isbn,
+                    'book'  => $ean,
                     'part'  => $part['name'],
                     'count' => $part['count'],
                     'data'  => $part
                 ]);
-                $ref = Store::data($isbn, $part['ref']);
+                $ref = Store::data($ean, $part['ref']);
                 if (!file_exists($ref) || strpos(file_get_contents($ref), 'id="'.$part['id'].'"') === false) {
                     $this->xmlError('slice', $part['line'], $this->locale->messages->slice->error->embed, [
                         'type'  => $part['type'],
@@ -598,8 +604,8 @@ class LibraryImport extends Import {
         return $result;
     }
     
-    protected function zoom($isbn) {
-        $metadata = Store::data($isbn, 'meta', 'array');
+    protected function zoom($ean) {
+        $metadata = Store::data($ean, 'meta', 'array');
         $zoom = isset($metadata['zoom']) ? $metadata['zoom'] : [];
         if (!empty($zoom)) {
             $deepzoom = new Deepzoom(Zord::getConfig('zoom'));
@@ -607,7 +613,7 @@ class LibraryImport extends Import {
             if ($deepzoom->processor == Deepzoom::$DEFAULT_PROCESSOR) {
                 $this->info(2, $this->locale->messages->zoom->info->convert.$deepzoom->convert);
             }
-            $folder = DATA_FOLDER.'zoom'.DS.$isbn.'.tmp';
+            $folder = DATA_FOLDER.'zoom'.DS.$ean.'.tmp';
             Zord::deleteRecursive($folder);
             $count = 1;
             foreach($zoom as $url) {
@@ -616,7 +622,7 @@ class LibraryImport extends Import {
                 $deepzoom->process($file, $folder);
                 $count++;
             }
-            $folder = DATA_FOLDER.'zoom'.DS.$isbn;
+            $folder = DATA_FOLDER.'zoom'.DS.$ean;
             Zord::deleteRecursive($folder);
             rename($folder.'.tmp', $folder);
         } else {
@@ -624,69 +630,15 @@ class LibraryImport extends Import {
         }
         return true;
     }
-        
-    protected function index($isbn) {
-        $result = true;
-        $metadata = Store::data($isbn, 'meta', 'array');
-        $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
-        if (isset($metadata) && isset($parts)) {
-            $index = new SolrClient(Zord::value('connection', ['solr','zord']));
-            $delete = $index->deleteByQuery('ean_s:'.$isbn);
-            $response = $delete->getResponse();
-            if ($response) {
-                foreach ($parts as &$part) {
-                    if ($part['index']) {
-                        $part['content'] = explode("\n", wordwrap(trim(preg_replace(
-                            '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
-                                '<br/>', ' ',
-                                Store::data($isbn, $part['name'], 'content')
-                            )), ENT_QUOTES | ENT_XML1, 'UTF-8')
-                        )), INDEX_MAX_CONTENT_LENGTH));
-                        $document = new SolrInputDocument();
-                        $document->addField('id', $isbn.'_'.$part['name']);
-                        foreach (Zord::value('index', 'fields') as $key => $type) {
-                            $default = Zord::value('index', ['default',$key]);
-                            $value = isset($part[$key]) ? $part[$key] : (isset($metadata[$key]) ? $metadata[$key] : (isset($default) ? $default : null));
-                            if (isset($value)) {
-                                $field = $key.Zord::value('index', ['suffix',$type]);
-                                if (!is_array($value)) {
-                                    $value = [$value];
-                                }
-                                foreach ($value as $item) {
-                                    $document->addField($field, $item);
-                                }
-                            }
-                        }
-                        $update = $index->addDocument($document);
-                        $response = $update->getResponse();
-                        if (!$response) {
-                            $this->logError('index', Zord::substitute($this->locale->messages->index->error->add), [
-                                'part' => $part['name']
-                            ]);
-                            $result = false;
-                        }
-                    }
-                }
-                $index->commit();
-            } else {
-                $this->logError('index', $this->locale->messages->index->error->delete);
-                $result = false;
-            }
-        } else {
-            $this->logError('index', $this->locale->messages->index->error->nodata);
-            $result = false;
-        }
-        return $result;
-    }
     
-    protected function publish($isbn) {
+    protected function publish($ean) {
         if ($this->publish) {
             foreach ($this->publish as $context => $status) {
-                $status = $this->status($context, $isbn);
+                $status = $this->status($context, $ean);
                 $context.' ('.$status.')';
                 $bookInContext = (new BookHasContextEntity())->retrieve([
                     'where' => [
-                        'book' => $isbn,
+                        'book' => $ean,
                         'context' => $context
                     ]
                 ]);
@@ -694,7 +646,7 @@ class LibraryImport extends Import {
                     if ($status !== 'no') {
                         (new BookHasContextEntity())->update(
                             ['where' => [
-                                'book' => $isbn,
+                                'book' => $ean,
                                 'context' => $context
                             ], 'many' => true],
                             ['status' => $status]
@@ -702,7 +654,7 @@ class LibraryImport extends Import {
                     } else {
                         (new BookHasContextEntity())->delete(
                             ['where' => [
-                                'book' => $isbn,
+                                'book' => $ean,
                                 'context' => $context
                             ], 'many' => true]
                         );
@@ -710,7 +662,7 @@ class LibraryImport extends Import {
                 } else {
                     if ($status !== 'no') {
                         (new BookHasContextEntity())->create([
-                            'book' => $isbn,
+                            'book' => $ean,
                             'context' => $context,
                             'status' => $status
                         ]);
@@ -724,30 +676,30 @@ class LibraryImport extends Import {
         return true;
     }
     
-    protected function facets($isbn) {
+    protected function facets($ean) {
         (new BookHasFacetEntity())->delete([
             'many'  => true,
-            'where' => ['book' => $isbn]
+            'where' => ['book' => $ean]
         ]);
-        $metadata = Store::data($isbn, 'meta', 'array');
-        $this->createSearchFacets($isbn, $metadata);
+        $metadata = Store::data($ean, 'meta', 'array');
+        $this->createSearchFacets($ean, $metadata);
         if (isset($metadata['parts'])) {
             foreach ($metadata['parts'] as $part) {
-                $this->createSearchFacets($isbn, $part);
+                $this->createSearchFacets($ean, $part);
             }
         }
         return true;
     }
     
-    protected function epub($isbn) {
+    protected function epub($ean) {
         $result = true;
-        $metadata = Store::data($isbn, 'meta', 'array');
+        $metadata = Store::data($ean, 'meta', 'array');
         $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
         $medias = isset($metadata['medias']) ? $metadata['medias'] : [];
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
-            $ean = $metadata['epub'];
-            $this->info(2, 'ISBN : '.$ean);
-            $cover = Store::media($isbn, ['epub_cover','titlepage','frontcover']);
+            $eanEPUB = $metadata['epub'];
+            $this->info(2, 'EAN : '.$eanEPUB);
+            $cover = Store::media($ean, ['epub_cover','titlepage','frontcover']);
             $cover = DATA_FOLDER.($cover === false ? 'epub'.DS.'cover.jpg' : $cover);
             if (!file_exists($cover)) {
                 $this->logError('epub', $this->locale->messages->epub->error->cover->missing);
@@ -779,7 +731,7 @@ class LibraryImport extends Import {
                     $result = false;
                 }
             }
-            $tmpFile = DATA_FOLDER.'epub'.DS.$ean.'.tmp.epub';
+            $tmpFile = DATA_FOLDER.'epub'.DS.$eanEPUB.'.tmp.epub';
             copy(Zord::getComponentPath('templates'.DS.'mimetype.epub'), $tmpFile);
             $epub = new ZipArchive(); 
             if ($epub->open($tmpFile)) {
@@ -801,7 +753,7 @@ class LibraryImport extends Import {
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
-                        $part['text'] = Store::data($isbn, $part['name'], 'content');
+                        $part['text'] = Store::data($ean, $part['name'], 'content');
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
                         $partXPath = new DOMXPath($partDoc);
@@ -823,7 +775,7 @@ class LibraryImport extends Import {
                                     }
                                 }
                             }
-                            $img->setAttribute('src', $this->url($isbn, $graphic, 'data-url', true));
+                            $img->setAttribute('src', $this->url($ean, $graphic, 'data-url', true));
                         }
                         $anchors = $partXPath->query('//a[@href]');
                         foreach ($anchors as $anchor) {
@@ -865,7 +817,7 @@ class LibraryImport extends Import {
                         ];
                     }
                 }
-                $epub->addEmptyDir('OPF/medias/'.$isbn);
+                $epub->addEmptyDir('OPF/medias/'.$ean);
                 $width = Zord::parameter($this->parameters, 'EPUB_IMAGE_MAX_WIDTH', '');
                 $height = Zord::parameter($this->parameters, 'EPUB_IMAGE_MAX_HEIGHT', '');
                 foreach ($medias as $file) {
@@ -904,7 +856,7 @@ class LibraryImport extends Import {
                     ]);
                     $errors = shell_exec($command);
                     if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
-                        $epubFile = DATA_FOLDER.'epub'.DS.$ean.'.epub';
+                        $epubFile = DATA_FOLDER.'epub'.DS.$eanEPUB.'.epub';
                         rename($tmpFile, $epubFile);
                     } else {
                         foreach (explode("\n", $errors) as $error) {
@@ -931,7 +883,7 @@ class LibraryImport extends Import {
         return $result;
     }
     
-    protected function header($isbn) {
+    protected function header($ean) {
         $this->info(2, $this->locale->messages->metadata->info->from->header);
         if (isset($this->document)) {
             $headerElements = $this->document->getElementsByTagName('teiHeader');
@@ -948,17 +900,17 @@ class LibraryImport extends Import {
         return false;
     }
     
-    protected function handlePart(&$part, $isbn, $folder) {
+    protected function handlePart(&$part, $ean, $folder) {
         $result = true;
         if (empty($part['title'])) {
             $this->xmlError('slice', $part['line'], $this->locale->messages->slice->error->notitle);
             $result = false;
         } else {
             if ($part['name'] == 'home') {
-                $part['link'] = $isbn.'/home';
+                $part['link'] = $ean.'/home';
                 $this->metadata['ariadne'][] = [
                     'id'    => $part['node']->getAttribute('id'),
-                    'link'  => $isbn,
+                    'link'  => $ean,
                     'title' => $part['title']
                 ];
             } else {
@@ -980,7 +932,7 @@ class LibraryImport extends Import {
                 if ($element != null) {
                     $partTitles = [$part['title']];
                     if ($this->is_fragment($part)) {
-                        $part['link'] = $isbn.'/'.$part['name'];
+                        $part['link'] = $ean.'/'.$part['name'];
                     } else {
                         $part['link'] = $element->parentNode->getAttribute('data-part');
                     }
@@ -1052,7 +1004,7 @@ class LibraryImport extends Import {
                 foreach ($graphics as $graphic) {
                     $url = $graphic->getAttribute('url');
                     if (in_array($url, $this->metadata['zoom'])) {
-                        $graphic->setAttribute('data-zoom', '/zoom/'.$isbn.'/'.str_replace('jpg', 'dzi', $url));
+                        $graphic->setAttribute('data-zoom', '/zoom/'.$ean.'/'.str_replace('jpg', 'dzi', $url));
                     } else {
                         $imgFile = $this->metadata['medias'][$url];
                         $loading = $partText->createElement($this->prefix.':loading');
@@ -1162,20 +1114,20 @@ class LibraryImport extends Import {
         $this->logError($step, $this->locale->line.' '.(is_int($element) ? $element : $element->getLineNo()).' : '.$message);
     }
     
-    private function createSearchFacets($isbn, $source) {
+    private function createSearchFacets($ean, $source) {
         foreach (Zord::value('search', 'facets') as $facet) {
             $values = isset($source[$facet]) ? $source[$facet] : [];
             if (!is_array($values)) {
                 $values = [$values];
             }
             foreach ($values as $value) {
-                if (!isset($this->facets[$isbn][$facet][$value])) {
+                if (!isset($this->facets[$ean][$facet][$value])) {
                     (new BookHasFacetEntity())->create([
-                        'book'  => $isbn,
+                        'book'  => $ean,
                         'facet' => $facet,
                         'value' => $value
                     ]);
-                    $this->facets[$isbn][$facet][$value] = 'done';
+                    $this->facets[$ean][$facet][$value] = 'done';
                 }
             }
         }
@@ -1193,11 +1145,11 @@ class LibraryImport extends Import {
         libxml_use_internal_errors($previous);
     }
     
-    private function status($context, $isbn) {
+    private function status($context, $ean) {
         if (isset($this->publish) && isset($this->publish[$context])) {
             if (is_array($this->publish[$context])) {
-                if (isset($this->publish[$context][$isbn])) {
-                    return $this->publish[$context][$isbn];
+                if (isset($this->publish[$context][$ean])) {
+                    return $this->publish[$context][$ean];
                 }
             } else {
                 return $this->publish[$context];
@@ -1447,21 +1399,21 @@ class LibraryImport extends Import {
         }
     }
     
-    private function url($isbn, $graphic, $name, $relative = false) {
+    private function url($ean, $graphic, $name, $relative = false) {
         if ($graphic->hasAttribute($name)) {
             $url = $graphic->getAttribute($name);
             if (substr($url, 0, 1) !== '/') {
-                $url = '/'.$isbn.'/'.$url;
+                $url = '/'.$ean.'/'.$url;
             }
             return ($relative ? '' : '/').'medias'.$url;
         }
         return null;
     }
     
-    private function base($isbn) {
-        if (!isset($this->base[$isbn])) {
+    private function base($ean) {
+        if (!isset($this->base[$ean])) {
             $book = (new BookHasContextEntity())->retrieve([
-                'where' => ['book' => $isbn]
+                'where' => ['book' => $ean]
             ]);
             if ($book) {
                 $context = $book->context;
@@ -1469,12 +1421,12 @@ class LibraryImport extends Import {
                 $host = $url['host'];
                 $path = $url['path'];
                 $secure = isset($url['secure']) ? $url['secure'] : false;
-                $this->base[$isbn] = ($secure ? 'https' : 'http').'://'.$host.($path !== '/' ? $path : '');
+                $this->base[$ean] = ($secure ? 'https' : 'http').'://'.$host.($path !== '/' ? $path : '');
             } else {
-                $this->base[$isbn] = false;
+                $this->base[$ean] = false;
             }
         }
-        return $this->base[$isbn];
+        return $this->base[$ean];
     }
 }
 

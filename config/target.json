@@ -1,4 +1,12 @@
 {
+	"Admin": {
+		"publish": {
+			"parameters": {
+				"context": "FILTER_SANITIZE_STRING",
+				"books": "FILTER_SANITIZE_STRING"
+			}
+		}
+	},
 	"Book": {
 		"response": "VIEW",
 		"search": {
