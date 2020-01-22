@@ -2,5 +2,6 @@
 	"Controler": "LibraryControler",
 	"User": "LibraryUser",
 	"Portal": "LibraryPortal",
-	"Admin": "LibraryAdmin"
+	"Admin": "LibraryAdmin",
+	"Import": "LibraryImport"
 }

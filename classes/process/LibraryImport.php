@@ -26,7 +26,7 @@ class LibraryImport extends Import {
     protected $page     = null;
     
     protected function sources($ean) {
-        $metadata = Store::data($ean, 'meta', 'array');
+        $metadata = Store::data($ean, 'metadata.json', 'array');
         $parts = [];
         if (isset($metadata['parts'])) {
             foreach ($metadata['parts'] as $part) {
@@ -34,7 +34,7 @@ class LibraryImport extends Import {
                     $part['content'] = explode("\n", wordwrap(trim(preg_replace(
                         '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
                             '<br/>', ' ',
-                            Store::data($ean, $part['name'], 'content')
+                            Store::data($ean, $part['name'].'.xhtml', 'content')
                         )), ENT_QUOTES | ENT_XML1, 'UTF-8')
                     )), INDEX_MAX_CONTENT_LENGTH));
                     $parts[] = $part;
@@ -147,7 +147,7 @@ class LibraryImport extends Import {
     
     protected function metadata($ean) {
         if ($header = $this->header($ean)) {
-            file_put_contents(Store::data($ean, 'head'), $header);
+            file_put_contents(Store::data($ean, 'header.xml'), $header);
             $header = simplexml_load_string($header);
             $uuid = md5($header);
             $metadata = [
@@ -293,7 +293,7 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            $metaFile = Store::data($ean, 'meta');
+            $metaFile = Store::data($ean, 'metadata.json');
             $previous = Zord::arrayFromJSONFile($metaFile);
             foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
                 if (isset($previous[$keep])) {
@@ -303,15 +303,15 @@ class LibraryImport extends Import {
             file_put_contents($metaFile, Zord::json_encode($metadata));
             $book = [
                 "ean"      => $ean,
-                "title"    => isset($metadata['title']) ? $metadata['title'] : '',
-                "subtitle" => isset($metadata['subtitle']) ? $metadata['subtitle'] : '',
-                "creator"  => isset($metadata['creator']) ? $metadata['creator'] : [],
-                "editor"   => isset($metadata['editor']) ? $metadata['editor'] : [],
-                "category" => isset($metadata['category']) ? $metadata['category'] : [],
-                "number"   => isset($metadata['category_number']) ? $metadata['category_number'] : '',
-                "date"     => isset($metadata['date']) ? $metadata['date'] : '',
-                "s_from"   => isset($metadata['creation_date_from']) ? $metadata['creation_date_from'] : '',
-                "s_to"     => isset($metadata['creation_date_to']) ? $metadata['creation_date_to'] : ''
+                "title"    => $metadata['title'] ?? '',
+                "subtitle" => $metadata['subtitle'] ?? '',
+                "creator"  => $metadata['creator'] ?? [],
+                "editor"   => $metadata['editor'] ?? [],
+                "category" => $metadata['category'] ?? [],
+                "number"   => $metadata['category_number'] ?? '',
+                "date"     => $metadata['date'] ?? '',
+                "s_from"   => $metadata['creation_date_from'] ?? '',
+                "s_to"     => $metadata['creation_date_to'] ?? ''
             ];
             if ((new BookEntity())->retrieve($ean)) {
                 (new BookEntity())->update($ean, $book);
@@ -345,7 +345,7 @@ class LibraryImport extends Import {
                 }
                 $result = false;
             }
-            $this->metadata = Store::data($ean, 'meta', 'array');
+            $this->metadata = Store::data($ean, 'metadata.json', 'array');
             $this->metadata['medias'] = [];
             $this->metadata['zoom'] = [];
             $page = null;
@@ -482,7 +482,7 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            file_put_contents(Store::data($ean, 'meta'), Zord::json_encode($this->metadata));
+            file_put_contents(Store::data($ean, 'metadata.json'), Zord::json_encode($this->metadata));
         } else {
             $this->logError('validate', $this->locale->messages->validate->error->nodata);
             $result = false;
@@ -514,7 +514,7 @@ class LibraryImport extends Import {
             
     protected function slice($ean) {
         $result = true;
-        $this->metadata = Store::data($ean, 'meta', 'array');
+        $this->metadata = Store::data($ean, 'metadata.json', 'array');
         foreach(['parts','refs','ariadne','visavis'] as $name) {
             $this->metadata[$name] = [];
         }
@@ -535,7 +535,7 @@ class LibraryImport extends Import {
             }
             
             $folder    = Store::data($ean);
-            $tmpFolder = Store::data($ean, 'temp');
+            $tmpFolder = $folder.'.tmp';
             Zord::resetFolder($tmpFolder);
             
             foreach ($this->metadata['parts'] as &$part) {
@@ -575,7 +575,7 @@ class LibraryImport extends Import {
             
             Zord::deleteRecursive($folder);
             rename($tmpFolder, $folder);
-            file_put_contents(Store::data($ean, 'book'),  $book->saveXML());
+            file_put_contents(Store::data($ean, 'book.xml'),  $book->saveXML());
             
             (new BookHasPartEntity())->delete([
                 'where' => ['book' => $ean],
@@ -588,7 +588,7 @@ class LibraryImport extends Import {
                     'count' => $part['count'],
                     'data'  => $part
                 ]);
-                $ref = Store::data($ean, $part['ref']);
+                $ref = Store::data($ean, $part['ref'].'.xhtml');
                 if (!file_exists($ref) || strpos(file_get_contents($ref), 'id="'.$part['id'].'"') === false) {
                     $this->xmlError('slice', $part['line'], $this->locale->messages->slice->error->embed, [
                         'type'  => $part['type'],
@@ -605,7 +605,7 @@ class LibraryImport extends Import {
     }
     
     protected function zoom($ean) {
-        $metadata = Store::data($ean, 'meta', 'array');
+        $metadata = Store::data($ean, 'metadata.json', 'array');
         $zoom = isset($metadata['zoom']) ? $metadata['zoom'] : [];
         if (!empty($zoom)) {
             $deepzoom = new Deepzoom(Zord::getConfig('zoom'));
@@ -681,7 +681,7 @@ class LibraryImport extends Import {
             'many'  => true,
             'where' => ['book' => $ean]
         ]);
-        $metadata = Store::data($ean, 'meta', 'array');
+        $metadata = Store::data($ean, 'metadata.json', 'array');
         $this->createSearchFacets($ean, $metadata);
         if (isset($metadata['parts'])) {
             foreach ($metadata['parts'] as $part) {
@@ -693,7 +693,7 @@ class LibraryImport extends Import {
     
     protected function epub($ean) {
         $result = true;
-        $metadata = Store::data($ean, 'meta', 'array');
+        $metadata = Store::data($ean, 'metadata.json', 'array');
         $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
         $medias = isset($metadata['medias']) ? $metadata['medias'] : [];
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
@@ -753,7 +753,7 @@ class LibraryImport extends Import {
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
-                        $part['text'] = Store::data($ean, $part['name'], 'content');
+                        $part['text'] = Store::data($ean, $part['name'].'.xhtml', 'content');
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
                         $partXPath = new DOMXPath($partDoc);
@@ -1019,7 +1019,7 @@ class LibraryImport extends Import {
                     $anchor = $partText->createElement('a');
                     $matches = [];
                     if (preg_match('/#(\d{13}):(.*)/', $target, $matches)) {
-                        $metadata = Store::data($matches[1], 'meta', 'array');
+                        $metadata = Store::data($matches[1], 'metadata.json', 'array');
                         if (isset($metadata['refs'])) {
                             $extRefs = $metadata['refs'];
                             if (isset($extRefs['#'.$matches[2]])) {

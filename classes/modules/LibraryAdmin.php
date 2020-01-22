@@ -30,7 +30,7 @@ class LibraryAdmin extends StoreAdmin {
     }
     
     protected function deletePaths($isbn) {
-        $metadata = Store::data($isbn, 'meta', 'array');
+        $metadata = Store::data($isbn, 'metadata.json', 'array');
         $epub = isset($metadata['epub']) ? $metadata['epub'] : $isbn;
         return [
             'books'.DS.$isbn.'.xml',

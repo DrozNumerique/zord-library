@@ -172,7 +172,7 @@ class Library {
 	}
 	
 	public static function reference($isbn, $page = '') {
-	    $metadata = Store::data($isbn, 'meta', 'array');
+	    $metadata = Store::data($isbn, 'metadata.json', 'array');
 	    $reference = [
 	        'type' => 'book',
 	        'id'   => uniqid('Zref_'),
