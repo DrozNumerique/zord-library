@@ -55,7 +55,7 @@ class Library {
             $title .= (empty($title) ? '' : $separator).$subtitle;
         }
         if (is_int($maxlength)) {
-            $title = mb_substr($title, 0, $maxlength).(mb_strlen($title) > $maxlength ? "…" : '');
+            $title = Zord::trunc($title, $maxlength);
         }
         return $title;
     }
