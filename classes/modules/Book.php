@@ -482,7 +482,7 @@ class Book extends Module {
             $this->context.'_quotes_'.date("Y-m-d").'.doc',
             null,
             (new View('/markers', [
-                'title'   => Library::portalTitle($this->context, $this->lang),
+                'title'   => Zord::portalTitle($this->context, $this->lang),
                 'markers' => $this->params['markers']
             ], $this->controler))->render()
         );
