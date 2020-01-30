@@ -681,7 +681,10 @@ function displayTEI(selectorIndex) {
 					tileSources: viewers[id]['sources']
 				});
 				viewer.addHandler('page', function(event) {
-				    document.getElementById(id).previousElementSibling.innerHTML = viewers[id]['captions'][event.page];
+					caption = document.getElementById(id).previousElementSibling;
+					if (caption) {
+				    	caption.innerHTML = viewers[id]['captions'][event.page];
+					}
 				});
 			}
 			loadings = document.querySelectorAll('div.loading');

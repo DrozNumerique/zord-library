@@ -535,7 +535,7 @@ class LibraryImport extends Import {
             }
             
             $folder    = Store::data($ean);
-            $tmpFolder = $folder.'.tmp';
+            $tmpFolder = substr($folder, 0, -1).'.tmp'.DS;
             Zord::resetFolder($tmpFolder);
             
             foreach ($this->metadata['parts'] as &$part) {
