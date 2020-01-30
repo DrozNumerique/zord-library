@@ -49,6 +49,9 @@ class LibraryImport extends Import {
     
     protected function configure($parameters = []) {
         parent::configure($parameters);
+        if (isset($parameters['books'])) {
+            $this->refs = $parameters['books'];
+        }
         if (isset($parameters['publish'])) {
             $this->publish = $parameters['publish'];
         }
@@ -61,16 +64,16 @@ class LibraryImport extends Import {
         if (!isset($this->publish) && file_exists($this->folder.'publish.json')) {
             $this->publish = Zord::arrayFromJSONFile($this->folder.'publish.json');
         }
-        if (!isset($this->books)) {
+        if (!isset($this->refs)) {
             $set = $this->folder.'*';
             $xmls = glob($set.'.xml');
             $medias = glob($set, GLOB_ONLYDIR);
-            $this->books = [];
+            $this->refs = [];
             foreach ([$xmls, $medias] as $items) {
                 foreach ($items as $item) {
                     $book = pathinfo($item, PATHINFO_FILENAME);
-                    if (!in_array($book, $this->books)) {
-                        $this->books[] = $book;
+                    if (!in_array($book, $this->refs)) {
+                        $this->refs[] = $book;
                     }
                 }
             }
@@ -79,7 +82,7 @@ class LibraryImport extends Import {
     
     protected function preRefs() {
         if (in_array('slice', $this->steps)) {
-            foreach ($this->books as $ean) {
+            foreach ($this->refs as $ean) {
                 $text = $this->folder.$ean.'.xml';
                 if (file_exists($text)) {
                     $this->total = $this->total + filesize($text);
