@@ -314,19 +314,19 @@ td.chapter{
 	font-size: 0.9em;
 	cursor:pointer;
 	color:#6C747F;
-	width: 3000px;
+	width: 2800px;
 	margin-left: -1012px;
 	padding: 3px 0;
 }
 
 .matches .snip > .left {
-	width: 1496px;
+	width: 1400px;
 	display: inline-block;
 	text-align: right;
 }
 
 .matches .snip > .right {
-	width: 1500px;
+	width: 1400px;
 	display: inline-block;
 	text-align: left;
 }
@@ -339,11 +339,10 @@ td.chapter{
 .matches .match .tooltip {
 	visibility: hidden;
 	width: 830px;
-	height: 40px;
 	left: 0;
 	right: 0;
 	margin: auto;
-	margin-top: -87px;
+	margin-top: -117px;
 	padding: 10px;
 	position: absolute;
 	display: block;

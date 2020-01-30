@@ -913,7 +913,7 @@ class Book extends Module {
                 $query->setHighlightSimplePre('<b>');
                 $query->setHighlightSimplePost('</b>');
                 $query->setHighlightSnippets(100000);
-                $query->setHighlightFragsize(50);
+                $query->setHighlightFragsize(500);
                 $query->setHighlightMaxAnalyzedChars(-1);
                 $query->setHighlightMergeContiguous(false);
                 $query->setHighlight(true);
