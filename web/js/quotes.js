@@ -102,8 +102,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	document.getElementById('markers_export').addEventListener("click", function(event) {
 		markers = document.getElementById('markers').cloneNode(true);
 		[].forEach.call(markers.childNodes, function(marker) {
-			marker.removeChild(marker.firstChild);
-			marker.removeChild(marker.firstChild);
+			[].forEach.call(marker.querySelectorAll('span.marker-del, span.marker-addnote'), function(span) {
+				marker.removeChild(span);
+			});
 		});		
 		invokeZord({
 			module:'Book',
