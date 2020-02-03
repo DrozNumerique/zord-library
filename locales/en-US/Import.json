@@ -73,9 +73,7 @@
 		},
 		"zoom": {
 			"info": {
-				"none": "No tiles processing needed",
-				"processor": "Image processed by ",
-				"convert": "Convert command: "
+				"none": "No tiles processing needed"
 			},
 			"error": {
 				"process": "Cannot save tiles descriptor"

@@ -612,9 +612,9 @@ class LibraryImport extends Import {
         $zoom = isset($metadata['zoom']) ? $metadata['zoom'] : [];
         if (!empty($zoom)) {
             $deepzoom = new Deepzoom(Zord::getConfig('zoom'));
-            $this->info(2, $this->locale->messages->zoom->info->processor.$deepzoom->processor);
-            if ($deepzoom->processor == Deepzoom::$DEFAULT_PROCESSOR) {
-                $this->info(2, $this->locale->messages->zoom->info->convert.$deepzoom->convert);
+            $this->info(2, $this->locale->messages->image->info->processor.$deepzoom->processor);
+            if ($deepzoom->processor == ImageProcessor::$DEFAULT_PROCESSOR) {
+                $this->info(2, $this->locale->messages->image->info->convert.$deepzoom->convert);
             }
             $folder = DATA_FOLDER.'zoom'.DS.$ean.'.tmp';
             Zord::deleteRecursive($folder);

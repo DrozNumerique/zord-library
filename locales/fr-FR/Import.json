@@ -73,9 +73,7 @@
 		},
 		"zoom": {
 			"info": {
-				"none": "Pas de découpage en tuiles requis",
-				"processor": "Traitement d'images par ",
-				"convert": "Commande de conversion : "
+				"none": "Pas de découpage en tuiles requis"
 			},
 			"error": {
 				"process": "Impossible d'enregistrer le descripteur de tuiles'"
