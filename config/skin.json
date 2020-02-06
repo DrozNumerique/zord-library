@@ -9,6 +9,11 @@
 		"image": "/library/img/zord.png"
 	},
 	"styles": {
+		"table": {
+			"media": "screen",
+			"type": "text/css",
+			"href": "/library/css/table.css"
+		},
 		"library": {
 			"media": "screen",
 			"type": "text/css",
