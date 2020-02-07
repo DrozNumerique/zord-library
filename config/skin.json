@@ -21,6 +21,10 @@
 		}
 	},
 	"scripts": {
+		"table": {
+			"type": "text/javascript",
+			"src": "/library/js/table.js"
+		},
 		"library": {
 			"type": "text/javascript",
 			"src": "/library/js/portal.js"
