@@ -2,6 +2,38 @@
 
 class LibraryAdmin extends StoreAdmin {
     
+    protected function prepareImport($folder) {
+        $dirs = glob($folder.'*', GLOB_ONLYDIR);
+        foreach ($dirs as $dir) {
+            $files = glob($dir.DS.'*');
+            $same = false;
+            foreach ($files as $file) {
+                $new = $folder.basename($file);
+                if (is_dir($file) && file_exists($new)) {
+                    $same = true;
+                    foreach (glob($file.DS.'*') as $sub) {
+                        rename($sub, $new.DS.basename($sub));
+                    }
+                    rmdir($file);
+                } else {
+                    rename($file, $new);
+                }
+            }
+            if (!$same) {
+                rmdir($dir);
+            }
+        }
+        $publish = [];
+        foreach (array_keys(Zord::getConfig('context')) as $name) {
+            if (isset($this->params[$name]) && $this->params[$name] !== 'no') {
+                $publish[$name] = $this->params[$name];
+            }
+        }
+        if (!empty($publish)) {
+            file_put_contents($folder.'publish.json', Zord::json_encode($publish));
+        }
+    }
+    
     public function publish() {
         if (isset($this->params['name']) &&
             isset($this->params['books'])) {
