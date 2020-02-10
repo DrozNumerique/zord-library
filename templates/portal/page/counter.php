@@ -2,12 +2,14 @@
     <input type="hidden" name="module"  value="Book"/>
     <input type="hidden" name="action"  value="counter"/>
 <?php if (isset($models['counter']['context'])) { ?>
-    <input type="hidden" name="context" value="<?php echo $models['counter']['context']['id']; ?>"/>
+    <input type="hidden" name="context" value="<?php echo $models['counter']['context']['name']; ?>"/>
     <p><?php echo $models['counter']['context']['label']; ?></p>
-<?php } else if (isset($models['counter']['user'])) { ?>
+<?php } ?>
+<?php if (isset($models['counter']['user'])) { ?>
     <input type="hidden" name="user"    value="<?php echo $models['counter']['user']['login']; ?>"/>
     <p><?php echo $models['counter']['user']['name']; ?></p>
-<?php } else if ($user->isManager()) { ?>
+<?php } ?>
+<?php if (!isset($models['counter']['context']) && !isset($models['counter']['user']) && $user->isManager()) { ?>
 	<p><?php echo $locale->all; ?>
 <?php }?>
     <div>
@@ -21,7 +23,7 @@
 <?php if (isset($models['counter']['reports']) && isset($models['counter']['months'])) { ?>
 <div id="reports" data-id="<?php echo $models['counter']['id']; ?>">
 <?php   foreach (array_keys($models['counter']['reports']) as $type) { ?>
-    <a href="/counter?type=<?php echo $type; ?>&id=<?php echo $models['counter']['id']; ?>" download="<?php echo isset($models['counter']['context']) ? $models['counter']['context']['id'] : (isset($models['counter']['user']) ? $models['counter']['user']['login'] : 'ALL').'_BR'.$type.'_'.$models['counter']['range']['start'].'_'.$models['counter']['range']['end'].'.xls'; ?>"><?php echo $locale->download; ?></a>
+    <a href="/counter?type=<?php echo $type; ?>&id=<?php echo $models['counter']['id']; ?>" download="<?php echo isset($models['counter']['context']) ? $models['counter']['context']['name'] : (isset($models['counter']['user']) ? $models['counter']['user']['login'] : 'ALL').'_BR'.$type.'_'.$models['counter']['range']['start'].'_'.$models['counter']['range']['end'].'.xls'; ?>"><?php echo $locale->download; ?></a>
     <div class="report">
 <?php     $this->render('report', ['counter' => $models['counter'], 'type' => $type]); ?>
     </div>

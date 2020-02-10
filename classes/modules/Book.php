@@ -502,11 +502,12 @@ class Book extends Module {
         }
         $user    = null;
         $context = null;
+        if (isset($this->params['context'])) {
+            $context = $this->params['context'];
+        }
         if ($this->user->isManager()) {
             if (isset($this->params['user'])) {
                 $user = new User($this->params['user']);
-            } else if (isset($this->params['context'])) {
-                $context = $this->params['context'];              
             }
         } else if ($this->user->isConnected()) {
             $user = $this->user;
@@ -515,15 +516,16 @@ class Book extends Module {
             return $this->page('home');
         }
         if (isset($user)) {
-            $result = ['user' => [
+            $result['user'] = [
                 'login' => $user->login,
                 'name'  => $user->name
-            ]];
-        } else if (isset($context)) {
-            $result = ['context' => [
-                'id'    => $context,
+            ];
+        }
+        if (isset($context)) {
+            $result['context'] = [
+                'name'  => $context,
                 'label' => Zord::getLocaleValue('title', Zord::value('context',$context), $this->lang)
-            ]];
+            ];
         }
         $year = date("Y");
         $start = isset($this->params['start']) ? $this->params['start'] : $year.'-01-01';
@@ -541,14 +543,34 @@ class Book extends Module {
                 $result['months'][] = $month->format('Y-m');
             }
             $result['books'] = [];
-            $select = isset($user) ? ['key' => 'user', 'value' => $user->login] : (isset($context) ? ['key' => 'context', 'value' => $context] : null);
+            $select = [];
+            if (isset($user)) {
+                $select['user'] = $user->login;
+            }
+            if (isset($context)) {
+                $select['context'] = $context;
+            }
+            $query = '';
+            foreach ($select as $key => $value) {
+                $query .= "`".$key."` ";
+                if (is_array($value)) {
+                    foreach ($value as $index => $item) {
+                        $value[$index] = "'".$item."'";
+                    }
+                    $query .= "IN (".implode(',', $value).")";
+                } else {
+                    $query .= "= '".$value."'";
+                }
+                $query .= " AND ";
+            }
+            $query .= "`type` = ? AND `when` BETWEEN ? AND ? ORDER BY `when` ASC";
             foreach (Zord::value('report', 'types') as $type => $title) {
                 $result['reports'][$type]['title'] = $title;
                 $result['reports'][$type]['books'] = [];
                 $hits = (new UserHasQueryEntity())->retrieve([
                     'many'  => true,
                     'where' => [
-                        'raw' => (isset($select) ? "`".$select['key']."` = '".$select['value']."' AND " : '')."`type` = ? AND `when` BETWEEN ? AND ? ORDER BY `when` ASC",
+                        'raw'        => $query,
                         'parameters' => [$type, $start->format('Y-m-d'), $end->format('Y-m-d')]
                     ]
                 ]);
