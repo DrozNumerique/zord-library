@@ -33,7 +33,7 @@
 					<form method="post" action="<?php echo $baseURL; ?>">
 						<input type="hidden" name="module" value="Account"/>
 						<input type="hidden" name="action" value="<?php echo $models['portal']['account']['action']; ?>"/>
-						<input type="submit" value="<?php echo $models['portal']['account']['label']; ?>" class="connection"/>
+						<input type="submit" value="<?php echo $models['portal']['account']['label']; ?>" class="account"/>
 					</form>
 				</li>
 <?php } ?>
