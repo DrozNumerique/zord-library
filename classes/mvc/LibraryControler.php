@@ -63,7 +63,7 @@ class LibraryControler extends Controler {
         }
         $connected = $this->user->isConnected();
         $models['portal']['account'] = [
-            'action' => $connected ? 'disconnect' : 'connection',
+            'action' => $connected ? 'disconnect' : 'connect',
             'label'  => $connected ? $models['portal']['locale']['menu']['logout'] : $models['portal']['locale']['menu']['login']
         ];
         return $models;
