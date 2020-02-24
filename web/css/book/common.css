@@ -928,6 +928,7 @@ div.speaker {
 div.text img {
 	margin:auto;
 	max-width:100%;
+	max-height: 500px;
 	display:block ! important;
 }
 

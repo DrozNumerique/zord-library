@@ -1011,7 +1011,7 @@ class LibraryImport extends Import {
                     } else {
                         $imgFile = $this->metadata['medias'][$url];
                         $loading = $partText->createElement($this->prefix.':loading');
-                        $height = min([file_exists($imgFile) ? getimagesize($imgFile)[1] : GRAPHIC_MAX_HEIGHT, GRAPHIC_MAX_HEIGHT]);
+                        $height = min([file_exists($imgFile) ? getimagesize($imgFile)[1] : GRAPHIC_LOADING_MAX_HEIGHT, GRAPHIC_LOADING_MAX_HEIGHT]);
                         $loading->setAttribute('style', 'height:'.$height.'px;');
                         $graphic->appendChild($loading);
                     }

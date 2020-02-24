@@ -417,8 +417,8 @@ function displayTEI(selectorIndex) {
 					if (element.hasAttribute('data-zoom')) {
 						sources.push(element.getAttribute('data-zoom'));
 						caption = '';
-						[].forEach.call([element.firstElementChild, element.nextElementSibling], function(candidate) {
-							if (candidate !== null && candidate.classList.contains('desc')) {
+						[].forEach.call([element.firstElementChild, element.nextElementSibling, element.previousElementSibling], function(candidate) {
+							if (candidate !== null && (candidate.classList.contains('desc') || candidate.classList.contains('head'))) {
 								caption = candidate.textContent;
 							}
 						});
@@ -693,7 +693,6 @@ function displayTEI(selectorIndex) {
 					graphic = loading.parentNode;
 					img = document.createElement('img');
 					img.setAttribute('src', '/medias/' + BOOK + '/' + graphic.getAttribute('data-' + ELS['graphic']['url']));
-					img.style.height = loading.style.height;
 					graphic.replaceChild(img, loading);
 				});
 			}

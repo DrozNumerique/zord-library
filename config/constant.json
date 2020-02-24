@@ -13,7 +13,7 @@
     "NS_URL": "http://www.tei-c.org/ns/1.0",
     "NS_PREFIX": "tei",
     "NS_ADJUST": "prefixTEI",
-    "GRAPHIC_MAX_HEIGHT": 500,
+    "GRAPHIC_LOADING_MAX_HEIGHT": 500,
     "SEARCH_SLIDE": false,
     "IMPORT_CONTINUE": false
 }

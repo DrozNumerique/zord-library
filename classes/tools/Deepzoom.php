@@ -68,7 +68,7 @@ class Deepzoom extends ImageProcessor {
                     ];                                        
                     switch ($this->processor) {
                         case 'Imagick': {
-                            $tileImage = clone $this->image;
+                            $tileImage = clone $tempImage;
                             $tileImage->setImagePage(0, 0, 0, 0);
                             $tileImage->cropImage($bounds['width'], $bounds['height'], $bounds['x'], $bounds['y']);
                             $tileImage->setImageFormat($this->format);
