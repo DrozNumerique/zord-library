@@ -14,7 +14,8 @@ div.tei *[data-rendition="#center"] {
 	text-align: center;
 }
 
-div.tei *[data-rend="inline"] {
+div.tei *[data-rend="inline"],
+div.tei *[data-rend="inline"] img {
 	display: inline ! important;
 }
 
@@ -436,7 +437,8 @@ div.l div.gloss {
 	text-indent:0;
 }
 
-div.l div.figure {
+div.l div.figure,
+div.l div.figure img {
 	display: inline ! important;
 }
 
@@ -597,7 +599,8 @@ div.p[data-rendition="#left"] {
 	text-align: left;
 }
 
-div.p div.figure {
+div.p div.figure,
+div.p div.figure img {
 	display: inline ! important;
 }
 
