@@ -14,6 +14,10 @@ div.tei *[data-rendition="#center"] {
 	text-align: center;
 }
 
+div.tei *[data-rend="inline"] {
+	display: inline ! important;
+}
+
 /* -------------------------------- ab -------------------------------- */
 
 div.ab {
@@ -432,6 +436,10 @@ div.l div.gloss {
 	text-indent:0;
 }
 
+div.l div.figure {
+	display: inline ! important;
+}
+
 @media screen and (max-width: 1135px) {
 	div.l div.gloss {
 		width: 18em;
@@ -587,6 +595,10 @@ div.p[data-rendition="#right"] {
 
 div.p[data-rendition="#left"] {
 	text-align: left;
+}
+
+div.p div.figure {
+	display: inline ! important;
 }
 
 /* ----------------------------------- pb ----------------------------------- */
