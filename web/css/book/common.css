@@ -659,27 +659,27 @@ div.list[data-type="ordered"] > div.item:before {
 	content:attr(data-n);
 }
 
-div.pb[id][data-visavis="noopAlone"], div.pb[id][data-visavis="alone"] {
+div[data-visavis="noopAlone"], div[data-visavis="alone"] {
 	display:inline ! important;
 }
 
-div.pb[id][data-visavis="noopVariant"], div.pb[id][data-visavis="variant"] {
+div[data-visavis="noopVariant"], div[data-visavis="variant"] {
 	display:block ! important;
 }
 
-div.pb[id][data-visavis="noopAlone"]:before, div.pb[id][data-visavis="alone"]:before {
+div[data-visavis="noopAlone"]:before, div[data-visavis="alone"]:before {
 	position:absolute;
 	right:60px;
 	display:inline ! important;
 }
 
-div.pb[id][data-visavis="noopVariant"]:before, div.pb[id][data-visavis="variant"]:before {
+div[data-visavis="noopVariant"]:before, div[data-visavis="variant"]:before {
 	position:static;
 	display:block ! important;
 	text-align: center;
 }
 
-div.p > div.pb[id][data-visavis="noopAlone"]:after, div.p > div.pb[id][data-visavis="alone"]:after {
+div.p > div[data-visavis="noopAlone"]:after, div.p > div[data-visavis="alone"]:after {
 	content:"|";
 }
 

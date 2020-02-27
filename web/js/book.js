@@ -377,12 +377,12 @@ function displayTEI(selectorIndex) {
 
 		TEI_SELECTOR       = 'div.' + ELS['tei']['elm'];
 		FOOTNOTES_SELECTOR = 'div.footnotes';
-		PAGE_SELECTOR      = 'div.' + ELS['pb']['elm'] + '[data-' + ELS['pb']['n'] + ']:not([data-' + ELS['pb']['rend'] + '="temoin"])';
-		LINE_SELECTOR      = 'div.' + ELS['l']['elm'] + '[data-' + ELS['l']['rend'] + '="margin"]';
+		PAGE_SELECTOR      = 'div.' + ELS['pb']['elm']  + '[data-' + ELS['pb']['n']     + ']:not([data-' + ELS['pb']['rend'] + '="temoin"])';
+		LINE_SELECTOR      = 'div.' + ELS['l']['elm']   + '[data-' + ELS['l']['rend']   + '="margin"]';
 		SECTION_SELECTOR   = 'div.' + ELS['div']['elm'] + '[data-' + ELS['div']['type'] + '="section"]';
 		ALIGN_SELECTORS    = [
-			PAGE_SELECTOR + ',' + FOOTNOTES_SELECTOR,
-			LINE_SELECTOR + ',' + FOOTNOTES_SELECTOR,
+			PAGE_SELECTOR    + ',' + FOOTNOTES_SELECTOR,
+			LINE_SELECTOR    + ',' + FOOTNOTES_SELECTOR,
 			SECTION_SELECTOR + ',' + FOOTNOTES_SELECTOR
 		];
 		
@@ -406,6 +406,24 @@ function displayTEI(selectorIndex) {
 		teiContents[0].style.display = 'block';
 		if (teiContents.length > 1) {
 			teiContents[1].style.display = 'block';
+		}
+		
+		var first = teiContents[0].firstElementChild.firstElementChild;
+		if (first.dataset.rend !== undefined) {
+			switch (first.dataset.rend) {
+				case 'page': {
+					CURRENT_SELECTOR_INDEX = PAGE_SELECTOR_INDEX;
+					break;
+				} 
+				case 'line': {
+					CURRENT_SELECTOR_INDEX = LINE_SELECTOR_INDEX;
+					break;
+				} 
+				case 'section': {
+					CURRENT_SELECTOR_INDEX = SECTION_SELECTOR_INDEX;
+					break;
+				} 
+			}
 		}
 		
 		var zooms = contentTEI.querySelectorAll(ZOOM_SELECTOR + ',' + FACSIMILE_SELECTOR);
