@@ -1,6 +1,8 @@
 <?php
 
 class LibraryImport extends Import {
+    
+    private static $XML_PARSE_BIG_LINES = 4194304;
 
     protected $adjust     = NS_ADJUST;
     protected $prefix     = NS_PREFIX;
@@ -1140,9 +1142,9 @@ class LibraryImport extends Import {
         libxml_clear_errors();
         $previous = libxml_use_internal_errors(true);
         if (file_exists($content)) {
-            $document->load($content);
+            $document->load($content, self::$XML_PARSE_BIG_LINES);
         } else {
-            $document->loadXML($content);
+            $document->loadXML($content, self::$XML_PARSE_BIG_LINES);
         }
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
