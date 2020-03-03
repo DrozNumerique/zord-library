@@ -527,6 +527,13 @@ class Book extends Module {
                 'label' => Zord::getLocaleValue('title', Zord::value('context',$context), $this->lang)
             ];
         }
+        $prefix = '';
+        if ($user) {
+            $prefix .= $user->login.'_';
+        }
+        if ($context) {
+            $prefix .= $context.'_';
+        }
         $year = date("Y");
         $start = isset($this->params['start']) ? $this->params['start'] : $year.'-01-01';
         $end   = isset($this->params['end']) ? $this->params['end'] : $year.'-12-31';
@@ -615,6 +622,7 @@ class Book extends Module {
         }
         $id = uniqid();
         $result['id'] = $id;
+        $result['prefix'] = empty($prefix) ? 'ALL_' : $prefix;
         $_SESSION['__ZORD__']['__LIBRARY__']['__COUNTER__'][$id] = $result;
         return $this->page('counter', ['counter' => $result]);
     }
