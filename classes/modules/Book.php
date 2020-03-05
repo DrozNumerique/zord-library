@@ -12,21 +12,29 @@ class Obfuscator {
     private $filename = null;
     
     public function __construct() {
-        $folder = Zord::liveFolder('config'.DS.'obf');
-        $files = glob($folder.'*.json');
-        $TEI = [];
+        $sources = [];
+        $medias = Zord::value('TEI', 'medias');
         foreach (COMPONENT_FOLDERS as $tier) {
-            $TEI[] = $tier.'config'.DS.'TEI.json';
+            $sources[] = $tier.'config'.DS.'TEI.json';
+            foreach($medias as $media) {
+                $sources[] = $tier.'web'.DS.'css'.DS.'book'.DS.$media.'.css';
+            }
         }
-        foreach($files as $file) {
-            if (Zord::needsUpdate($file, $TEI)) {
-                unlink($file);
-                foreach(['screen','print'] as $media) {
-                    unlink(BUILD_FOLDER.pathinfo($file, PATHINFO_FILENAME).'_'.$media.'.css');
+        $folder = Zord::liveFolder('config'.DS.'obf');
+        $mappings = glob($folder.'*.json');
+        foreach($mappings as $mapping) {
+            $builds = [$mapping];
+            foreach($medias as $media) {
+                $builds[] = BUILD_FOLDER.pathinfo($mapping, PATHINFO_FILENAME).'_'.$media.'.css';
+            }
+            if (Zord::needsUpdate($builds, $sources)) {
+                foreach($builds as $build) {
+                    unlink($build);
                 }
             }
         }
-        if (count($files) < OBFUSCATION_MODELS_MAX) {
+        $mappings = glob($folder.'*.json');
+        if (count($mappings) < OBFUSCATION_MODELS_MAX) {
             $this->prefix = self::$ALPHABET[rand(0, 25)];
             $elements = Zord::value('TEI', 'elements');
             shuffle($elements);
@@ -57,7 +65,7 @@ class Obfuscator {
             $this->filename = md5(json_encode($this->elementMap).json_encode($this->attributeMap));
             file_put_contents($folder.$this->filename.'.json', Zord::json_encode($content));
         } else {
-            $this->filename = pathinfo($files[rand(0, count($files) - 1)], PATHINFO_FILENAME);
+            $this->filename = pathinfo($mappings[rand(0, count($mappings) - 1)], PATHINFO_FILENAME);
             $obfuscator = Zord::arrayFromJSONFile($folder.$this->filename.'.json');
             $this->ids = $obfuscator['ids'];
             $this->prefix = $obfuscator['prefix'];

@@ -1,4 +1,10 @@
 {
+	"medias": [
+		"common",
+		"screen",
+		"print",
+		"epub"
+	],
 	"obfuscated": {
 		"tei": [],
 		"pb": ["n","rend"],
