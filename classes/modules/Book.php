@@ -23,12 +23,15 @@ class Obfuscator {
         $folder = Zord::liveFolder('config'.DS.'obf');
         $mappings = glob($folder.'*.json');
         foreach($mappings as $mapping) {
-            $builds = [$mapping];
+            $targets = [$mapping];
             foreach($medias as $media) {
-                $builds[] = BUILD_FOLDER.pathinfo($mapping, PATHINFO_FILENAME).'_'.$media.'.css';
+                $css = BUILD_FOLDER.pathinfo($mapping, PATHINFO_FILENAME).'_'.$media.'.css';
+                if (file_exists($css)) {
+                    $targets[] = $css;
+                }
             }
-            if (Zord::needsUpdate($builds, $sources)) {
-                foreach($builds as $build) {
+            if (Zord::needsUpdate($targets, $sources)) {
+                foreach($targets as $build) {
                     unlink($build);
                 }
             }
