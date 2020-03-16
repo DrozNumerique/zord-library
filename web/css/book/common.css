@@ -419,10 +419,6 @@ div.l[data-rend="margin"]:before {
 	content:attr(data-n);
 }
 
-div.l[data-rend="margin"]:before {
-	content:attr(data-n);
-}
-
 div.l div.gloss {
 	position:absolute;
 	display:block ! important;
@@ -659,21 +655,21 @@ div.list[data-type="ordered"] > div.item:before {
 	content:attr(data-n);
 }
 
-div[data-visavis="noopAlone"], div[data-visavis="alone"] {
+div.pb[data-visavis="noopAlone"], div.pb[data-visavis="alone"] {
 	display:inline ! important;
 }
 
-div[data-visavis="noopVariant"], div[data-visavis="variant"] {
+div.pb[data-visavis="noopVariant"], div[data-visavis="variant"] {
 	display:block ! important;
 }
 
-div[data-visavis="noopAlone"]:before, div[data-visavis="alone"]:before {
+div.pb[data-visavis="noopAlone"]:before, div.pb[data-visavis="alone"]:before {
 	position:absolute;
 	right:60px;
 	display:inline ! important;
 }
 
-div[data-visavis="noopVariant"]:before, div[data-visavis="variant"]:before {
+div.pb[data-visavis="noopVariant"]:before, div.pb[data-visavis="variant"]:before {
 	position:static;
 	display:block ! important;
 	text-align: center;
