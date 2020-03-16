@@ -220,12 +220,10 @@ function displayTEI(selectorIndex) {
 
 	[].forEach.call(teiDisplayed, function(teiContent,i) {
 		teiContent.style.width = teiWidth + unit;
-/*
 		var temoins = teiContent.querySelectorAll(PB_TEMOIN_SELECTOR);
 		[].forEach.call(temoins, function(temoin,j) {
 			temoin.setAttribute('base', (teiContent.offsetLeft - 30) + 'px');
 		});
-*/
 	});
 	[].forEach.call(pageDisplayed, function(pages,i) {
 		[].forEach.call(pages, function (page,j) {
