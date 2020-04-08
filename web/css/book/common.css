@@ -486,6 +486,10 @@ div.lg {
 	margin:8px 0px 15px 0px;
 }
 
+div.lg[data-rend="margin"]::before {
+    content: attr(data-n);
+}
+
 /* ---------------------------------- list ---------------------------------- */
 
 div.list {
