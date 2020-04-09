@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		el.addEventListener("keyup", function(event) {
 			var parent = el.parentNode;
 			var id = parent.getAttribute('data-id');
-			quotes[id].zord_note = this.value;
+			el.innerHTML = el.value;
+			quotes[id].zord_note = el.value;
 			saveCitations();
 		});
 	};
@@ -83,9 +84,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		[].forEach.call(document.querySelectorAll('.marker-addnote'), function (el) {
 			el.addEventListener("click", function(event) {
 				var parent = el.parentNode;
-				parent.insertAdjacentHTML('beforeend', '<textarea class="marker-note"></textarea>');
+				var hr = parent.querySelector('hr');
+				var note = document.createElement('textarea');
+				note.classList.add('marker-note');
+				parent.insertBefore(note, hr);
 				parent.removeChild(this);
-				saveChangeNote(parent.querySelector('.marker-note'));
+				saveChangeNote(note);
 			});
 		});
 
@@ -105,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			[].forEach.call(marker.querySelectorAll('span.marker-del, span.marker-addnote'), function(span) {
 				marker.removeChild(span);
 			});
-		});		
+		});
 		invokeZord({
 			module:'Book',
 			action:'quotes',
