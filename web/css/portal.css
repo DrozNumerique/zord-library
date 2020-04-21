@@ -659,3 +659,8 @@ div.loading {
 	display: block ! important;
 	background: no-repeat center url("/library/img/wait.gif");
 }
+
+#admin-import-publish {
+	width: 300px;
+	margin-top: 20px;
+}

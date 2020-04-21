@@ -1,0 +1,7 @@
+{
+	"view": {
+		"/portal/page/admin/import/file": {
+			"after": "/portal/page/admin/import/publish"
+		}
+	}
+}
