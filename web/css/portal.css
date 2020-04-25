@@ -264,6 +264,38 @@ body {
 	color:#A3CBFF;
 }
 
+#navbar div.sub {
+	cursor: pointer;
+}
+
+#navbar div.sub ul {
+	display: block;
+	position: absolute;
+	padding-top: 3px;
+	left: 0px;
+}
+
+#navbar div.sub ul li {
+	display: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid;
+	margin-bottom: 1px;
+}
+
+#navbar div.sub:hover ul li {
+	display: block;
+}
+
+#navbar div.sub li:hover {
+	background: black;
+	border-color: white;
+}
+
+#navbar div.sub li:hover a {
+	color: white ! important;
+}
+
 .navcit {
 	background: #ff8043;
 	font-size: 0.9em;
