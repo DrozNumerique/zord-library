@@ -8,8 +8,9 @@ class CollectionLiner extends Liner {
     
     public function sortValue($shelf, $book) {
         $number = 0;
-        if (isset($book['metadata']['collection_number'])) {
-            $number = $book['metadata']['collection_number'];
+        $metadata = Store::data($book['isbn'], 'metadata.json', 'array');
+        if (isset($metadata['collection_number'])) {
+            $number = $metadata['collection_number'];
             if (!is_int($number)) {
                 $number = Library::roman2number($number);
             }
@@ -19,8 +20,9 @@ class CollectionLiner extends Liner {
     
     public function store($book) {
         $stored = false;
-        if (isset($book['metadata']['relation'])) {
-            foreach(explode(',',$book['metadata']['relation']) as $collection) {
+        $metadata = Store::data($book['isbn'], 'metadata.json', 'array');
+        if (isset($metadata['relation'])) {
+            foreach(explode(',',$metadata['relation']) as $collection) {
                 $stored = true;
                 $this->locale[$collection] = $collection;
                 $this->shelves[$collection]['books'][] = $book;
