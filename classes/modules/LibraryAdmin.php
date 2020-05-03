@@ -53,7 +53,7 @@ class LibraryAdmin extends StoreAdmin {
                 } else if ($this->user->isManager()) {
                     (new BookEntity())->delete($book['isbn'], true);
                     foreach($this->deletePaths($book['isbn']) as $path) {
-                        Zord::deleteRecursive(DATA_FOLDER.$path);
+                        Zord::deleteRecursive(STORE_FOLDER.$path);
                     }
                 }
             }
@@ -62,14 +62,14 @@ class LibraryAdmin extends StoreAdmin {
     }
     
     protected function deletePaths($isbn) {
-        $metadata = Store::data($isbn, 'metadata.json', 'array');
+        $metadata = Library::data($isbn, 'metadata.json', 'array');
         $epub = isset($metadata['epub']) ? $metadata['epub'] : $isbn;
         return [
             'books'.DS.$isbn.'.xml',
             'epub'.DS.$epub.'.epub',
             'medias'.DS.$isbn,
             'zoom'.DS.$isbn,
-            'zord'.DS.$isbn,
+            'library'.DS.$isbn,
         ];
     }
     

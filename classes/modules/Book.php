@@ -187,8 +187,7 @@ class Book extends Module {
         if (isset($models['book'])) {
             $book = $models['book'];
             $models['portal']['title'] = $book['TITLE'];
-            $metadata = Store::data($book['ISBN'], 'metadata.json', 'array');
-            $parts  = $metadata['parts'];
+            $parts = Library::data($book['ISBN'], 'parts.json', 'array');
             if (count($book['PARTS']) > 1) {
                 $index = 0;
                 foreach($book['PARTS'] as $variant) {
@@ -218,7 +217,7 @@ class Book extends Module {
     public function unapi() {
         if (isset($this->params['id'])) {
             $format = isset($this->params['format']) ? $this->params['format'] : 'rdf_bibliontology';
-            $metadata = Store::data($this->params['id'], 'metadata.json', 'array');
+            $metadata = Library::data($this->params['id'], 'metadata.json', 'array');
             return $this->view('/xml/formats/'.$format, ['metadata' => $metadata], Zord::value('formats', [$format, 'type']), false);
         } else {
             return $this->view('/xml/formats', ['formats' => Zord::getConfig('formats')], 'application/xml', false);
@@ -228,7 +227,7 @@ class Book extends Module {
     public function openurl() {
         if (isset($this->params['id'])) {
             $isbn = $this->params['id'];
-            if (file_exists(Store::data($isbn))) {
+            if (file_exists(Library::data($isbn))) {
                 $access = [];
                 $context = (new BookHasContextEntity())->retrieve([
                     'where' => ['book' => $isbn],
@@ -300,8 +299,8 @@ class Book extends Module {
                 }
                 return $this->redirect(Zord::getContextURL($this->context, $this->indexURL, $path), true);
             }
-            if (file_exists(Store::data($isbn))) {
-                $metadata = Store::data($isbn, 'metadata.json', 'array');
+            if (file_exists(Library::data($isbn))) {
+                $metadata = Library::data($isbn, 'metadata.json', 'array');
                 $defined = isset($this->params['part']) && !empty($this->params['part']);
                 $readable = $this->user->hasAccess($isbn, 'reader') && $this->access($isbn);
                 $part = ($defined && $readable) ? $this->params['part'] : 'home';
@@ -351,8 +350,9 @@ class Book extends Module {
                     }
                 }
                 $parts = [$part];
-                if (isset($metadata['visavis'])) {
-                    foreach ($metadata['visavis'] as $group) {
+                $visavis = Library::data($isbn, 'visavis.json', 'array');
+                if (isset($visavis)) {
+                    foreach ($visavis as $group) {
                         if (in_array($part, $group)) {
                             $parts = $group;
                             break;
@@ -363,7 +363,7 @@ class Book extends Module {
                 $obfuscator = $obfuscate ? new Obfuscator() : null;
                 $texts = [];
                 foreach($parts as $item) {
-                    $text = Store::data($isbn, $item.'.xhtml', 'content');
+                    $text = Library::data($isbn, $item.'.xhtml', 'content');
                     if ($item == $part && isset($this->params['match']) && isset($this->params['index'])) {
                         $match = $this->params['match'];
                         $index = $this->params['index'];
@@ -390,13 +390,14 @@ class Book extends Module {
                         $this->addStyle($obfuscate ? '/build/'.$obfuscator->getCSS($css)   : '/library/css/book/'.$css.'.css', $media);
                     }
                 }
-                if (!empty($metadata['zoom'])) {
+                $zoom = Library::data($isbn, 'zoom.json', 'array');
+                if (!empty($zoom)) {
                     $this->addScript('/library/js/openseadragon.js');
                 }
                 $this->addUpdatedScript(
                     'ariadne_'.$isbn.'.js',
                     '/portal/page/book/script/ariadne',
-                    Store::data($isbn, 'metadata.json'),
+                    Library::data($isbn, 'ariadne.json'),
                     ['portal' => ['ariadne' => $this->ariadne($isbn)]]
                 );
                 return $this->page('book', ['book' => [
@@ -406,7 +407,7 @@ class Book extends Module {
                     'PARTS'    => $parts,
                     'IDS'      => $obfuscate ? $obfuscator->getIDS() : Obfuscator::clearIDS(),
                     'parts'    => $texts,
-                    'toc'      => Store::data($isbn, 'toc.xhtml', 'content'),
+                    'toc'      => Library::data($isbn, 'toc.xhtml', 'content'),
                     'metadata' => $metadata,
                     'message'  => $message,
                     'search'   => isset($this->params['search']) ? $this->params['search'] : null
@@ -470,19 +471,23 @@ class Book extends Module {
     }
     
     public function metadata() {
-        return $this->send(Store::data($this->params['isbn'], 'metadata.json'), 'admin');
+        return $this->send(Library::data($this->params['isbn'], 'metadata.json'), 'admin');
+    }
+    
+    public function parts() {
+        return $this->send(Library::data($this->params['isbn'], 'parts.json'), 'admin');
     }
     
     public function header() {
-        return $this->send(Store::data($this->params['isbn'], 'header.xml'), 'admin');
+        return $this->send(Library::data($this->params['isbn'], 'header.xml'), 'admin');
     }
     
     public function epub() {
-        $metadata = Store::data($this->params['isbn'], 'metadata.json', 'array');
+        $metadata = Library::data($this->params['isbn'], 'metadata.json', 'array');
         if (isset($metadata['epub'])) {
             $this->params['isbn'] = $metadata['epub'];
         }
-        return $this->download(DATA_FOLDER.'epub'.DS.'${isbn}.epub', 'reader');
+        return $this->download(STORE_FOLDER.'epub'.DS.'${isbn}.epub', 'reader');
     }
     
     public function quotes() {
@@ -596,7 +601,7 @@ class Book extends Module {
                     $month   = (new DateTime($hit->when))->format('Y-m');
                     $book    = $hit->book;
                     $context = $hit->context;
-                    $metadata = Store::data($book, 'metadata.json', 'array');
+                    $metadata = Library::data($book, 'metadata.json', 'array');
                     if ($metadata) {
                         $result['books'][$book] = Library::title($metadata);
                     }
@@ -823,14 +828,13 @@ class Book extends Module {
     }
     
     private function ariadne($isbn, $part = null) {
-        $metadata = Store::data($isbn, 'metadata.json', 'array');
-        $parts = $metadata['parts'];
+        $parts = Library::data($isbn, 'parts.json', 'array');
+        $ariadne = Library::data($isbn, 'ariadne.json', 'array');
         $sequence = [];
-        $ariadne = [];
-        if (isset($metadata['ariadne'])) {
-            $sequence = $metadata['ariadne'];
+        if (isset($ariadne)) {
+            $sequence = $ariadne;
         } else {
-            $toc = Store::data($isbn, 'toc.xhtml', 'document');
+            $toc = Library::data($isbn, 'toc.xhtml', 'document');
             $tocXPath = new DOMXPath($toc);
             foreach($parts as $index => $_part) {
                 $li = $tocXPath->query('//li[@data-id="'.$_part['id'].'"]/span');
@@ -838,8 +842,8 @@ class Book extends Module {
                     $sequence[] = $_part;
                 }
             }
-            $metadata['ariadne'] = $sequence;
-            file_put_contents(Store::data($isbn, 'metadata.json'), Zord::json_encode($metadata));
+            $ariadne = $sequence;
+            file_put_contents(Library::data($isbn, 'ariadne.json'), Zord::json_encode($ariadne));
         }
         if ($part) {
             foreach ($parts as $_part) {

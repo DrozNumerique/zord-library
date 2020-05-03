@@ -8,7 +8,7 @@ class CollectionLiner extends Liner {
     
     public function sortValue($shelf, $book) {
         $number = 0;
-        $metadata = Store::data($book['isbn'], 'metadata.json', 'array');
+        $metadata = Library::data($book['isbn'], 'metadata.json', 'array');
         if (isset($metadata['collection_number'])) {
             $number = $metadata['collection_number'];
             if (!is_int($number)) {
@@ -20,7 +20,7 @@ class CollectionLiner extends Liner {
     
     public function store($book) {
         $stored = false;
-        $metadata = Store::data($book['isbn'], 'metadata.json', 'array');
+        $metadata = Library::data($book['isbn'], 'metadata.json', 'array');
         if (isset($metadata['relation'])) {
             foreach(explode(',',$metadata['relation']) as $collection) {
                 $stored = true;

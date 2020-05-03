@@ -18,6 +18,10 @@ class Library {
         'I'  => 1,
     );
     
+    public static function data($ean, $path = null, $format = 'path') {
+        return Store::data(STORE_FOLDER.'library'.DS.$ean.DS.(isset($path) ? $path : ''), $format);
+    }
+    
     public static function books($context) {
         $books = [];
         $entity = (new BookHasContextEntity())->retrieve([
@@ -172,7 +176,7 @@ class Library {
 	}
 	
 	public static function reference($isbn, $page = '') {
-	    $metadata = Store::data($isbn, 'metadata.json', 'array');
+	    $metadata = self::data($isbn, 'metadata.json', 'array');
 	    $reference = [
 	        'type' => 'book',
 	        'id'   => uniqid('Zref_'),

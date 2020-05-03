@@ -19,6 +19,12 @@ class LibraryImport extends Import {
     protected $document = null;
     protected $adjusted = null;
     protected $metadata = null;
+    protected $medias   = null;
+    protected $zoom     = null;
+    protected $parts    = null;
+    protected $refs     = null;
+    protected $visavis  = null;
+    protected $ariadne  = null;
     protected $idCount  = 1;
     protected $dones    = [];
     protected $xpath    = null;
@@ -28,23 +34,24 @@ class LibraryImport extends Import {
     protected $page     = null;
     
     protected function sources($ean) {
-        $metadata = Store::data($ean, 'metadata.json', 'array');
-        $parts = [];
-        if (isset($metadata['parts'])) {
-            foreach ($metadata['parts'] as $part) {
+        $metadata = Library::data($ean, 'metadata.json', 'array');
+        $parts = Library::data($ean, 'parts.json', 'array');
+        $docs = [];
+        if (isset($parts)) {
+            foreach ($parts as $part) {
                 if ($part['index']) {
                     $part['content'] = explode("\n", wordwrap(trim(preg_replace(
                         '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
                             '<br/>', ' ',
-                            Store::data($ean, $part['name'].'.xhtml', 'content')
+                            Library::data($ean, $part['name'].'.xhtml', 'content')
                         )), ENT_QUOTES | ENT_XML1, 'UTF-8')
                     )), INDEX_MAX_CONTENT_LENGTH));
-                    $parts[] = $part;
+                    $docs[] = $part;
                 }
             }
         }
         return [
-            'docs' => $parts,
+            'docs' => $docs,
             'meta' => $metadata
         ];
     }
@@ -95,6 +102,10 @@ class LibraryImport extends Import {
     
     protected function resetRef($ean) {
         parent::resetRef($ean);
+        $folder = Library::data($ean);
+        if (!file_exists($folder)) {
+            mkdir($folder);
+        }
         $text = $this->folder.$ean.'.xml';
         if ($this->total > 0 && file_exists($text)) {
             $this->size += filesize($text);
@@ -104,6 +115,12 @@ class LibraryImport extends Import {
         $this->document = null;
         $this->adjusted = null;
         $this->metadata = null;
+        $this->medias = null;
+        $this->zoom = null;
+        $this->parts = null;
+        $this->refs = null;
+        $this->visavis = null;
+        $this->ariadne = null;
         $this->xpath = null;
         $this->adjXPath = null;
         $this->toc = null;
@@ -152,7 +169,7 @@ class LibraryImport extends Import {
     
     protected function metadata($ean) {
         if ($header = $this->header($ean)) {
-            file_put_contents(Store::data($ean, 'header.xml'), $header);
+            file_put_contents(Library::data($ean, 'header.xml'), $header);
             $header = simplexml_load_string($header);
             $uuid = md5($header);
             $metadata = [
@@ -298,14 +315,7 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            $metaFile = Store::data($ean, 'metadata.json');
-            $previous = Zord::arrayFromJSONFile($metaFile);
-            foreach (['medias','zoom','parts','refs','visavis','ariadne'] as $keep) {
-                if (isset($previous[$keep])) {
-                    $metadata[$keep] = $previous[$keep];
-                }
-            }
-            file_put_contents($metaFile, Zord::json_encode($metadata));
+            file_put_contents(Library::data($ean, 'metadata.json'), Zord::json_encode($metadata));
             $book = [
                 "ean"      => $ean,
                 "title"    => $metadata['title'] ?? '',
@@ -350,9 +360,8 @@ class LibraryImport extends Import {
                 }
                 $result = false;
             }
-            $this->metadata = Store::data($ean, 'metadata.json', 'array');
-            $this->metadata['medias'] = [];
-            $this->metadata['zoom'] = [];
+            $this->medias = [];
+            $this->zoom = [];
             $page = null;
             $paths = [
                 '*[@xml:id]',
@@ -420,8 +429,8 @@ class LibraryImport extends Import {
                         case 3: {
                             $url = $element->getAttribute('url');
                             if (substr($url, 0, 4) !== 'http') {
-                                $imgFile = DATA_FOLDER.str_replace('/', DS, $this->url($ean, $element, 'url', true));
-                                $this->metadata['medias'][$url] = $imgFile;
+                                $imgFile = STORE_FOLDER.str_replace('/', DS, $this->url($ean, $element, 'url', true));
+                                $this->medias[$url] = $imgFile;
                                 if (!file_exists($imgFile)) {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->missing.$url);
                                     $result = false;
@@ -429,7 +438,7 @@ class LibraryImport extends Import {
                                 if ($element->parentNode->nodeName == 'figure' &&
                                     $element->parentNode->hasAttribute('rend') &&
                                     in_array($element->parentNode->getAttribute('rend'), ['zoom','facsimile'])) {
-                                    $this->metadata['zoom'][] = $url;
+                                    $this->zoom[] = $url;
                                 }
                             }
                             break;
@@ -487,7 +496,9 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            file_put_contents(Store::data($ean, 'metadata.json'), Zord::json_encode($this->metadata));
+            foreach (['medias','zoom'] as $data) {
+                file_put_contents(Library::data($ean, $data.'.json'), Zord::json_encode($this->$data));
+            }
         } else {
             $this->logError('validate', $this->locale->messages->validate->error->nodata);
             $result = false;
@@ -519,9 +530,9 @@ class LibraryImport extends Import {
             
     protected function slice($ean) {
         $result = true;
-        $this->metadata = Store::data($ean, 'metadata.json', 'array');
+        $this->metadata = Library::data($ean, 'metadata.json', 'array');
         foreach(['parts','refs','ariadne','visavis'] as $name) {
-            $this->metadata[$name] = [];
+            $this->$name = [];
         }
         if (file_exists($this->xml) && isset($this->adjusted) && isset($this->adjXPath) && isset($this->metadata)) {
             
@@ -539,17 +550,17 @@ class LibraryImport extends Import {
                 $this->scan($tag, $tag, 1);
             }
             
-            $folder    = Store::data($ean);
+            $folder    = Library::data($ean);
             $tmpFolder = substr($folder, 0, -1).'.tmp'.DS;
             Zord::resetFolder($tmpFolder);
             
-            foreach ($this->metadata['parts'] as &$part) {
+            foreach ($this->parts as &$part) {
                 $result &= $this->handlePart($part, $ean, $tmpFolder);
                 foreach (['node','parent','part','content'] as $useless) {
                     unset($part[$useless]);
                 }
             }
-            $book = DATA_FOLDER.'books'.DS.$ean.'.xml';
+            $book = STORE_FOLDER.'books'.DS.$ean.'.xml';
             if ($this->xml !== $book) {
                 copy($this->xml, $book);
             }
@@ -575,25 +586,32 @@ class LibraryImport extends Import {
                     }
                 }
             }
-            file_put_contents($tmpFolder.'metadata.json', Zord::json_encode($this->metadata));
-            file_put_contents($tmpFolder.'toc.xhtml',     $this->toc->saveXML($this->toc->documentElement));
+            file_put_contents($tmpFolder.'book.xml', $book->saveXML());
+            foreach (['metadata','medias','zoom'] as $data) {
+                if (file_exists($folder.$data.'.json')) {
+                    copy($folder.$data.'.json', $tmpFolder.$data.'.json');
+                }
+            }
+            foreach (['parts','refs','visavis','ariadne'] as $data) {
+                file_put_contents($tmpFolder.$data.'.json', Zord::json_encode($this->$data));
+            }
+            file_put_contents($tmpFolder.'toc.xhtml', $this->toc->saveXML($this->toc->documentElement));
             
             Zord::deleteRecursive($folder);
             rename($tmpFolder, $folder);
-            file_put_contents(Store::data($ean, 'book.xml'),  $book->saveXML());
             
             (new BookHasPartEntity())->delete([
                 'where' => ['book' => $ean],
-                'many'   => true
+                'many'  => true
             ]);
-            foreach ($this->metadata['parts'] as &$part) {
+            foreach ($this->parts as &$part) {
                 (new BookHasPartEntity())->create([
                     'book'  => $ean,
                     'part'  => $part['name'],
                     'count' => $part['count'],
                     'data'  => $part
                 ]);
-                $ref = Store::data($ean, $part['ref'].'.xhtml');
+                $ref = Library::data($ean, $part['ref'].'.xhtml');
                 if (!file_exists($ref) || strpos(file_get_contents($ref), 'id="'.$part['id'].'"') === false) {
                     $this->xmlError('slice', $part['line'], $this->locale->messages->slice->error->embed, [
                         'type'  => $part['type'],
@@ -610,24 +628,24 @@ class LibraryImport extends Import {
     }
     
     protected function zoom($ean) {
-        $metadata = Store::data($ean, 'metadata.json', 'array');
-        $zoom = isset($metadata['zoom']) ? $metadata['zoom'] : [];
+        $medias = Library::data($ean, 'medias.json', 'array');
+        $zoom = Library::data($ean, 'zoom.json', 'array');
         if (!empty($zoom)) {
             $deepzoom = new Deepzoom(Zord::getConfig('zoom'));
             $this->info(2, $this->locale->messages->image->info->processor.$deepzoom->processor);
             if ($deepzoom->processor == ImageProcessor::$DEFAULT_PROCESSOR) {
                 $this->info(2, $this->locale->messages->image->info->convert.$deepzoom->convert);
             }
-            $folder = DATA_FOLDER.'zoom'.DS.$ean.'.tmp';
+            $folder = STORE_FOLDER.'zoom'.DS.$ean.'.tmp';
             Zord::deleteRecursive($folder);
             $count = 1;
             foreach($zoom as $url) {
-                $file = $metadata['medias'][$url];
+                $file = $medias[$url];
                 $this->info(2, $count.' / '.count($zoom).' : '.$file);
                 $deepzoom->process($file, $folder);
                 $count++;
             }
-            $folder = DATA_FOLDER.'zoom'.DS.$ean;
+            $folder = STORE_FOLDER.'zoom'.DS.$ean;
             Zord::deleteRecursive($folder);
             rename($folder.'.tmp', $folder);
         } else {
@@ -686,10 +704,11 @@ class LibraryImport extends Import {
             'many'  => true,
             'where' => ['book' => $ean]
         ]);
-        $metadata = Store::data($ean, 'metadata.json', 'array');
+        $metadata = Library::data($ean, 'metadata.json', 'array');
+        $parts = Library::data($ean, 'parts.json', 'array');
         $this->createSearchFacets($ean, $metadata);
-        if (isset($metadata['parts'])) {
-            foreach ($metadata['parts'] as $part) {
+        if (isset($parts)) {
+            foreach ($parts as $part) {
                 $this->createSearchFacets($ean, $part);
             }
         }
@@ -698,14 +717,15 @@ class LibraryImport extends Import {
     
     protected function epub($ean) {
         $result = true;
-        $metadata = Store::data($ean, 'metadata.json', 'array');
-        $parts = isset($metadata['parts']) ? $metadata['parts'] : [];
-        $medias = isset($metadata['medias']) ? $metadata['medias'] : [];
+        $metadata = Library::data($ean, 'metadata.json', 'array');
+        $medias = Library::data($ean, 'medias.json', 'array');
+        $parts = Library::data($ean, 'parts.json', 'array');
+        $refs = Library::data($ean, 'refs.json', 'array');
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
             $eanEPUB = $metadata['epub'];
             $this->info(2, 'EAN : '.$eanEPUB);
             $cover = Store::media($ean, ['epub_cover','titlepage','frontcover']);
-            $cover = DATA_FOLDER.($cover === false ? 'epub'.DS.'cover.jpg' : $cover);
+            $cover = STORE_FOLDER.($cover === false ? 'epub'.DS.'cover.jpg' : $cover);
             if (!file_exists($cover)) {
                 $this->logError('epub', $this->locale->messages->epub->error->cover->missing);
                 $result = false;
@@ -736,7 +756,7 @@ class LibraryImport extends Import {
                     $result = false;
                 }
             }
-            $tmpFile = DATA_FOLDER.'epub'.DS.$eanEPUB.'.tmp.epub';
+            $tmpFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.tmp.epub';
             copy(Zord::getComponentPath('templates'.DS.'mimetype.epub'), $tmpFile);
             $epub = new ZipArchive(); 
             if ($epub->open($tmpFile)) {
@@ -758,7 +778,7 @@ class LibraryImport extends Import {
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
-                        $part['text'] = Store::data($ean, $part['name'].'.xhtml', 'content');
+                        $part['text'] = Library::data($ean, $part['name'].'.xhtml', 'content');
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
                         $partXPath = new DOMXPath($partDoc);
@@ -785,7 +805,7 @@ class LibraryImport extends Import {
                         $anchors = $partXPath->query('//a[@href]');
                         foreach ($anchors as $anchor) {
                             $tokens = explode('#', $anchor->getAttribute('href'));
-                            if (count($tokens) == 2 && isset($metadata['refs']['#'.$tokens[1]]) && $metadata['refs']['#'.$tokens[1]] == $tokens[0]) {
+                            if (count($tokens) == 2 && isset($refs['#'.$tokens[1]]) && $refs['#'.$tokens[1]] == $tokens[0]) {
                                 $anchor->setAttribute('href', $tokens[0].'.xhtml#'.$tokens[1]);
                             }
                         }
@@ -827,9 +847,9 @@ class LibraryImport extends Import {
                 $height = Zord::parameter($this->parameters, 'EPUB_IMAGE_MAX_HEIGHT', '');
                 foreach ($medias as $file) {
                     if (file_exists($file)) {
-                        $path = substr($file, strlen(DATA_FOLDER));
+                        $path = substr($file, strlen(STORE_FOLDER));
                         if (defined("RESIZE_COMMAND")) {
-                            $resized = DATA_FOLDER.'epub'.DS.$path;
+                            $resized = STORE_FOLDER.'epub'.DS.$path;
                             $dir = dirname($resized);
                             if (!file_exists($dir)) {
                                 mkdir($dir, 0777, true);
@@ -846,13 +866,12 @@ class LibraryImport extends Import {
                         $items[$path]['id'] = 'zord-media-'.$id++;
                     }
                 }
-                $models = [
-                    'metadata' => $metadata,
-                    'navbar'   => $navbar,
-                    'items'    => $items
-                ];
                 foreach (['navigation.xhtml','navigation.ncx','package.opf'] as $metaFile) {
-                    $epub->addFromString('OPF/'.$metaFile, (new View('/epub/OPF/'.$metaFile, $models))->render());
+                    $epub->addFromString('OPF/'.$metaFile, (new View('/epub/OPF/'.$metaFile, [
+                        'metadata' => $metadata,
+                        'navbar'   => $navbar,
+                        'items'    => $items
+                    ]))->render());
                 }
                 if ($epub->close()) {
                     $command = Zord::substitute(EPUBCHECK_COMMAND, [
@@ -861,7 +880,7 @@ class LibraryImport extends Import {
                     ]);
                     $errors = shell_exec($command);
                     if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
-                        $epubFile = DATA_FOLDER.'epub'.DS.$eanEPUB.'.epub';
+                        $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
                         rename($tmpFile, $epubFile);
                     } else {
                         foreach (explode("\n", $errors) as $error) {
@@ -875,7 +894,7 @@ class LibraryImport extends Import {
                     ]));
                     $result = false;
                 }
-                Zord::resetFolder(DATA_FOLDER.'epub'.DS.'medias', false);
+                Zord::resetFolder(STORE_FOLDER.'epub'.DS.'medias', false);
             } else {
                 $this->logError('epub', Zord::substitute($this->locale->messages->epub->error->open, [
                     'file' => $tmpFile
@@ -913,7 +932,7 @@ class LibraryImport extends Import {
         } else {
             if ($part['name'] == 'home') {
                 $part['link'] = $ean.'/home';
-                $this->metadata['ariadne'][] = [
+                $this->ariadne[] = [
                     'id'    => $part['node']->getAttribute('id'),
                     'link'  => $ean,
                     'title' => $part['title']
@@ -943,13 +962,13 @@ class LibraryImport extends Import {
                     }
                     $toDo = !in_array($part['name'], $this->dones);
                     if ($toDo) {
-                        if (isset($this->metadata['visavis'])) {
-                            foreach ($this->metadata['visavis'] as $group) {
+                        if (isset($this->visavis)) {
+                            foreach ($this->visavis as $group) {
                                 if (in_array($part['name'], $group)) {
                                     $toDo = ($part['name'] == $group[0]);
                                     $this->dones = array_merge($this->dones, $group);
                                     $partTitles = [];
-                                    foreach ($this->metadata['parts'] as $_part) {
+                                    foreach ($this->parts as $_part) {
                                         if (in_array($_part['name'], $group)) {
                                             $partTitles[] = $_part['title'];
                                         }
@@ -968,14 +987,14 @@ class LibraryImport extends Import {
                         $span = $this->toc->createElement('span', $title);
                         $li->appendChild($span);
                         $pageInAriadne = false;
-                        foreach ($this->metadata['ariadne'] as $entry) {
+                        foreach ($this->ariadne as $entry) {
                             if ($entry['link'] == $part['link']) {
                                 $pageInAriadne = true;
                                 break;
                             }
                         }
                         if (!$pageInAriadne) {
-                            $this->metadata['ariadne'][] = [
+                            $this->ariadne[] = [
                                 'id'    => $part['id'],
                                 'link'  => $part['link'],
                                 'title' => $title
@@ -996,7 +1015,7 @@ class LibraryImport extends Import {
                 $partText->documentElement->appendChild($node);
                 $subs = $partXPath->query('/div[@class="text"]/'.$this->prefix.':div[@type]/'.$this->prefix.':div[@type]');
                 foreach ($subs as $sub) {
-                    foreach ($this->metadata['parts'] as $entry) {
+                    foreach ($this->parts as $entry) {
                         if ($entry['id'] == $sub->getAttribute('id')) {
                             if ($this->is_fragment($entry)) {
                                 $sub->parentNode->removeChild($sub);
@@ -1008,10 +1027,10 @@ class LibraryImport extends Import {
                 $graphics = $partXPath->query('//'.$this->prefix.':graphic');
                 foreach ($graphics as $graphic) {
                     $url = $graphic->getAttribute('url');
-                    if (in_array($url, $this->metadata['zoom'])) {
+                    if (in_array($url, $this->zoom)) {
                         $graphic->setAttribute('data-zoom', '/zoom/'.$ean.'/'.str_replace('jpg', 'dzi', $url));
                     } else {
-                        $imgFile = $this->metadata['medias'][$url];
+                        $imgFile = $this->medias[$url];
                         $loading = $partText->createElement($this->prefix.':loading');
                         $height = min([file_exists($imgFile) ? getimagesize($imgFile)[1] : GRAPHIC_LOADING_MAX_HEIGHT, GRAPHIC_LOADING_MAX_HEIGHT]);
                         $loading->setAttribute('style', 'height:'.$height.'px;');
@@ -1024,16 +1043,15 @@ class LibraryImport extends Import {
                     $anchor = $partText->createElement('a');
                     $matches = [];
                     if (preg_match('/#(\d{13}):(.*)/', $target, $matches)) {
-                        $metadata = Store::data($matches[1], 'metadata.json', 'array');
-                        if (isset($metadata['refs'])) {
-                            $extRefs = $metadata['refs'];
+                        $extRefs = Library::data($matches[1], 'refs.json', 'array');
+                        if (isset($extRefs)) {
                             if (isset($extRefs['#'.$matches[2]])) {
                                 $base = $this->base($matches[1]);
                                 $anchor->setAttribute('href', ($base !== false ? $base : '').'/book/'.$matches[1].'/'.$extRefs['#'.$matches[2]].'#'.$matches[2]);
                             }
                         }
-                    } else if (substr($target, 0, 1) == '#' && isset($this->metadata['refs'][$target])) {
-                        $anchor->setAttribute('href', $this->metadata['refs'][$target].$target);
+                    } else if (substr($target, 0, 1) == '#' && isset($this->refs[$target])) {
+                        $anchor->setAttribute('href', $this->refs[$target].$target);
                     } else if (substr($target, 0, 4) == 'http') {
                         $anchor->setAttribute('href', $target);
                     }
@@ -1197,7 +1215,7 @@ class LibraryImport extends Import {
             }
         }
         $newPart['ref'] = $this->getRefName($newPart);
-        $this->metadata['parts'][] = $newPart;
+        $this->parts[] = $newPart;
         return $newPart;
     }
     
@@ -1205,8 +1223,8 @@ class LibraryImport extends Import {
         if ($this->is_fragment($part, false)) {
             return $part['name'];
         } else {
-            if (isset($this->metadata['parts'])) {
-                foreach ($this->metadata['parts'] as $base) {
+            if (isset($this->parts)) {
+                foreach ($this->parts as $base) {
                     if ($base['name'] == $part['base']) {
                         return $this->getRefName($base);
                     }
@@ -1257,7 +1275,7 @@ class LibraryImport extends Import {
             }
             $part = $this->addPart($name, $type, $title, $base, $node, $level, $div);
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
-                $this->metadata['refs']['#'.$element->getAttribute('xml:id')] = $part['ref'];
+                $this->refs['#'.$element->getAttribute('xml:id')] = $part['ref'];
             }
             if (in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
                 $this->scan('div[@id="'.$id.'"]', $name, $level + 1);
@@ -1266,7 +1284,7 @@ class LibraryImport extends Import {
         if (count($visavis) > 0) {
             foreach ($visavis as $name => $group) {
                 foreach($group as $entry) {
-                    $this->metadata['visavis'][$name][] = $entry;
+                    $this->visavis[$name][] = $entry;
                 }
             }
         }
