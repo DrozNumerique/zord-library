@@ -33,10 +33,10 @@ class LibraryImport extends Import {
     protected $tocXPath = null;
     protected $page     = null;
     
-    protected function sources($ean) {
+    protected function contents($ean) {
         $metadata = Library::data($ean, 'metadata.json', 'array');
         $parts = Library::data($ean, 'parts.json', 'array');
-        $docs = [];
+        $contents = [];
         if (isset($parts)) {
             foreach ($parts as $part) {
                 if ($part['index']) {
@@ -46,14 +46,16 @@ class LibraryImport extends Import {
                             Library::data($ean, $part['name'].'.xhtml', 'content')
                         )), ENT_QUOTES | ENT_XML1, 'UTF-8')
                     )), INDEX_MAX_CONTENT_LENGTH));
-                    $docs[] = $part;
+                    foreach ($metadata as $name => $value) {
+                        if (!array_key_exists($name, $part)) {
+                            $part[$name] = $value;
+                        }
+                    }
+                    $contents[] = $part;
                 }
             }
         }
-        return [
-            'docs' => $docs,
-            'meta' => $metadata
-        ];
+        return $contents;
     }
     
     protected function configure($parameters = []) {
