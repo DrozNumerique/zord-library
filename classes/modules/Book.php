@@ -590,17 +590,19 @@ class Book extends Module {
         $send = false;
         if (isset($this->params['bug'])) {
             $bug = Zord::objectToArray(json_decode($this->params['bug']));
-            $send = $this->sendMail(
-                [WEBMASTER_MAIL_ADDRESS => WEBMASTER_MAIL_ADDRESS],
-                $this->locale->notify_bug,
-                $this->locale->click_here.' : '.$bug['zord_url'],
-                '/mail/bug',
-                [
+            $send = $this->sendMail([
+                'recipients' => [
+                    WEBMASTER_MAIL_ADDRESS => WEBMASTER_MAIL_ADDRESS
+                ],
+                'subject'    => $this->locale->notify_bug,
+                'text'       => $this->locale->click_here.' : '.$bug['zord_url'],
+                'template'   => '/mail/bug',
+                'models'     => [
                     'url'   => $bug['zord_url'],
                     'quote' => $bug['zord_citation'],
                     'note'  => $bug['zord_note']
                 ]
-            );
+            ]);
         }
         return ['send' => $send];
     }
