@@ -1,5 +1,8 @@
 {
 	"view": {
+		"/portal/link": {
+			"before": "/portal/link/meta"
+		},
 		"/portal/page/admin/import/file": {
 			"after": "/portal/page/admin/import/publish"
 		}
