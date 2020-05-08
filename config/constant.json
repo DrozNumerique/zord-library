@@ -1,4 +1,6 @@
 {
+    "EDITOR_MAIL_ADDRESS": "editor@zord.tech",
+    "EDITOR_MAIL_NAME": "Zord Library Editor",
     "OBFUSCATION_MODELS_MAX": 45,
     "OBFUSCATE_BOOK": true,
     "MAX_TOC_DEPTH": 3,
