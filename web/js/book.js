@@ -24,14 +24,14 @@ window.$quote = {
 								isbn : data.book,
 								page : data.page,
 								callback : function(reference) {
-									if (data.zord_note != undefined && data.zord_note != null && data.zord_note != '') {
+									if (data.zord_note !== undefined && data.zord_note !== null && data.zord_note !== '') {
 										reference.zord_note = data.zord_note;
 									}
-									if (data.zord_citation != undefined && data.zord_citation != null && data.zord_citation != '') {
+									if (data.zord_citation !== undefined && data.zord_citation !== null && data.zord_citation !== '') {
 										reference.zord_citation = formatCitation(data.zord_citation);
 									}
-									if (data.zord_url != undefined && data.zord_url != null && data.zord_url != '') {
-										reference.zord_URL = data.zord_url;
+									if (data.zord_path !== undefined && data.zord_path !== null && data.zord_path !== '') {
+										reference.zord_URL  = reference.baseURL + data.zord_path;
 									}
 									addCSLObject('quotes', reference);
 								}
@@ -647,11 +647,11 @@ function displayTEI(selectorIndex) {
 					var page = pageBefore ? pageBefore.getAttribute('data-n') : '';
 					var id = pageBefore ? ('#' + pageBefore.id) : '';
 					$quote.add({
+						book : BOOK,
+						page : page,
 						zord_type : type,
 						zord_citation : html,
-						page : page,
-						book : BOOK,
-						zord_url : BASEURL['zord'] + '/book/' + BOOK + '/' + PART + id
+						zord_path : '/book/' + BOOK + '/' + PART + id
 					});
 				}
 			}

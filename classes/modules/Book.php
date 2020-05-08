@@ -344,7 +344,9 @@ class Book extends Module {
     }
     
     public function reference() {
-        return Library::reference($this->params['isbn'], isset($this->params['page']) ? $this->params['page'] : '');
+        $reference = Library::reference($this->params['isbn'], isset($this->params['page']) ? $this->params['page'] : '');
+        $reference['baseURL'] = $this->baseURL;
+        return $reference;
     }
     
     public function counter() {
@@ -609,10 +611,10 @@ class Book extends Module {
                     WEBMASTER_MAIL_ADDRESS => WEBMASTER_MAIL_ADDRESS
                 ],
                 'subject'    => $this->locale->notify_bug,
-                'text'       => $this->locale->click_here.' : '.$bug['zord_url'],
+                'text'       => $this->locale->click_here.' : '.$this->baseURL.$bug['zord_path'],
                 'template'   => '/mail/bug',
                 'models'     => [
-                    'url'   => $bug['zord_url'],
+                    'path'  => $bug['zord_path'],
                     'quote' => $bug['zord_citation'],
                     'note'  => $bug['zord_note']
                 ]
