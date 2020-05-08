@@ -489,9 +489,10 @@ function displayTEI(selectorIndex) {
 				footnote.querySelector('div.footnote-note').classList.add("footnote-select");
 				window.location.href = '#footref_' + id;
 			} else {
-				var note = document.getElementById(id.replace('footref_', ''));
-				if (note) {
-					window.location.href = '#' + id.replace('footref_', '');
+				id = id.replace('footref_', '');
+				var note = document.getElementById(id);
+				if (note && window.getSelection().isCollapsed) {
+					window.location.href = '#' + id;
 				}
 			}
 		};

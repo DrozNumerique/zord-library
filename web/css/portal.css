@@ -273,6 +273,7 @@ body {
 	position: absolute;
 	padding-top: 3px;
 	left: 0px;
+	z-index: 1000;
 }
 
 #navbar div.sub ul li {

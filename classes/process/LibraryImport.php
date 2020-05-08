@@ -157,6 +157,41 @@ class LibraryImport extends Import {
         return true;
     }
     
+    protected function resources($ean) {
+        $result = true;
+        $folder = $this->folder.$ean.DS;
+        if (file_exists($folder) && is_dir($folder)) {
+            $target = Store::resource('medias', $ean);
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), RecursiveIteratorIterator::SELF_FIRST);
+            if ($iterator->current()) {
+                $this->info(2, $target);
+                foreach ($iterator as $file) {
+                    if (is_dir($file)) {
+                        continue;
+                    }
+                    $name = substr($file, strlen($folder));
+                    $this->info(3, $name);
+                    $dir = dirname($target.$name);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+                    if (!copy($file, $target.$name)) {
+                        $this->logError('resources', Zord::substitute($this->locale->messages->resources->error->copy, [
+                            'source' => $file,
+                            'target' => $target
+                        ]));
+                        $result = false;
+                    }
+                }
+            } else {
+                $this->info(2, $this->locale->messages->resources->info->none);
+            }
+        } else {
+            $this->info(2, $this->locale->messages->resources->info->none);
+        }
+        return $result;
+    }
+    
     protected function load($ean) {
         if (file_exists($this->xml)) {
             $this->document = new DOMDocument();
@@ -726,7 +761,7 @@ class LibraryImport extends Import {
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
             $eanEPUB = $metadata['epub'];
             $this->info(2, 'EAN : '.$eanEPUB);
-            $cover = Store::media($ean, ['epub_cover','titlepage','frontcover']);
+            $cover = Store::resource('medias', $ean, ['epub_cover','titlepage','frontcover']);
             $cover = STORE_FOLDER.($cover === false ? 'epub'.DS.'cover.jpg' : $cover);
             if (!file_exists($cover)) {
                 $this->logError('epub', $this->locale->messages->epub->error->cover->missing);

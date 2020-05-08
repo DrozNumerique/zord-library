@@ -2,7 +2,7 @@
 	"steps": {
 		"__RESET__": [
 			"grant",
-			"medias",
+			"resources",
 			"load",
 			"metadata",
 			"validate",
