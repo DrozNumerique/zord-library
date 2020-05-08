@@ -3,14 +3,11 @@
 	"line": "Ligne",
 	"steps": {
 		"grant": "Vérification des accès",
-		"medias": "Copie des médias inclus",
-		"metadata": "Recupération des métadonnées",
 		"load": "Chargement du document",
 		"validate": "Validation du document",
 		"adjust": "Ajustement du document",
 		"slice": "Découpage du document",
 		"zoom": "Génération des tuiles",
-		"index": "Indexation du document",
 		"publish": "Publication dans le contexte",
 		"facets": "Mise à jour des listes de valeurs indexées",
 		"epub": "Création de la version ePub"

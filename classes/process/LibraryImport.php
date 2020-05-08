@@ -466,7 +466,7 @@ class LibraryImport extends Import {
                         case 3: {
                             $url = $element->getAttribute('url');
                             if (substr($url, 0, 4) !== 'http') {
-                                $imgFile = STORE_FOLDER.str_replace('/', DS, $this->url($ean, $element, 'url', true));
+                                $imgFile = STORE_FOLDER.str_replace('/', DS, $this->url($ean, $element, 'url'));
                                 $this->medias[$url] = $imgFile;
                                 if (!file_exists($imgFile)) {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->missing.$url);
@@ -837,7 +837,7 @@ class LibraryImport extends Import {
                                     }
                                 }
                             }
-                            $img->setAttribute('src', $this->url($ean, $graphic, 'data-url', true));
+                            $img->setAttribute('src', $this->url($ean, $graphic, 'data-url'));
                         }
                         $anchors = $partXPath->query('//a[@href]');
                         foreach ($anchors as $anchor) {
@@ -1459,13 +1459,13 @@ class LibraryImport extends Import {
         }
     }
     
-    private function url($ean, $graphic, $name, $relative = false) {
+    private function url($ean, $graphic, $name) {
         if ($graphic->hasAttribute($name)) {
             $url = $graphic->getAttribute($name);
             if (substr($url, 0, 1) !== '/') {
                 $url = '/'.$ean.'/'.$url;
             }
-            return ($relative ? '' : '/').'medias'.$url;
+            return 'medias'.$url;
         }
         return null;
     }

@@ -34,6 +34,18 @@
 				"file": "FILTER_SANITIZE_STRING"
 			}
 		},
+		"parts": {
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"file": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"header": {
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"file": "FILTER_SANITIZE_STRING"
+			}
+		},
 		"epub": {
 			"response": "DOWNLOAD",
 			"shortcut": "epub",
@@ -87,6 +99,20 @@
 			"response": "DATA",
 			"parameters": {
 				"bug": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"zoom": {
+			"shortcut": "zoom",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"path": "PATH"
+			}
+		},
+		"medias": {
+			"shortcut": "medias",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING",
+				"path": "PATH"
 			}
 		}
 	}

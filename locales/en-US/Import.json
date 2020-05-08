@@ -3,14 +3,11 @@
 	"line": "Line",
 	"steps": {
 		"grant": "Checking authorizations",
-		"medias": "Copying included medias",
-		"metadata": "Fetching metadata",
 		"load": "Loading document",
 		"validate": "Validating document",
 		"adjust": "Adjusting document",
 		"slice": "Slicing document",
 		"zoom": "Generating tiles",
-		"index": "Indexing document",
 		"publish": "Publishing in context",
 		"facets": "Updating indexed values lists",
 		"epub": "Generating ePub format"

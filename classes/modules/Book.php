@@ -307,6 +307,20 @@ class Book extends Module {
         return $this->send(Library::data($this->params['isbn'], 'header.xml'), 'admin');
     }
     
+    public function zoom() {
+        return $this->resource('zoom');
+    }
+    
+    public function medias() {
+        return $this->resource('medias');
+    }
+        
+    private function resource($type) {
+        $isbn = $this->params['isbn'];
+        $path = $this->params['path'];
+        return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path, 'reader');
+    }
+    
     public function epub() {
         $metadata = Library::data($this->params['isbn'], 'metadata.json', 'array');
         if (isset($metadata['epub'])) {
