@@ -22,7 +22,7 @@ class LibraryImport extends Import {
     protected $medias   = null;
     protected $zoom     = null;
     protected $parts    = null;
-    protected $refs     = null;
+    protected $anchors  = null;
     protected $visavis  = null;
     protected $ariadne  = null;
     protected $idCount  = 1;
@@ -120,7 +120,7 @@ class LibraryImport extends Import {
         $this->medias = null;
         $this->zoom = null;
         $this->parts = null;
-        $this->refs = null;
+        $this->anchors = null;
         $this->visavis = null;
         $this->ariadne = null;
         $this->xpath = null;
@@ -568,7 +568,7 @@ class LibraryImport extends Import {
     protected function slice($ean) {
         $result = true;
         $this->metadata = Library::data($ean, 'metadata.json', 'array');
-        foreach(['parts','refs','ariadne','visavis'] as $name) {
+        foreach(['parts','anchors','ariadne','visavis'] as $name) {
             $this->$name = [];
         }
         if (file_exists($this->xml) && isset($this->adjusted) && isset($this->adjXPath) && isset($this->metadata)) {
@@ -629,7 +629,7 @@ class LibraryImport extends Import {
                     copy($folder.$data.'.json', $tmpFolder.$data.'.json');
                 }
             }
-            foreach (['parts','refs','visavis','ariadne'] as $data) {
+            foreach (['parts','anchors','visavis','ariadne'] as $data) {
                 file_put_contents($tmpFolder.$data.'.json', Zord::json_encode($this->$data));
             }
             file_put_contents($tmpFolder.'toc.xhtml', $this->toc->saveXML($this->toc->documentElement));
@@ -757,7 +757,7 @@ class LibraryImport extends Import {
         $metadata = Library::data($ean, 'metadata.json', 'array');
         $medias = Library::data($ean, 'medias.json', 'array');
         $parts = Library::data($ean, 'parts.json', 'array');
-        $refs = Library::data($ean, 'refs.json', 'array');
+        $anchors = Library::data($ean, 'anchors.json', 'array');
         if (isset($metadata['epub']) && !empty($metadata['epub'])) {
             $eanEPUB = $metadata['epub'];
             $this->info(2, 'EAN : '.$eanEPUB);
@@ -842,7 +842,7 @@ class LibraryImport extends Import {
                         $anchors = $partXPath->query('//a[@href]');
                         foreach ($anchors as $anchor) {
                             $tokens = explode('#', $anchor->getAttribute('href'));
-                            if (count($tokens) == 2 && isset($refs['#'.$tokens[1]]) && $refs['#'.$tokens[1]] == $tokens[0]) {
+                            if (count($tokens) == 2 && isset($anchors['#'.$tokens[1]]) && $anchors['#'.$tokens[1]] == $tokens[0]) {
                                 $anchor->setAttribute('href', $tokens[0].'.xhtml#'.$tokens[1]);
                             }
                         }
@@ -1087,8 +1087,8 @@ class LibraryImport extends Import {
                                 $anchor->setAttribute('href', ($base !== false ? $base : '').'/book/'.$matches[1].'/'.$extRefs['#'.$matches[2]].'#'.$matches[2]);
                             }
                         }
-                    } else if (substr($target, 0, 1) == '#' && isset($this->refs[$target])) {
-                        $anchor->setAttribute('href', $this->refs[$target].$target);
+                    } else if (substr($target, 0, 1) == '#' && isset($this->anchors[$target])) {
+                        $anchor->setAttribute('href', $this->anchors[$target].$target);
                     } else if (substr($target, 0, 4) == 'http') {
                         $anchor->setAttribute('href', $target);
                     }
@@ -1312,7 +1312,7 @@ class LibraryImport extends Import {
             }
             $part = $this->addPart($name, $type, $title, $base, $node, $level, $div);
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
-                $this->refs['#'.$element->getAttribute('xml:id')] = $part['ref'];
+                $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
             }
             if (in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
                 $this->scan('div[@id="'.$id.'"]', $name, $level + 1);

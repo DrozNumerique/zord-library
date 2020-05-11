@@ -4,8 +4,8 @@ class LibraryUser extends User {
     
     public $access = [];
     
-    public function __construct($login = null, $session = null) {
-        parent::__construct($login, $session);
+    public function __construct($login = null, $session = null, $date = null) {
+        parent::__construct($login, $session, $date = null);
         if (!empty($this->roles)) {
             $context = (new BookHasContextEntity())->retrieve();
             if ($context) {
