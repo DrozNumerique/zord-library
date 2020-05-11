@@ -1080,11 +1080,11 @@ class LibraryImport extends Import {
                     $anchor = $partText->createElement('a');
                     $matches = [];
                     if (preg_match('/#(\d{13}):(.*)/', $target, $matches)) {
-                        $extRefs = Library::data($matches[1], 'refs.json', 'array');
-                        if (isset($extRefs)) {
-                            if (isset($extRefs['#'.$matches[2]])) {
+                        $anchors = Library::data($matches[1], 'anchors.json', 'array');
+                        if (isset($anchors)) {
+                            if (isset($anchors['#'.$matches[2]])) {
                                 $base = $this->base($matches[1]);
-                                $anchor->setAttribute('href', ($base !== false ? $base : '').'/book/'.$matches[1].'/'.$extRefs['#'.$matches[2]].'#'.$matches[2]);
+                                $anchor->setAttribute('href', ($base !== false ? $base : '').'/book/'.$matches[1].'/'.$anchors['#'.$matches[2]].'#'.$matches[2]);
                             }
                         }
                     } else if (substr($target, 0, 1) == '#' && isset($this->anchors[$target])) {
