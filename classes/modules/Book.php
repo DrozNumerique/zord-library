@@ -608,7 +608,9 @@ class Book extends Module {
             $bug = Zord::objectToArray(json_decode($this->params['bug']));
             $send = $this->sendMail([
                 'recipients' => [
-                    EDITOR_MAIL_ADDRESS => EDITOR_MAIL_NAME
+                    'to' => [
+                        EDITOR_MAIL_ADDRESS => EDITOR_MAIL_NAME
+                    ]
                 ],
                 'subject'    => $this->locale->notify_bug,
                 'text'       => $this->locale->click_here.' : '.$this->baseURL.$bug['zord_path'],
