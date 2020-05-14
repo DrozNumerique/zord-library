@@ -1462,10 +1462,12 @@ class LibraryImport extends Import {
     private function url($ean, $graphic, $name) {
         if ($graphic->hasAttribute($name)) {
             $url = $graphic->getAttribute($name);
-            if (substr($url, 0, 1) !== '/') {
-                $url = '/'.$ean.'/'.$url;
+            if (substr($url, 0, 1) === '/') {
+                $url = 'public'.$url;
+            } else {
+                $url = 'medias/'.$ean.'/'.$url;
             }
-            return 'medias'.$url;
+            return $url;
         }
         return null;
     }
