@@ -51,7 +51,7 @@ function refreshHistory(only) {
 			module:'Book',
 			action:'criteria',
 			criteria:JSON.stringify(searchHistory[searchIndex - 1]),
-			callback:function(result) {
+			success:function(result) {
 				display.innerHTML = '';
 				index = document.createElement('div');
 				index.appendChild(document.createTextNode(searchIndex + '/' + searchHistory.length));
@@ -269,14 +269,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			after: function() {
 				$dialog.hide();
 			},
-			callback: function(facets) {
+			success: function(facets) {
 				[].forEach.call(facets, function(facet) {
 					invokeZord({
 						module:'Book',
 						action:'facets',
 						key:   facet,
 						async: false,
-						callback: function(entries) {
+						success: function(entries) {
 							searchFacets[facet] = entries;
 							setContextProperty('search.facets', searchFacets);
 						}
@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			after: function() {
 				$dialog.hide();
 			},
-			callback: function(titles) {
+			success: function(titles) {
 				searchTitles = titles;
 				setContextProperty('search.titles', searchTitles);
 			}
@@ -546,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				module:'Book',
 				action:'reference',
 				isbn:isbn,
-				callback:function(reference) {
+				success:function(reference) {
 					addCSLObject('corpus', reference);
 					setBiblio('corpus', entry, reference);
 				}
