@@ -648,6 +648,7 @@ function displayTEI(selectorIndex) {
 					var id = pageBefore ? ('#' + pageBefore.id) : '';
 					$quote.add({
 						book : BOOK,
+						part : PART,
 						page : page,
 						zord_type : type,
 						zord_citation : html,

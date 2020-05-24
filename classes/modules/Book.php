@@ -607,7 +607,7 @@ class Book extends Module {
         if (isset($this->params['bug'])) {
             $bug = Zord::objectToArray(json_decode($this->params['bug']));
             $send = $this->sendMail([
-                'id'         => 'bug_'.date('YmdHis'),
+                'category'   => 'bug'.DS.$bug['book'],
                 'recipients' => [
                     'to' => [
                         EDITOR_MAIL_ADDRESS => EDITOR_MAIL_NAME
