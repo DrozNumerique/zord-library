@@ -1,5 +1,4 @@
         <a href="<?php echo $baseURL.$models['path']; ?>"><?php echo $locale->click_here; ?></a>
-        <br>
-        <p><?php echo $models['quote']; ?></p>
-        <p><?php echo $models['note']; ?></p>
+        <p class="quote"><?php echo $models['quote']; ?></p>
+        <p class="note"><?php echo $models['note']; ?></p>
         
