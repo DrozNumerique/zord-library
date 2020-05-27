@@ -609,7 +609,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	[].forEach.call(document.querySelectorAll('select.facet'), function(select) {
 		var background = select.style.background;
-		select.style.background = "url('/library/img/wait.gif') no-repeat center";
+		select.style.background = "url('/img/wait.gif') no-repeat center";
 		select.setAttribute('data-loading', 'true');
 		for (var key in searchFacets[select.id]) {
 			var option = document.createElement('option');
