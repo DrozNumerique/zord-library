@@ -23,7 +23,7 @@ window.$quote = {
 								action : 'reference',
 								isbn : data.book,
 								page : data.page,
-								callback : function(reference) {
+								success : function(reference) {
 									if (data.zord_note !== undefined && data.zord_note !== null && data.zord_note !== '') {
 										reference.zord_note = data.zord_note;
 									}
