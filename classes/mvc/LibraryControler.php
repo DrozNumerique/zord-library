@@ -20,7 +20,7 @@ class LibraryControler extends Controler {
     public function getTarget($url, $redirect = false) {
         $target = parent::getTarget($url, $redirect);
         if ($target['module'] === 'Book' && $target['action'] === 'show') {
-            $target['base'] .= '/book/'.($target['params']['isbn'] ?? null);
+            $target['base'] .= '/book/'.($target['params']['isbn'] ?? null).'/';
         }
         return $target;
     }
