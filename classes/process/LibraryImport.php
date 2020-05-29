@@ -839,8 +839,8 @@ class LibraryImport extends Import {
                             }
                             $img->setAttribute('src', $this->url($ean, $graphic, 'data-url'));
                         }
-                        $anchors = $partXPath->query('//a[@href]');
-                        foreach ($anchors as $anchor) {
+                        $links = $partXPath->query('//a[@href]');
+                        foreach ($links as $anchor) {
                             $tokens = explode('#', $anchor->getAttribute('href'));
                             if (count($tokens) == 2 && isset($anchors['#'.$tokens[1]]) && $anchors['#'.$tokens[1]] == $tokens[0]) {
                                 $anchor->setAttribute('href', $tokens[0].'.xhtml#'.$tokens[1]);
