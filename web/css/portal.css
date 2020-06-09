@@ -352,6 +352,10 @@ form.account  {
 	padding:30px;
 }
 
+form.account div.advert {
+	margin-bottom: 20px;
+}
+
 form.account label {
 	width:150px;
 	display: inline-block;
