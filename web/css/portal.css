@@ -40,6 +40,18 @@ form.account  {
 	font-size: 0.9em;
 }
 
+input.account[type="submit"] {
+	position: relative;
+	font-size: 0.9em;
+	color: white;
+	text-transform: uppercase;
+	background: #6E97CB;
+	border: 0;
+	padding: 1px 12px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
 .message {
 	padding: 5px 0;
 	text-align: center;
@@ -233,7 +245,7 @@ form.account  {
 	display:inline-block;
 	text-transform: uppercase;
 	position: relative;
-	top:-7px;
+	top:-9px;
 	margin:18px 5px;
 }
 
