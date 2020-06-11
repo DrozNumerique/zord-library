@@ -37,6 +37,7 @@ body {
 form.account  {
 	color: white ! important;
 	background: #6E97CB ! important;
+	font-size: 0.9em;
 }
 
 .message {
