@@ -34,16 +34,9 @@ body {
 	box-shadow: -3px 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-.account {
-	position: relative;
-	font-size: 0.9em;
-	color: white;
-	text-transform: uppercase;
-	background: #6E97CB;
-	border: 0;
-	padding: 1px 12px;
-	border-radius: 3px;
-	cursor: pointer;
+form.account  {
+	color: white ! important;
+	background: #6E97CB ! important;
 }
 
 .message {
