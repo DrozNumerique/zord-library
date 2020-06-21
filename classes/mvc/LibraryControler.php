@@ -90,7 +90,7 @@ class LibraryControler extends Controler {
     
     private function menu($entry, $name, $locale) {
         $type  = isset($entry['type'])  ? $entry['type']  : 'default';
-        $path  = isset($entry['path'])  ? $entry['path']  : ($type == 'shortcut' ? (isset($entry['module']) && isset($entry['action']) ? '/'.$entry['module'].'/'.$entry['action'] : '/'.$name) : ($type == 'page' ? '/page/'.$name : ''));
+        $path  = isset($entry['path'])  ? $entry['path']  : ($type == 'shortcut' ? (isset($entry['module']) && isset($entry['action']) ? '/'.$entry['module'].'/'.$entry['action'] : '/'.$name) : ($type == 'page' ? '/page/'.$name : ($type == 'content' ? '/content/'.$name : '')));
         $url   = isset($entry['url'])   ? $entry['url']   : ($type == 'menu' ? null : $this->baseURL.$path);
         $class = isset($entry['class']) ? (is_array($entry['class']) ? $entry['class'] : [$entry['class']]) : [];
         $label = isset($entry['label'][$this->lang]) ? $entry['label'][$this->lang] : (isset($locale[$name]) ? $locale[$name] : $name);
