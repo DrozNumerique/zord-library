@@ -312,11 +312,15 @@ td.chapter{
 	white-space: nowrap;
 	margin-top:5px;
 	font-size: 0.9em;
-	cursor:pointer;
+	cursor:zoom-in;
 	color:#6C747F;
 	width: 2800px;
 	margin-left: -1012px;
 	padding: 3px 0;
+}
+
+.matches .snip span.keyword {
+	cursor:pointer;
 }
 
 .matches .snip > .left {
@@ -342,7 +346,7 @@ td.chapter{
 	left: 0;
 	right: 0;
 	margin: auto;
-	margin-top: -117px;
+	margin-top: -83px;
 	padding: 10px;
 	position: absolute;
 	display: block;

@@ -800,7 +800,7 @@ class Book extends Module {
                 $query->setHighlightSimplePre('<b>');
                 $query->setHighlightSimplePost('</b>');
                 $query->setHighlightSnippets(100000);
-                $query->setHighlightFragsize(500);
+                $query->setHighlightFragsize(200);
                 $query->setHighlightMaxAnalyzedChars(-1);
                 $query->setHighlightMergeContiguous(false);
                 $query->setHighlight(true);
@@ -839,21 +839,23 @@ class Book extends Module {
                     $isbn = $tokens[0];
                     $part = $tokens[1];
                     foreach ($object['content'] as $content) {
-                        $matches = [];
-                        preg_match('#(.*)<b>(.*)</b>(.*)#', $content, $matches);
-                        $match = [
-                            'left'    => $matches[1],
-                            'keyword' => $matches[2],
-                            'right'   => $matches[3]
-                        ];
-                        if (isset($indexes[$match['keyword']])) {
-                            $index = $indexes[$match['keyword']];
-                        } else {
-                            $index = 0;
+                        $first = strpos($content, '<b>');
+                        $last = strrpos($content, '</b>');
+                        if ($first && $last) {
+                            $match = [
+                                'left'    => substr($content, 0, $first),
+                                'keyword' => strip_tags(substr($content, $first, $last -$first + strlen('<b>') + 1)),
+                                'right'   => substr($content, $last + strlen('</b>'))
+                            ];
+                            if (isset($indexes[$match['keyword']])) {
+                                $index = $indexes[$match['keyword']];
+                            } else {
+                                $index = 0;
+                            }
+                            $indexes[$match['keyword']] = $index + 1;
+                            $match['index'] = $indexes[$match['keyword']];
+                            $search['matches'][$isbn][$part][] = $match;
                         }
-                        $indexes[$match['keyword']] = $index + 1;
-                        $match['index'] = $indexes[$match['keyword']];
-                        $search['matches'][$isbn][$part][] = $match;
                     }
                 }
             }
