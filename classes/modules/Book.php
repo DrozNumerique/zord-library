@@ -878,7 +878,7 @@ class Book extends Module {
             'order' => ['desc' => 'ean']
         ]);
         $shelves = [];
-        $locale  = [];
+        $labels  = [];
         $books = [];
         foreach($entities as $book) {
             $isbn = $book->ean;
@@ -910,7 +910,7 @@ class Book extends Module {
         $class = ($search !== false ? 'search' : null);
         $result = $liner->line($books, $apart, $class);
         $shelves = $result['shelves'];
-        $locale = $result['locale'];
+        $labels = $result['labels'];
         foreach($shelves as $name => $shelf) {
             foreach($shelf['books'] as $index => $book) {
                 $shelves[$name]['books'][$index]['matches'] = isset($search['matches'][$book['isbn']]) ? $search['matches'][$book['isbn']] : [];
@@ -930,7 +930,7 @@ class Book extends Module {
             $shelves[$name]['instances']['total'] = $count;
         }
         $order = $shelves;
-        $keys = array_keys($locale);
+        $keys = array_keys($labels);
         $keys[-1]   = 'new';
         $keys[9999] = 'other';
         usort($order, function($first, $second) use ($keys) {
@@ -949,7 +949,7 @@ class Book extends Module {
         return [
             'search'  => $search,
             'shelves' => $shelves,
-            'locale'  => $locale
+            'labels'  => $labels
         ];
     }
 }

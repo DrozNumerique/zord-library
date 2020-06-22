@@ -60,7 +60,7 @@ abstract class Liner {
         }
         return [
             'shelves' => $this->shelves,
-            'locale'  => $this->locale
+            'labels'  => $this->locale
         ];
     }
     

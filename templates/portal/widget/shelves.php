@@ -11,7 +11,7 @@
 <?php foreach ($models['shelves'] as $name => $shelf) { ?>
 <?php   if ($shelf['apart']) { ?>
 			<div class="<?php echo $shelf['name']; ?> apart">
-				<div class="apart_title apart_label"><?php echo Zord::getLocaleValue($shelf['name'], $models['locale'], $lang, ['new', 'other'], $locale); ?></div>
+				<div class="apart_title apart_label"><?php echo Zord::getLocaleValue($shelf['name'], $models['labels'], $lang, ['new', 'other'], $locale); ?></div>
 				<div class="apart_title apart_count"><?php echo count($shelf['books']); ?> <?php echo $locale->books; ?></div>
 <?php
 $this->render('shelf', ['shelf' => $shelf, 'search' => isset($models['search']['id']) ? $models['search']['id'] : null]);
@@ -25,7 +25,7 @@ $this->render('shelf', ['shelf' => $shelf, 'search' => isset($models['search']['
 				<div class="tabs">
 <?php   foreach ($models['shelves'] as $name => $shelf) { ?>
 					<div data-tab="<?php echo $name; ?>" class="tab">
-						<div class="frame_title"><?php echo Zord::getLocaleValue($shelf['name'], $models['locale'], $lang, ['new', 'other'], $locale); ?></div>
+						<div class="frame_title"><?php echo Zord::getLocaleValue($shelf['name'], $models['labels'], $lang, ['new', 'other'], $locale); ?></div>
 <?php     if (isset($models['search']['matches'])) { ?>
 						<div class="frame_subtitle">
 							<span class="frame_instances count"><?php echo $shelf['instances']['total']; ?></span>&nbsp;<span class="frame_instances"><?php echo $locale->instances; ?></span>
