@@ -27,25 +27,16 @@ class LibraryControler extends Controler {
 
     public function models() {
 	    $models = parent::models();
-        $skin = Zord::getSkin($this->context);
-        if (isset($skin->header->right->text)) {
-            $models['portal']['header']['right']['text'] = $skin->header->right->text;
-        } else {
-            $models['portal']['header']['right']['text'] = explode(' ', Zord::getLocaleValue('title', Zord::value('context', $this->context), $this->lang));
-        }
-        $layout = Zord::value('menu', 'layout');
-        if (!isset($layout)) {
-            $layout = array_keys(Zord::getConfig('menu'));
-        }
-        $locale = $models['portal']['locale']['menu'] ?? [];
+	    $models['portal']['header']['right']['text'] = $this->skin->header->right->text ?? explode(' ', Zord::getLocaleValue('title', $this->config, $this->lang));
+	    $layout = Zord::value('menu', 'layout') ?? array_keys(Zord::getConfig('menu'));
         foreach ($layout as $name) {
             $entry = Zord::value('menu', $name);
             if ((!isset($entry['role']) || $this->user->hasRole($entry['role'], $this->context)) && (!isset($entry['connected']) || ($this->user->isConnected() && $entry['connected']) || (!$this->user->isConnected() && !$entry['connected']) || $this->user->isManager())) {
-                list($type, $url, $class, $label) = $this->menu($entry, $name, $locale);
+                list($type, $url, $class, $label) = $this->menu($entry, $name, $models['portal']['locale']['menu'][$name] ?? null);
                 $subMenu  = [];
                 if ($type == 'menu' && isset($entry['menu']) && is_array($entry['menu']) && Zord::is_associative($entry['menu'])) {
                     foreach ($entry['menu'] as $subName => $subEntry) {
-                        list(, $subURL, $subClass, $subLabel) = $this->menu($subEntry, $subName, $locale);
+                        list(, $subURL, $subClass, $subLabel) = $this->menu($subEntry, $subName, $models['portal']['locale']['menu'][$subName] ?? null);
                         $subMenu[] = [
                             'name'  => $subName,
                             'url'   => $subURL,
@@ -93,7 +84,7 @@ class LibraryControler extends Controler {
         $path  = isset($entry['path'])  ? $entry['path']  : ($type == 'shortcut' ? (isset($entry['module']) && isset($entry['action']) ? '/'.$entry['module'].'/'.$entry['action'] : '/'.$name) : ($type == 'page' ? '/page/'.$name : ($type == 'content' ? '/content/'.$name : '')));
         $url   = isset($entry['url'])   ? $entry['url']   : ($type == 'menu' ? null : $this->baseURL.$path);
         $class = isset($entry['class']) ? (is_array($entry['class']) ? $entry['class'] : [$entry['class']]) : [];
-        $label = isset($entry['label'][$this->lang]) ? $entry['label'][$this->lang] : (isset($locale[$name]) ? $locale[$name] : $name);
+        $label = isset($entry['label'][$this->lang]) ? $entry['label'][$this->lang] : (isset($locale) ? $locale : $name);
         return [$type, $url, $class, $label];
     }
 }
