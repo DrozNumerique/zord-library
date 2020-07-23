@@ -5,6 +5,10 @@ class LibraryControler extends Controler {
     public function findTarget($host, $path) {
         if (parse_url(OPENURL, PHP_URL_HOST) == $host) {
             return [
+                'host'    => $host,
+                'scheme'  => parse_url(OPENURL, PHP_URL_SCHEME),
+                'config'  => null,
+                'skin'    => null,
                 'context' => 'unknown',
                 'indexURL'=> 0,
                 'baseURL' => OPENURL,
