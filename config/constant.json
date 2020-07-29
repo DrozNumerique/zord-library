@@ -16,6 +16,6 @@
     "NS_PREFIX": "tei",
     "NS_ADJUST": "prefixTEI",
     "GRAPHIC_LOADING_MAX_HEIGHT": 500,
-    "SEARCH_SLIDE": false,
+    "SEARCH_PULLOUT": false,
     "IMPORT_CONTINUE": false
 }

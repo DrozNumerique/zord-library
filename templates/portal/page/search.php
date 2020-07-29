@@ -1,6 +1,6 @@
-<?php if (isset($models['slide']) && $models['slide'] == true) { ?>
+<?php if (isset($models['pullout']) && $models['pullout'] == true) { ?>
 <?php   
-      $this->render('/portal/widget/slide', [
+      $this->render('/portal/widget/pullout', [
           'id'      => 'search', 
           'top'     => '/portal/widget/query', 
           'content' => '/portal/page/search/refine', 

@@ -66,7 +66,7 @@ input.account[type="submit"] {
 	color: #C03938;
 }
 
-.slide {
+.pullout {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -82,18 +82,18 @@ input.account[type="submit"] {
 	font-size: 0.8em;
 }
 
-.slide .top {
+.pullout .top {
 	display: none;
 	float: left;
 }
 
-.slide .content {
+.pullout .content {
 	display: none;
 	overflow: auto;
 	float: left;
 }
 
-.slide .handle {
+.pullout .handle {
 	position: fixed;
 	font-size: 25px;
 	float: right;
@@ -114,7 +114,7 @@ input.account[type="submit"] {
 	-ms-transition: left .3s;
 }
 
-.slide .handle span {
+.pullout .handle span {
 	color: white;
 	position: relative;
 	background: #C0392B;
@@ -128,14 +128,14 @@ input.account[type="submit"] {
 	top: 50%;
 }
 
-.slide.show {
+.pullout.show {
 	width: 450px;
 	width: -webkit-calc(50% - 0px);
 	width: -moz-calc(50% - 0px);
 	width: calc(50% - 0px);
 }
 
-.slide.show .top, .slide.show .content {
+.pullout.show .top, .pullout.show .content {
 	width: 420px;
 	width: -webkit-calc(100% - 30px);
 	width: -moz-calc(100% - 30px);
@@ -143,7 +143,7 @@ input.account[type="submit"] {
 	display:block;
 }
 
-.slide.show .handle {
+.pullout.show .handle {
 	left: 420px;
 	left: -webkit-calc(50% - 30px);
 	left: -moz-calc(50% - 30px);

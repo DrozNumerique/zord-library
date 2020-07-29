@@ -17,7 +17,7 @@ var toScroll = function() {
 		marginTop = marginTop + getNumber(document.getElementById('navbar'), 'height');
 		[].forEach.call(document.querySelectorAll('.fixed'), function(element) {
 			element.style.marginTop = marginTop + 'px';
-			if (element.classList.contains('slide')) {
+			if (element.classList.contains('pullout')) {
 				new Map([
 					['.content',element.querySelector('.content').offsetTop + getNumber(element.querySelector('.top'), 'margin-bottom')],
 					['.handle' ,element.querySelector('.handle span').offsetHeight]

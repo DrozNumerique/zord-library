@@ -102,7 +102,7 @@ class Book extends Module {
                 $facets[] = $facet;
             }
         }
-        return $this->page('search', array_merge($this->classify($this->fetch()), ['slide' => SEARCH_SLIDE, 'facets' => $facets]));
+        return $this->page('search', array_merge($this->classify($this->fetch()), ['pullout' => SEARCH_PULLOUT, 'facets' => $facets]));
     }
     
     public function show() {

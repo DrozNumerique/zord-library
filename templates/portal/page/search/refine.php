@@ -1,4 +1,4 @@
-   			<div id="searchRefine" class="<?php echo SEARCH_SLIDE ? '' : 'switch'; ?>">
+   			<div id="searchRefine" class="<?php echo SEARCH_PULLOUT ? '' : 'switch'; ?>">
     			<label><?php echo $locale->refine; ?></label>
     		</div>
 			<div id="searchControls">	

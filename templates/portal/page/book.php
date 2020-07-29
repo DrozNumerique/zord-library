@@ -1,5 +1,5 @@
 		<abbr class="unapi-id" title="<?php echo $models['book']['ISBN']; ?>"></abbr>
-<?php $this->render('/portal/widget/slide', ['id' => 'toc', 'top' => '/portal/widget/query', 'content' => '/portal/page/book/toc', 'align' => 'left', 'handle' => '≡']); ?>
+<?php $this->render('/portal/widget/pullout', ['id' => 'toc', 'top' => '/portal/widget/query', 'content' => '/portal/page/book/toc', 'align' => 'left', 'handle' => '≡']); ?>
 		<div id="tools" class="fixed">
 			<a id="searchBack" class="fa fa-search fa-fw<?php echo !isset($models['book']['search']) ? ' __disabled' : ''; ?>" href="<?php echo isset($models['book']['search']) ? $baseURL.'/search'.'?id='.$models['book']['search'] : ''; ?>" title="<?php echo $locale->search_back; ?>">
 				<i class="fa fa-arrow-left fa-stack-1x searchBack"></i>

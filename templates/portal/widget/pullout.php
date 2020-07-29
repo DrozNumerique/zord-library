@@ -1,4 +1,4 @@
-		<div id="<?php echo $models['id']; ?>" class="slide fixed">
+		<div id="<?php echo $models['id']; ?>" class="pullout fixed">
 			<div class="top">
 <?php $this->render($models['top']); ?>
 			</div>

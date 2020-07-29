@@ -24,7 +24,7 @@ class LibraryControler extends Controler {
     public function getTarget($url, $redirect = false) {
         $target = parent::getTarget($url, $redirect);
         if ($target['module'] === 'Book' && $target['action'] === 'show') {
-            $target['base'] = $target['baseURL'].'/book/'.($target['params']['isbn'] ?? null).'/';
+            $target['base'] = $target['baseURL'].'/book/'.($target['params']['isbn'] ?? null).'/'.($target['params']['part'] ?? null);
         }
         return $target;
     }
