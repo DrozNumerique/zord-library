@@ -2,11 +2,11 @@
 	"header": {
 		"left": {
 			"url": "http://www.droz.org",
-			"image": "/library/img/librairie_droz.jpg"
+			"image": "/library/img/books.jpg"
 		}
 	},
 	"banner": {
-		"image": "/library/img/zord.png"
+		"image": "/library/img/books2.jpg"
 	},
 	"styles": {
 		"table": {
