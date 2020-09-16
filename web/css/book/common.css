@@ -986,7 +986,7 @@ div.footnotes div.footnote-counter {
 
 div.footnotes div.note:before {
 	content:'';
-	font-size:0;
+	font-size: 0px;
 }
 
 div.footnotes div.note div.note:before {
