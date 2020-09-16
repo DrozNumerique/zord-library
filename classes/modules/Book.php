@@ -810,11 +810,11 @@ class Book extends Module {
             $found = $result['response']['numFound'];
             if (isset($result['response']['docs']) && !empty($result['response']['docs'])) {
                 foreach ($result['response']['docs'] as $doc) {
-                    $ean = $doc->ean_s;
+                    $ean = $doc['ean_s'];
                     if (!in_array($ean, $books)) {
                         $books[] = $ean;
                     }
-                    $part = substr($doc->id, strpos($doc->id, '_') + 1);
+                    $part = substr($doc['id'], strpos($doc['id'], '_') + 1);
                     if (!isset($parts[$ean][$part])) {
                         $entity = (new BookHasPartEntity())->retrieve(['book' => $ean, 'part' => $part]);
                         if ($entity) {
@@ -860,6 +860,7 @@ class Book extends Module {
                 }
             }
         }
+        Zord::log($books);
         return !empty($books) ? $search : [];
     }
     
