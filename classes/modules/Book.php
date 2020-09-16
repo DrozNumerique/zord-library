@@ -806,7 +806,7 @@ class Book extends Module {
                 $query->setHighlight(true);
             }
             $result = $client->query($query);
-            $result = $result->getResponse();
+            $result = Zord::objectToArray(json_decode($result->getRawResponse()));
             $found = $result['response']['numFound'];
             if (isset($result['response']['docs']) && !empty($result['response']['docs'])) {
                 foreach ($result['response']['docs'] as $doc) {
