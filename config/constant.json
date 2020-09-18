@@ -6,7 +6,7 @@
     "MAX_TOC_DEPTH": 3,
     "MAX_LOG_SIZE": 3000000,
     "RELAXNG_COMMAND": "jing ${RNG} ${XML}",
-    "EPUBCHECK_COMMAND": "epubcheck --locale ${LANG} -e ${EPUB} 2>&1",
+    "EPUBCHECK_COMMAND": "${EXEC} --locale ${LANG} -e ${EPUB} 2>&1",
     "OPENURL": "http://openurl.zord.tech/",
     "SEARCH_PAGE_DEFAULT_SIZE": 10,
     "SEARCH_PAGE_MAX_SIZE": 100000,

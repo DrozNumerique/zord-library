@@ -912,9 +912,11 @@ class LibraryImport extends Import {
                 }
                 if ($epub->close()) {
                     $command = Zord::substitute(EPUBCHECK_COMMAND, [
+                        'EXEC' => defined('EPUBCHECK_PATH') ? 'java -jar '.EPUBCHECK_PATH.DS.'epubcheck.jar' : 'epubcheck',
                         'LANG' => $this->lang,
                         'EPUB' => $tmpFile
                     ]);
+                    $this->info(2, $command);
                     $errors = shell_exec($command);
                     if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
                         $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
