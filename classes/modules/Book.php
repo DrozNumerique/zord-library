@@ -860,7 +860,6 @@ class Book extends Module {
                 }
             }
         }
-        Zord::log($books);
         return !empty($books) ? $search : [];
     }
     
