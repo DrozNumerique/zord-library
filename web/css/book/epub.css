@@ -10,6 +10,9 @@ div[data-rendition="#noepub"] {
 	display: none ! important;
 }
 
+graphic[data-rendition="logo"] {
+	max-width : 200px;
+}
 
 /*
 div.pb[id]:not([data-rend="temoin"]):before {
