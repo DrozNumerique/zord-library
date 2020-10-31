@@ -6,8 +6,12 @@ body {
 	padding:20px;
 }
 
-div.p[data-rendition="#noepub"] {
+div[data-rendition="#noepub"] {
 	display: none ! important;
+}
+
+graphic[data-rendition="logo"] {
+	max-width : 200px;
 }
 
 /*
