@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Image xmlns="http://schemas.microsoft.com/deepzoom/2008"
        Format="<?php echo $models['format']; ?>"
        Overlap="<?php echo $models['overlap']; ?>"

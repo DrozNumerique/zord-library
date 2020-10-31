@@ -5,6 +5,15 @@
 		},
 		"/portal/page/admin/import/file": {
 			"after": "/portal/page/admin/import/publish"
+		},
+		"/xml/dzi": {
+			"instruction": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+		},
+		"/xml/formats": {
+			"instruction": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+		},
+		"/xml/formats/rdf_bibliontology": {
+			"instruction": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 		}
 	}
 }
