@@ -25,7 +25,8 @@
 		"records": {
 			"shortcut": "records",
 			"parameters": {
-				"books": "FILTER_SANITIZE_STRING"
+				"books": "FILTER_SANITIZE_STRING",
+				"format": "FILTER_SANITIZE_STRING"
 			}
 		},
 		"metadata": {

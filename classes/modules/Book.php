@@ -244,7 +244,7 @@ class Book extends Module {
         
     public function records() {
         if (isset($this->params['books'])) {
-            $format = $this->either('MODS', 'format');
+            $format = $this->params['format'] ?? 'MODS';
             $books = Zord::objectToArray(json_decode($this->params['books']));
             $steps = Zord::value('records', $format);
             if ($steps) {
