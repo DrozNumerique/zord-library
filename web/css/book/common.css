@@ -856,7 +856,7 @@ div.titlePart[data-type="desc"] {
 	margin:35px 0;
 	color: #32455D;
 	font-size: 15px;
-	line-height: 1em;
+	line-height: 1.5em;
 }
 
 div.titlePart[data-type="main"] {
