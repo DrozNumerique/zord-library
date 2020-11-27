@@ -3,7 +3,7 @@
          xmlns:dc="http://purl.org/dc/terms/"
          xmlns:foaf="http://xmlns.com/foaf/0.1/"
          xmlns:address="http://schemas.talis.com/2005/address/schema#">
-  <bibo:Book rdf:about="http://calvin.droz.org/9782600024181">
+  <bibo:Book rdf:about="<?php echo $baseURL.'/'.$models['metadata']['ean']; ?>">
     <dc:title><?php echo Library::title($models['metadata']); ?></dc:title>
 <?php if (isset($models['metadata']['description'])) { ?>
 <?php   if (is_array($models['metadata']['description'])) { ?>
