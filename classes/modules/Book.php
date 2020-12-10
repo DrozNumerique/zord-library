@@ -865,6 +865,7 @@ class Book extends Module {
     
     public function classify($search = false) {
         $books = ($search !== false && isset($search['books'])) ? $search['books'] : null;
+        $year  = ($search !== false && ctype_digit($search) && strlen($search) == 4 && in_array(substr($search, 0, 2), ['18','19','20'])) ? $search : null;
         $entities = (new BookHasContextEntity())->retrieve([
             'many'  => true,
             'where' => ['context' => $this->context]
@@ -873,10 +874,16 @@ class Book extends Module {
         foreach ($entities as $entity) {
             $status[$entity->book] = $entity->status;
         }
+        $raw = 'BookHasContextEntity.context = ?';
+        $parameters = $this->context;
+        if (isset($year)) {
+            $raw .= ' AND BookEntity.date = ?';
+            $parameters = [$parameters, $year];
+        }
         $entities = (new BookEntity())->retrieve([
             'many'  => true,
             'join'  => empty($books) ? 'BookHasContextEntity' : null,
-            'where' => empty($books) ? ['raw' => 'BookHasContextEntity.context = ?', 'parameters' => $this->context] : ['BookEntity.ean' => ['in' => $books]],
+            'where' => empty($books) ? ['raw' => $raw, 'parameters' => $parameters] : ['BookEntity.ean' => ['in' => $books]],
             'order' => ['desc' => 'ean']
         ]);
         $shelves = [];

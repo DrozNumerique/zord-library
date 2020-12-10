@@ -1,4 +1,11 @@
 {
+	"Portal": {
+		"home": {
+			"parameters": {
+				"year": "FILTER_SANITIZE_NUMBER_INT"
+			}
+		}
+	},
 	"Admin": {
 		"publish": {
 			"parameters": {
