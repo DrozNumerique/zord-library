@@ -39,16 +39,6 @@ class Book extends Module {
         return $models;
     }
     
-    public function unapi() {
-        if (isset($this->params['id'])) {
-            $format = isset($this->params['format']) ? $this->params['format'] : 'rdf_bibliontology';
-            $metadata = Library::data($this->params['id'], 'metadata.json', 'array');
-            return $this->view('/xml/formats/'.$format, ['metadata' => $metadata], Zord::value('formats', [$format, 'type']), false);
-        } else {
-            return $this->view('/xml/formats', ['formats' => Zord::getConfig('formats')], 'application/xml', false);
-        }
-    }
-    
     public function openurl() {
         if (isset($this->params['id'])) {
             $isbn = $this->params['id'];

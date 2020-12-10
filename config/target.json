@@ -83,12 +83,6 @@
 		"titles": {
 			"response": "DATA"
 		},
-		"unapi": {
-			"shortcut": "unapi",
-			"parameters": {
-				"id": "FILTER_SANITIZE_NUMBER_INT"
-			}
-		},
 		"counter": {
 			"shortcut": "counter",
 			"parameters": {
