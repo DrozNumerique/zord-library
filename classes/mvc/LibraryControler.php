@@ -78,7 +78,7 @@ class LibraryControler extends Controler {
                 $models['portal']['menu']['context'][$name] = $title;
             }
         }
-        foreach (Zord::getConfig('lang') as $name => $value) {
+        foreach (Zord::value('portal', 'lang') as $name => $value) {
             $models['portal']['menu']['lang'][$name] = $value;
         }
         $connected = $this->user->isConnected();
