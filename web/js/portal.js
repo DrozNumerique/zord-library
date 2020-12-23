@@ -74,21 +74,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	document.addEventListener('scroll', function() {
 		toScroll();
 	});
-		
-	document.getElementById('switchContext').addEventListener("change", function() {
-		form = this.parentNode;
-		form.action = BASEURL[this.value];
-		form.submit();
-	});
 	
-	document.getElementById('switchLang').addEventListener("change", function() {
-		invokeZord({
-			module:'Portal',
-			action:'last',
-			type:'VIEW',
-			lang:this.value
+	if (document.getElementById('switchContext')) {	
+		document.getElementById('switchContext').addEventListener("change", function() {
+			form = this.parentNode;
+			form.action = BASEURL[this.value];
+			form.submit();
 		});
-	});
+	}
+	
+	if (document.getElementById('switchLang')) {	
+		document.getElementById('switchLang').addEventListener("change", function() {
+			invokeZord({
+				module:'Portal',
+				action:'last',
+				type:'VIEW',
+				lang:this.value
+			});
+		});
+	}
 	
 	counter = document.getElementById('menu_counter');
 	if (counter) {
