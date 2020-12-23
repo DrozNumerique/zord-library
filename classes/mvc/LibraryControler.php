@@ -41,6 +41,9 @@ class LibraryControler extends Controler {
                 if ($type == 'menu' && isset($entry['menu']) && is_array($entry['menu']) && Zord::is_associative($entry['menu'])) {
                     foreach ($entry['menu'] as $subName => $subEntry) {
                         list(, $subURL, $subClass, $subLabel) = $this->menu($subEntry, $subName, $models['portal']['locale']['menu'][$subName] ?? null);
+                        if (($models['menu'] ?? null) == $name.'/'.$subName) {
+                            $subClass[] = 'highlight';
+                        }
                         $subMenu[] = [
                             'name'  => $subName,
                             'url'   => $subURL,
@@ -48,6 +51,9 @@ class LibraryControler extends Controler {
                             'label' => $subLabel
                         ];
                     }
+                }
+                if (($models['menu'] ?? null) == $name) {
+                    $class[] = 'highlight';
                 }
                 $models['portal']['menu']['link'][] = [
                     'type'  => $type,
