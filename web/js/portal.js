@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		toScroll();
 	});
 	
-	if (document.getElementById('switchContext') !== undefined) {	
+	if (document.getElementById('switchContext') !== null) {	
 		document.getElementById('switchContext').addEventListener("change", function() {
 			form = this.parentNode;
 			form.action = BASEURL[this.value];
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	}
 	
-	if (document.getElementById('switchLang') !== undefined) {	
+	if (document.getElementById('switchLang') !== null) {	
 		document.getElementById('switchLang').addEventListener("change", function() {
 			invokeZord({
 				module:'Portal',
