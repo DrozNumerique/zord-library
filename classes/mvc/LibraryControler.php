@@ -32,39 +32,8 @@ class LibraryControler extends Controler {
     public function models() {
 	    $models = parent::models();
 	    $models['portal']['header']['right']['text'] = $this->skin->header->right->text ?? explode(' ', Zord::getLocaleValue('title', $this->config, $this->lang));
-	    $layout = Zord::value('menu', 'layout') ?? array_keys(Zord::getConfig('menu'));
-        foreach ($layout as $name) {
-            $entry = Zord::value('menu', $name);
-            if ((!isset($entry['role']) || $this->user->hasRole($entry['role'], $this->context)) && (!isset($entry['connected']) || ($this->user->isConnected() && $entry['connected']) || (!$this->user->isConnected() && !$entry['connected']) || $this->user->isManager())) {
-                list($type, $url, $class, $label) = $this->menu($entry, $name, $models['portal']['locale']['menu'][$name] ?? null);
-                $subMenu  = [];
-                if ($type == 'menu' && isset($entry['menu']) && is_array($entry['menu']) && Zord::is_associative($entry['menu'])) {
-                    foreach ($entry['menu'] as $subName => $subEntry) {
-                        list(, $subURL, $subClass, $subLabel) = $this->menu($subEntry, $subName, $models['portal']['locale']['menu'][$subName] ?? null);
-                        if (($this->params['menu'] ?? null) == $name.'/'.$subName) {
-                            $subClass[] = 'highlight';
-                        }
-                        $subMenu[] = [
-                            'name'  => $subName,
-                            'url'   => $subURL,
-                            'class' => $subClass,
-                            'label' => $subLabel
-                        ];
-                    }
-                }
-                if (($this->params['menu'] ?? null) == $name) {
-                    $class[] = 'highlight';
-                }
-                $models['portal']['menu']['link'][] = [
-                    'type'  => $type,
-                    'name'  => $name,
-                    'url'   => $url,
-                    'class' => $class,
-                    'label' => $label,
-                    'menu'  => $subMenu
-                ];
-            }
-        }
+        $menu = Zord::getClassName('Menu');
+        (new $menu($this))->build($models);
         foreach (Zord::getConfig('context') as $name => $config) {
             if (isset($config['url']) && !empty($config['url'])) {
                 $title = $name;
@@ -87,16 +56,6 @@ class LibraryControler extends Controler {
             'label'  => $connected ? $models['portal']['locale']['menu']['logout'] : $models['portal']['locale']['menu']['login']
         ];
         return $models;
-    }
-    
-    private function menu($entry, $name, $locale) {
-        $type    = isset($entry['type'])  ? $entry['type']  : 'default';
-        $path    = isset($entry['path'])  ? $entry['path']  : ($type == 'shortcut' ? (isset($entry['module']) && isset($entry['action']) ? '/'.$entry['module'].'/'.$entry['action'] : '/'.$name) : ($type == 'page' ? '/page/'.$name : ($type == 'content' ? '/content/'.$name : '')));
-        $url     = isset($entry['url'])   ? $entry['url']   : ($type == 'menu' ? null : $this->baseURL.$path);
-        $class   = isset($entry['class']) ? (is_array($entry['class']) ? $entry['class'] : [$entry['class']]) : [];
-        $label   = isset($entry['label'][$this->lang]) ? $entry['label'][$this->lang] : (isset($locale) ? $locale : $name);
-        $display = isset($entry['display']) ? (new View($entry['display'], $this->models, $this))->render() : null;
-        return [$type, $url, $class, $display ?? $label];
     }
 }
 
