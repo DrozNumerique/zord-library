@@ -55,6 +55,7 @@ class LibraryAdmin extends StoreAdmin {
                     foreach($this->deletePaths($book['isbn']) as $path) {
                         Zord::deleteRecursive(STORE_FOLDER.$path);
                     }
+                    Store::deindex($book['isbn']);
                 }
             }
         }
