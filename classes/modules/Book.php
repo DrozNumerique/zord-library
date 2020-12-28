@@ -858,7 +858,7 @@ class Book extends Module {
     public function classify($search = false) {
         $books    = ($search !== false && isset($search['books'])) ? $search['books'] : null;
         $year     = ($search !== false && ctype_digit($search) && strlen($search) == 4 && in_array(substr($search, 0, 2), ['18','19','20'])) ? $search : null;
-        $category = ($search !== false && null !== Zord::value('category', [$this->context,$search])) ? $search : null;
+        $category = ($search !== false && is_string($search) && null !== Zord::value('category', [$this->context,$search])) ? $search : null;
         $entities = (new BookHasContextEntity())->retrieve([
             'many'  => true,
             'where' => ['context' => $this->context]
