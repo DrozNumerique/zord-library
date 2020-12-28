@@ -701,18 +701,19 @@ class Book extends Module {
         return $ariadne;
     }
     
-    private function fetch() {
-        $criteria = [];
+    public function fetch($criteria = null) {
         $search   = [];
         $books    = [];
         $parts    = [];
-        $id = null;
-        if (isset($this->params['criteria'])) {
-            $id = uniqid();
-            $criteria = Zord::objectToArray(json_decode($this->params['criteria']));
-        } else if (isset($this->params['id']) && isset($_SESSION['__ZORD__']['__SEARCH___'][$this->params['id']])) {
-            $id = $this->params['id'];
-            $criteria = $_SESSION['__ZORD__']['__SEARCH___'][$id];
+        $id       = isset($criteria) ? uniqid() : null;
+        if (!isset($criteria)) {
+            if (isset($this->params['criteria'])) {
+                $id = uniqid();
+                $criteria = Zord::objectToArray(json_decode($this->params['criteria']));
+            } else if (isset($this->params['id']) && isset($_SESSION['__ZORD__']['__SEARCH___'][$this->params['id']])) {
+                $id = $this->params['id'];
+                $criteria = $_SESSION['__ZORD__']['__SEARCH___'][$id];
+            }
         }
         if (isset($id) && isset($criteria['context']) && $criteria['context'] == $this->context) {
             $_SESSION['__ZORD__']['__SEARCH___'][$id] = $criteria;
@@ -783,6 +784,7 @@ class Book extends Module {
             if ($criteria['rows'] > SEARCH_PAGE_MAX_SIZE) {
                 $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
             }
+            $criteria['start'] = $criteria['start'] ?? 0;
             $query->setStart($criteria['start']);
             $query->setRows($criteria['rows']);
             if (isset($criteria['query']) && !empty($criteria['query'])) {
@@ -854,8 +856,9 @@ class Book extends Module {
     }
     
     public function classify($search = false) {
-        $books = ($search !== false && isset($search['books'])) ? $search['books'] : null;
-        $year  = ($search !== false && ctype_digit($search) && strlen($search) == 4 && in_array(substr($search, 0, 2), ['18','19','20'])) ? $search : null;
+        $books    = ($search !== false && isset($search['books'])) ? $search['books'] : null;
+        $year     = ($search !== false && ctype_digit($search) && strlen($search) == 4 && in_array(substr($search, 0, 2), ['18','19','20'])) ? $search : null;
+        $category = ($search !== false && null !== Zord::value('category', [$this->context,$search])) ? $search : null;
         $entities = (new BookHasContextEntity())->retrieve([
             'many'  => true,
             'where' => ['context' => $this->context]
@@ -869,6 +872,10 @@ class Book extends Module {
         if (isset($year)) {
             $raw .= ' AND BookEntity.date = ?';
             $parameters = [$parameters, $year];
+        }
+        if (isset($category)) {
+            $raw .= ' AND BookEntity.category = ?';
+            $parameters = [$parameters, '["'.$category.'"]'];
         }
         $entities = (new BookEntity())->retrieve([
             'many'  => true,
