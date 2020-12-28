@@ -897,7 +897,7 @@ class Book extends Module {
                 'readable' => $this->user->hasAccess($isbn, 'reader')
             ];
         }
-        $liner = Zord::value('plugin', ['liner',$this->context]);
+        $liner = ($search !== false) ? 'SearchLiner' : Zord::value('plugin', ['liner',$this->context]);
         if (!isset($liner)) {
             $liner = Zord::value('plugin', 'liner');
             if (!isset($liner) || !(is_string($liner))) {

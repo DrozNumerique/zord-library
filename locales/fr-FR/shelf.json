@@ -5,6 +5,7 @@
 	"title" : "Titre",
 	"editors" : "Éditeurs",
 	"publication_date" : "Publié",
+	"category" : "Catégorie",
 	"title_page": "Page de titre",
 	"chapter": "Chapitre"
 }

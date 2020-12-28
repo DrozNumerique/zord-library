@@ -15,32 +15,38 @@
 										</span>
 									</span>
 								</th>
-								<th class="authors" style="width: 150px;">
+								<th class="authors"  style="width: 150px;">
 									<span class="sort" data-column="2">
 										<?php echo $locale->authors."\n"; ?>
 										<i class="fa fa-sort fa-fw"></i>
 									</span>
 								</th>
-								<th class="title"   style="width: 450px;">
+								<th class="title"    style="width: 450px;">
 									<span class="sort" data-column="3">
 										<?php echo $locale->title."\n"; ?>
 										<i class="fa fa-sort fa-fw"></i>
 									</span>
 								</th>
-								<th class="editors" style="width: 200px;">
+								<th class="editors"  style="width: 200px;">
 									<span class="sort" data-column="4">
 										<?php echo $locale->editors."\n"; ?>
 										<i class="fa fa-sort fa-fw"></i>
 									</span>
 								</th>
-								<th class="date"	style="width: 55px;" >
+								<th class="date"	 style="width: 55px;" >
 									<span class="sort" data-column="5">
 										<?php echo $locale->publication_date."\n"; ?>
 										<i class="fa fa-sort fa-fw"></i>
 									</span>
 								</th>
 <?php if (in_array('search', $models['shelf']['class'])) { ?>
-								<th class="search"  style="width: 30px;" >
+								<th class="category" style="width: 30px;" >
+									<span class="sort" data-column="6">
+										<?php echo $locale->category."\n"; ?>
+										<i class="fa fa-sort fa-fw"></i>
+									</span>
+								</th>
+								<th class="search"   style="width: 30px;" >
 									<i class="fa fa-search fa-fw"></i>
 								</th>
 <?php } ?>
@@ -58,6 +64,7 @@
 								<td class="t_person editors"><?php echo Library::listActors($book['editor'], 'HTML'); ?></td>
 								<td class="t_date date"><?php echo $book['date']; ?></td>
 <?php   if (in_array('search', $models['shelf']['class'])) { ?>
+								<td class="category"><?php echo implode(',', $book['category']); ?></td>
 								<td class="search" data-isbn="<?php echo $book['isbn']; ?>" style="color:white;"><i class="fa fa-check fa-fw"></i></td>
 <?php   } ?>
 							</tr>

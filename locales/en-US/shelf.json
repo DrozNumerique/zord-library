@@ -5,6 +5,7 @@
 	"title": "Title",
 	"editors": "Editors",
 	"publication_date": "Issued",
+	"category" : "Category",
 	"title_page": "Title Page",
 	"chapter": "Chapter"
 }
