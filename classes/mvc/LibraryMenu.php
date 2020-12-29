@@ -42,7 +42,7 @@ class LibraryMenu extends Menu {
                     $connected = $this->user->isConnected();
                     $entry['action'] = $connected ? 'disconnect' : 'connect';
                     $label = $connected ? 'logout' : 'login';
-                    $entry['label'] = Zord::getLocale('portal')->menu->$label;
+                    $entry['label'] = Zord::getLocale('portal', $this->lang)->menu->$label;
                 }
                 break;
             }
