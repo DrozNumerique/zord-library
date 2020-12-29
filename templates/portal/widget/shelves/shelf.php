@@ -64,7 +64,7 @@
 								<td class="t_person editors"><?php echo Library::listActors($book['editor'], 'HTML'); ?></td>
 								<td class="t_date date"><?php echo $book['date']; ?></td>
 <?php   if (in_array('search', $models['shelf']['class'])) { ?>
-								<td class="category"><?php echo implode(',', $book['category']); ?></td>
+								<td class="category"><?php echo Library::categories($context, $book['category']); ?></td>
 								<td class="search" data-isbn="<?php echo $book['isbn']; ?>" style="color:white;"><i class="fa fa-check fa-fw"></i></td>
 <?php   } ?>
 							</tr>

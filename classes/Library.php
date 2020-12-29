@@ -226,4 +226,12 @@ class Library {
 	    $reference['page'] = $page;
 	    return $reference;
 	}
+	
+	public static function categories($context, $list) {
+	    $categories = [];
+	    foreach ($list as $category) {
+	        $categories[] = Zord::value('category', [$context,$category]);
+	    }
+	    return implode(',', $categories);
+	}
 }
