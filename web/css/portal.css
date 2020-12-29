@@ -271,36 +271,45 @@ input.account[type="submit"] {
 }
 
 #navbar div.sub {
+	color: white;
 	cursor: pointer;
+}
+
+#navbar div.sub:hover {
+	color: #A3CBFF;
 }
 
 #navbar div.sub ul {
 	display: block;
 	position: absolute;
-	padding-top: 3px;
-	left: 0px;
-	z-index: 1000;
+	padding-top: 20px;
+	width: auto! important;
 }
 
 #navbar div.sub ul li {
 	display: none;
 	margin: 0;
-	padding: 0;
-	border: 1px solid;
-	margin-bottom: 1px;
+	padding: 5px 10px;
+	background: #6C757E;;
+	white-space: nowrap;
+	text-align: left;
 }
 
 #navbar div.sub:hover ul li {
 	display: block;
 }
 
-#navbar div.sub li:hover {
-	background: black;
-	border-color: white;
+#navbar div.sub ul li a {
+	color: white;
+	text-transform: none;
 }
 
-#navbar div.sub li:hover a {
-	color: white ! important;
+#navbar div.sub ul li:hover {
+	background: #A3CBFF;
+}
+
+#navbar div.sub ul li:hover a {
+	color: #6C757E;;
 }
 
 .navcit {

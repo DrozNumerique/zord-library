@@ -75,24 +75,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		toScroll();
 	});
 	
-	if (document.getElementById('switchContext') !== null) {	
-		document.getElementById('switchContext').addEventListener("change", function() {
-			form = this.parentNode;
-			form.action = BASEURL[this.value];
+	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.context'), function(li) {	
+		li.querySelector('a').addEventListener("click", function() {return false;});	
+		li.addEventListener("click", function() {
+			form = document.getElementById('switchContextForm');
+			form.action = BASEURL[li.id.substr('menu_context_'.length)];
 			form.submit();
 		});
-	}
+	});
 	
-	if (document.getElementById('switchLang') !== null) {	
-		document.getElementById('switchLang').addEventListener("change", function() {
+	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.lang'), function(li) {
+		li.querySelector('a').addEventListener("click", function() {return false;});	
+		li.addEventListener("click", function() {
 			invokeZord({
 				module:'Portal',
 				action:'last',
 				type:'VIEW',
-				lang:this.value
+				lang:li.id.substr('menu_lang_'.length)
 			});
 		});
-	}
+	});
 	
 	counter = document.getElementById('menu_counter');
 	if (counter) {

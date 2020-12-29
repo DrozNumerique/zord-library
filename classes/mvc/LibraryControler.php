@@ -32,24 +32,6 @@ class LibraryControler extends Controler {
     public function models() {
 	    $models = parent::models();
 	    $models['portal']['header']['right']['text'] = $this->skin->header->right->text ?? explode(' ', Zord::getLocaleValue('title', $this->config, $this->lang));
-        $menu = Zord::getClassName('Menu');
-        (new $menu($this))->build($models);
-        foreach (Zord::getConfig('context') as $name => $config) {
-            if (isset($config['url']) && !empty($config['url'])) {
-                $title = $name;
-                if (isset($config['title'][$this->lang])) {
-                    $title = $config['title'][$this->lang];
-                } else if (isset($config['title'][DEFAULT_LANG])) {
-                    $title = $config['title'][DEFAULT_LANG];
-                } else if (isset($config['title']) && is_string($config['title'])) {
-                    $title = $config['title'];
-                }
-                $models['portal']['menu']['context'][$name] = $title;
-            }
-        }
-        foreach (Zord::value('portal', 'lang') as $name => $value) {
-            $models['portal']['menu']['lang'][$name] = $value;
-        }
         $connected = $this->user->isConnected();
         $models['portal']['account'] = [
             'action' => $connected ? 'disconnect' : 'connect',

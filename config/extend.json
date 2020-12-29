@@ -1,5 +1,6 @@
 {
 	"Controler": "LibraryControler",
+	"Menu": "LibraryMenu",
 	"User": "LibraryUser",
 	"Portal": "LibraryPortal",
 	"Admin": "LibraryAdmin",

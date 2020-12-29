@@ -7,6 +7,8 @@
 		"counter" : "Usage",
 		"records" : "Notices",
 		"admin" : "Admin",
+		"context" : "Contexte",
+		"lang" : "Langage",
 		"login" : "Connexion",
 		"logout" : "Déconnexion"
 	},

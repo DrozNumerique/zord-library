@@ -25,5 +25,11 @@
 	"admin": {
 		"type": "shortcut",
 		"role": "admin"
+	},
+	"context": {
+		"type": "menu"
+	},
+	"lang": {
+		"type": "menu"
 	}
 }
