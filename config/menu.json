@@ -31,5 +31,9 @@
 	},
 	"lang": {
 		"type": "menu"
+	},
+	"connect": {
+		"type": "shortcut",
+		"module": "Account"
 	}
 }

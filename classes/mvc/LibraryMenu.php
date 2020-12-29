@@ -35,6 +35,17 @@ class LibraryMenu extends Menu {
                 }
                 break;
             }
+            case 'connect': {
+                if ($this->user->hasRole('admin', $this->context) && !$this->user->isConnected()) {
+                    $entry['active'] = false;
+                } else {
+                    $connected = $this->user->isConnected();
+                    $entry['action'] = $connected ? 'disconnect' : 'connect';
+                    $label = $connected ? 'logout' : 'login';
+                    $entry['label'] = Zord::getLocale('portal')->menu->$label;
+                }
+                break;
+            }
         }
         return $entry;
     }

@@ -32,11 +32,6 @@ class LibraryControler extends Controler {
     public function models() {
 	    $models = parent::models();
 	    $models['portal']['header']['right']['text'] = $this->skin->header->right->text ?? explode(' ', Zord::getLocaleValue('title', $this->config, $this->lang));
-        $connected = $this->user->isConnected();
-        $models['portal']['account'] = [
-            'action' => $connected ? 'disconnect' : 'connect',
-            'label'  => $connected ? $models['portal']['locale']['menu']['logout'] : $models['portal']['locale']['menu']['login']
-        ];
         return $models;
     }
 }

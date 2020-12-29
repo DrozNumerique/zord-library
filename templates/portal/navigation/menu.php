@@ -17,14 +17,5 @@
 <?php   } ?>
 				</li>
 <?php } ?>
-<?php if (CONNECTION_MENU_ENTRY && ($user->isConnected() || !$user->hasRole('admin', $context))) { ?>
-				<li class="connectionMenu">
-					<form method="post" action="<?php echo $baseURL; ?>">
-						<input type="hidden" name="module" value="Account"/>
-						<input type="hidden" name="action" value="<?php echo $models['portal']['account']['action']; ?>"/>
-						<input type="submit" value="<?php echo $models['portal']['account']['label']; ?>" class="account"/>
-					</form>
-				</li>
-<?php } ?>
 			</ul>
 		</div>
