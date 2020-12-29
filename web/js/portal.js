@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 	
 	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.context'), function(li) {	
-		li.querySelector('a').addEventListener("click", function() {return false;});	
 		li.addEventListener("click", function() {
 			form = document.getElementById('switchContextForm');
 			form.action = BASEURL[li.id.substr('menu_context_'.length)];
@@ -85,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 	
 	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.lang'), function(li) {
-		li.querySelector('a').addEventListener("click", function() {return false;});	
 		li.addEventListener("click", function() {
 			invokeZord({
 				module:'Portal',

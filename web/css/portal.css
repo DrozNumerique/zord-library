@@ -261,12 +261,14 @@ input.account[type="submit"] {
     width: 100%;
 }
 
-#navbar li a {
+#navbar li a,
+#navbar li span {
 	color:white;
 	text-decoration: inherit;
 }
 
-#navbar li:hover a {
+#navbar li:hover a,
+#navbar li:hover span {
 	color:#A3CBFF;
 }
 
@@ -299,7 +301,8 @@ input.account[type="submit"] {
 	display: block;
 }
 
-#navbar div.sub ul li a {
+#navbar div.sub ul li a,
+#navbar div.sub ul li span {
 	color: white;
 	text-transform: none;
 }
@@ -308,7 +311,8 @@ input.account[type="submit"] {
 	background: #A3CBFF;
 }
 
-#navbar div.sub ul li:hover a {
+#navbar div.sub ul li:hover a,
+#navbar div.sub ul li:hover span {
 	color: #6C757E;;
 }
 
