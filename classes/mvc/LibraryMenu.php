@@ -18,8 +18,7 @@ class LibraryMenu extends Menu {
                         }
                         $entry['menu'][$context] = [
                             'type'  => 'nolink',
-                            'label' => $title,
-                            'class' => 'context'
+                            'label' => $title
                         ];
                     }
                 }
@@ -29,8 +28,7 @@ class LibraryMenu extends Menu {
                 foreach (Zord::value('portal', 'lang') as $lang => $locale) {
                     $entry['menu'][$lang] = [
                         'type'  => 'nolink',
-                        'label' => $locale,
-                        'class' => 'lang'
+                        'label' => $locale
                     ];
                 }
                 break;

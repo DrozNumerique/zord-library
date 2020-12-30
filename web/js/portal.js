@@ -75,24 +75,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		toScroll();
 	});
 	
-	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.context'), function(li) {	
-		li.addEventListener("click", function() {
-			form = document.getElementById('switchContextForm');
-			form.action = BASEURL[li.id.substr('menu_context_'.length)];
-			form.submit();
-		});
-	});
-	
-	[].forEach.call(document.getElementById('navbar').querySelectorAll('li.lang'), function(li) {
-		li.addEventListener("click", function() {
-			invokeZord({
-				module:'Portal',
-				action:'last',
-				type:'VIEW',
-				lang:li.id.substr('menu_lang_'.length)
+	context = document.getElementById('menu_context');
+	if (context) {
+		[].forEach.call(document.getElementById('menu_context').querySelectorAll('li'), function(li) {	
+			li.addEventListener("click", function() {
+				form = document.getElementById('switchContextForm');
+				form.action = BASEURL[li.id.substr('menu_context_'.length)];
+				form.submit();
 			});
 		});
-	});
+	}
+	
+	lang = document.getElementById('menu_lang');
+	if (lang) {
+		[].forEach.call(document.getElementById('menu_lang').querySelectorAll('li'), function(li) {
+			li.addEventListener("click", function() {
+				invokeZord({
+					module:'Portal',
+					action:'last',
+					type:'VIEW',
+					lang:li.id.substr('menu_lang_'.length)
+				});
+			});
+		});
+	}
 	
 	counter = document.getElementById('menu_counter');
 	if (counter) {

@@ -272,6 +272,33 @@ input.account[type="submit"] {
 	color:#A3CBFF;
 }
 
+#navbar li.bright {
+	background: #ff8043;
+	font-size: 0.9em;
+	padding: 1px 12px;
+	border-radius: 3px;
+	margin: 18px 5px ! important;
+}
+
+#navbar li.bright:hover {
+	background: #6E97CB;
+}
+
+#navbar li.bright:hover a {
+	color:white !important;
+}
+
+#navbar li#menu_quotes:before {
+	color: white;
+	content: " “ ";
+	font-size: 2.2em;
+	position: relative;
+	left: 0px;
+	top: 9px;
+	line-height: 0;
+	font-family: times;
+}
+
 #navbar div.sub {
 	color: white;
 	cursor: pointer;
@@ -314,43 +341,6 @@ input.account[type="submit"] {
 #navbar div.sub ul li:hover a,
 #navbar div.sub ul li:hover span {
 	color: #6C757E;;
-}
-
-.navcit {
-	background: #ff8043;
-	font-size: 0.9em;
-	padding: 1px 12px;
-	border-radius: 3px;
-	margin: 18px 5px ! important;
-	-webkit-transition: all .01s ease;
-		-moz-transition: all .01s ease;
-		-o-transition: all .01s ease;
-		-ms-transition: all .01s ease;
-		transition: all .01s ease;
-			color:white;
-}
-
-.navcit a {
-		color: white ! important;
-}
-
-.linkcit:before {
-	color: white;
-	content: " “ ";
-	font-size: 2.2em;
-	position: relative;
-	left: 0px;
-	top: 9px;
-	line-height: 0;
-	font-family: times;
-}
-
-.navcit:hover {
-	background: #6E97CB;
-}
-
-.navcit:hover a {
-	color:white !important;
 }
 
 /* --------------------------------- Footer --------------------------------- */

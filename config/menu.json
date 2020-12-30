@@ -10,10 +10,7 @@
 	},
 	"quotes": {
 		"type": "page",
-		"class": [
-			"navcit",
-			"linkcit"
-		]
+		"class": ["bright"]
 	},
 	"counter": {
 		"type": "shortcut",
@@ -34,6 +31,7 @@
 	},
 	"connect": {
 		"type": "shortcut",
-		"module": "Account"
+		"module": "Account",
+		"class": ["bright"]
 	}
 }
