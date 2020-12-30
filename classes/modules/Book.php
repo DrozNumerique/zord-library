@@ -635,7 +635,7 @@ class Book extends Module {
                 $filters[] = $book->book;
             }
             if (!empty($filters)) {
-                return $this->field('ean').':('.implode(' ', $filters).')';
+                return Store::field('ean').':('.implode(' ', $filters).')';
             }
         }
     }
@@ -715,7 +715,8 @@ class Book extends Module {
                 $criteria = $_SESSION['__ZORD__']['__SEARCH___'][$id];
             }
         }
-        if (isset($id) && isset($criteria['context']) && $criteria['context'] == $this->context) {
+        $criteria['context'] = $criteria['context'] ?? $this->context;
+        if (isset($id) && $criteria['context'] == $this->context) {
             $_SESSION['__ZORD__']['__SEARCH___'][$id] = $criteria;
             $client = new SolrClient(Zord::value('connection', ['solr','zord']));
             $query  = new SolrQuery();
@@ -745,8 +746,8 @@ class Book extends Module {
                 $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
             }
             $filters = [];
-            foreach ($criteria['filters'] as $key => $value) {
-                $field = $this->field($key);
+            foreach (($criteria['filters'] ?? []) as $key => $value) {
+                $field = Store::field($key);
                 if (!$field) {
                     $filter = Zord::value('search', ['filters',$key]);
                     if ($filter) {
@@ -781,6 +782,7 @@ class Book extends Module {
             foreach (Zord::value('search', ['sort']) as $key => $order) {
                 $query->addSortField($this->field($key), self::$SOLR_ORDERS[$order]);
             }
+            $criteria['rows'] = $criteria['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE;
             if ($criteria['rows'] > SEARCH_PAGE_MAX_SIZE) {
                 $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
             }
@@ -957,5 +959,29 @@ class Book extends Module {
             'shelves' => $shelves,
             'labels'  => $labels
         ];
+    }
+    
+    public function match() {
+        $term = $this->params['term']  ?? null;
+        if (empty($term)) {
+            return $this->error(400);
+        }
+        $results = [];
+        foreach (Store::search($term, null, 10) as $ean) {
+            $book = (new BookEntity())->retrieve($ean);
+            if ($book !== false) {
+                $context = (new BookHasContextEntity())->retrieve([
+                    'book'    => $book->ean,
+                    'context' => $this->context
+                ]);
+                if ($context !== false) {
+                    $results[] = [
+                        'value' => $ean,
+                        'label' => Library::title($book->title, $book->subtitle, 60)
+                    ];
+                }
+            }
+        }
+        return $results;
     }
 }

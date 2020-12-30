@@ -1,0 +1,11 @@
+{
+	"search": {
+		"type": "home",
+		"fields": [
+	    	"ean",
+	    	"title",
+	     	"editor",
+	    	"creator"
+		]
+	}
+}

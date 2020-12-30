@@ -116,6 +116,13 @@
 				"isbn": "FILTER_SANITIZE_STRING",
 				"path": "PATH"
 			}
+		},
+		"match": {
+			"shortcut": "match",
+			"response": "DATA",
+			"parameters": {
+				"term": "FILTER_SANITIZE_STRING"
+			}
 		}
 	}
 }
