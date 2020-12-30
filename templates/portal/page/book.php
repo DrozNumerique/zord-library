@@ -12,6 +12,12 @@
 			<i id="tool_bug" class="fa fa-bug fa-fw __disabled" title="<?php echo $locale->misprint; ?>"></i>
 			<i id="quote" class="fa fa-quote-left fa-fw __disabled" title="<?php echo $locale->quote; ?>"></i>
 		</div>
+<?php if (isset($models['portal']['ariadne'])) { ?>
+<?php   $this->render('ariadne'); ?>
+<?php } ?>
+<?php if (isset($models['portal']['message'])) { ?>
+<?php   $this->render('message'); ?>
+<?php } ?>
 		<article id="tei">
 			<div id="markerAnchorLeft">❯</div>
 			<div id="markerAnchorRight">❮</div>
