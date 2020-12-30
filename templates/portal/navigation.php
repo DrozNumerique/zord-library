@@ -1,13 +1,9 @@
 	<nav id="navbar">
-<?php 
-if (isset($models['portal']['menu'])) {
-        $this->render('menu');
-}
-if (isset($models['portal']['ariadne'])) {
-        $this->render('ariadne');
-}
-if (isset($models['portal']['message'])) {
-        $this->render('message');
-} 
-?>
+<?php $this->render('/portal/widget/menu', Menu::build($controler, $models)); ?>
+<?php if (isset($models['portal']['ariadne'])) { ?>
+<?php   $this->render('ariadne'); ?>
+<?php } ?>
+<?php if (isset($models['portal']['message'])) { ?>
+<?php   $this->render('message'); ?>
+<?php } ?>
 	</nav>
