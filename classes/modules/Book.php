@@ -967,7 +967,7 @@ class Book extends Module {
             return $this->error(400);
         }
         $results = [];
-        foreach (Store::search($term, null, 10) as $ean) {
+        foreach (Store::match($term, null, 10) as $ean) {
             $book = (new BookEntity())->retrieve($ean);
             if ($book !== false) {
                 $context = (new BookHasContextEntity())->retrieve([

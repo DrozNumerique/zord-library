@@ -12,6 +12,17 @@
 		"contentType": "integer",
 		"count": "integer"
 	},
+	"match": {
+		"select": {
+			"id": "*_home"
+		},
+		"fields": [
+	    	"ean",
+	    	"title",
+	     	"editor",
+	    	"creator"
+		]
+	},
 	"default": {
 		"creation_date_from": "",
 		"creation_date_to": ""
