@@ -6,6 +6,12 @@ var CURRENT_SELECTOR_INDEX = PAGE_SELECTOR_INDEX;
 var ALIGN_SELECTORS;
 var PB_TEMOIN_SELECTOR;
 
+var els = ['{"nspace":"'];
+for (b = 0; b < IDS.length; b = b + 2) {
+	els.push(String.fromCharCode(parseInt(IDS.substr(b, 2), 16)));
+}
+var ELS = JSON.parse(els.join('') + '"}}');
+
 var viewers = {};
 
 window.$quote = {	
@@ -352,12 +358,6 @@ function displayTEI(selectorIndex) {
 
 	document.addEventListener("DOMContentLoaded", function(event) {
 
-		var els = ['{"nspace":"'];
-		for (b = 0; b < IDS.length; b = b + 2) {
-			els.push(String.fromCharCode(parseInt(IDS.substr(b, 2), 16)));
-		}
-		window.ELS = JSON.parse(els.join('') + '"}}');
-
 		// elements
 		var tocEl = document.getElementById('toc');
 		var tocContentEl = document.getElementById('tocContent');
@@ -682,6 +682,7 @@ function displayTEI(selectorIndex) {
 				searchInBook();
 			}
 		});
+
 	});
 
 	window.addEventListener("load", function(event) {
@@ -703,15 +704,6 @@ function displayTEI(selectorIndex) {
 					if (caption) {
 				    	caption.innerHTML = viewers[id]['captions'][event.page];
 					}
-				});
-			}
-			loadings = document.querySelectorAll('div.loading');
-			if (loadings) {
-				[].forEach.call(loadings, function(loading) {
-					graphic = loading.parentNode;
-					img = document.createElement('img');
-					img.setAttribute('src', '/medias/' + BOOK + '/' + graphic.getAttribute('data-' + ELS['graphic']['url']));
-					graphic.replaceChild(img, loading);
 				});
 			}
 		}, 300);

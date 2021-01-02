@@ -13,40 +13,40 @@ class Obfuscator {
     
     public function __construct() {
         $sources = [];
-        $medias = Zord::value('TEI', 'medias');
+        $scopes = Zord::value('obfuscate', 'scopes');
         foreach (COMPONENT_FOLDERS as $tier) {
-            $sources[] = $tier.'config'.DS.'TEI.json';
-            foreach($medias as $media) {
-                $sources[] = $tier.'web'.DS.'css'.DS.'book'.DS.$media.'.css';
+            $sources[] = $tier.'config'.DS.'obfuscate.json';
+            foreach($scopes as $scope) {
+                $sources[] = $tier.'web'.DS.'css'.DS.'book'.DS.$scope.'.css';
             }
         }
         $folder = Zord::liveFolder('config'.DS.'obf');
         $mappings = glob($folder.'*.json');
         foreach($mappings as $mapping) {
             $targets = [$mapping];
-            foreach($medias as $media) {
-                $css = BUILD_FOLDER.pathinfo($mapping, PATHINFO_FILENAME).'_'.$media.'.css';
-                if (file_exists($css)) {
-                    $targets[] = $css;
+            foreach($scopes as $scope) {
+                $path = BUILD_FOLDER.pathinfo($mapping, PATHINFO_FILENAME).'_'.$scope.'.css';
+                if (file_exists($path)) {
+                    $targets[] = $path;
                 }
             }
             if (Zord::needsUpdate($targets, $sources)) {
-                foreach($targets as $build) {
-                    unlink($build);
+                foreach($targets as $path) {
+                    unlink($path);
                 }
             }
         }
         $mappings = glob($folder.'*.json');
         if (count($mappings) < OBFUSCATION_MODELS_MAX) {
             $this->prefix = self::$ALPHABET[rand(0, 25)];
-            $elements = Zord::value('TEI', 'elements');
+            $elements = Zord::value('obfuscate', 'elements');
             shuffle($elements);
             $this->elementMap = array();
             $index = 0;
             foreach ($elements as $element) {
                 $this->elementMap[$element] = $this->num2alpha($index++);
             }
-            $attributes = Zord::value('TEI', 'attributes');
+            $attributes = Zord::value('obfuscate', 'attributes');
             shuffle($attributes);
             $this->attributeMap = array();
             $index = 0;
@@ -59,7 +59,7 @@ class Obfuscator {
                 $this->prefix,
                 $this->elementMap,
                 $this->attributeMap
-                );
+            );
             $content = [];
             $content['ids'] = $this->ids;
             $content['prefix'] = $this->prefix;
@@ -107,10 +107,10 @@ class Obfuscator {
         return $xml;
     }
     
-    public function getCSS($media = 'screen') {
-        $file = BUILD_FOLDER.$this->filename.'_'.$media.'.css';
+    public function getCSS($scope = 'screen') {
+        $file = BUILD_FOLDER.$this->filename.'_'.$scope.'.css';
         if (!file_exists($file)) {
-            $CSS = file_get_contents(Zord::getComponentPath('web'.DS.'css'.DS.'book'.DS.$media.'.css'));
+            $CSS = file_get_contents(Zord::getComponentPath('web'.DS.'css'.DS.'book'.DS.$scope.'.css'));
             $CSS = preg_replace_callback(
                 '#div\.(\w+)#si',
                 function($matches) {
@@ -121,7 +121,7 @@ class Obfuscator {
                     }
                 },
                 $CSS
-                );
+            );
             $CSS = preg_replace_callback(
                 '#data-(\w+)#si',
                 function($matches) {
@@ -132,7 +132,7 @@ class Obfuscator {
                     }
                 },
                 $CSS
-                );
+            );
             file_put_contents($file, $CSS);
         }
         return pathinfo($file, PATHINFO_BASENAME);
@@ -140,7 +140,7 @@ class Obfuscator {
     
     public static function buildIDS($prefix, $elementMap, $attributeMap) {
         $els = array('nspace' => $prefix);
-        foreach (Zord::value('TEI', 'obfuscated') as $tag => $attributes) {
+        foreach (Zord::value('obfuscate', 'obfuscated') as $tag => $attributes) {
             $els[$tag] = array('elm' => $elementMap[$tag]);
             foreach ($attributes as $attribute) {
                 $els[$tag][$attribute] = $attributeMap[$attribute];
@@ -151,13 +151,13 @@ class Obfuscator {
     
     public static function clearIDS() {
         if (!self::$CLEAR_IDS) {
-            $elements = Zord::value('TEI', 'elements');
-            $attributes = Zord::value('TEI', 'attributes');
+            $elements = Zord::value('obfuscate', 'elements');
+            $attributes = Zord::value('obfuscate', 'attributes');
             self::$CLEAR_IDS = self::buildIDS(
                 'tei',
                 array_combine($elements, $elements),
                 array_combine($attributes, $attributes)
-                );
+            );
         }
         return self::$CLEAR_IDS;
     }

@@ -95,6 +95,18 @@ class Book extends Module {
         return $this->page('search', array_merge($this->classify($this->fetch()), ['pullout' => SEARCH_PULLOUT, 'facets' => $facets]));
     }
     
+    public function style($scope, $obfuscator, $path) {
+        return isset($obfuscator) ? '/build/'.$obfuscator->getCSS($scope) : $path.'/css/book/'.$scope.'.css';
+    }
+    
+    public function styles($media, $obfuscator = null) {
+        $styles = [];
+        foreach (['common',$media] as $scope) {
+            $styles[] = $this->style($scope, $obfuscator, '/library');
+        }
+        return $styles;
+    }
+    
     public function show() {
         $isbn = $this->either(null, 'isbn');
         if (isset($isbn)) {
@@ -201,8 +213,8 @@ class Book extends Module {
                     $texts[] = $text;
                 }
                 foreach (['screen','print'] as $media) {
-                    foreach (['common',$media] as $css) {
-                        $this->addStyle($obfuscate ? '/build/'.$obfuscator->getCSS($css)   : '/library/css/book/'.$css.'.css', $media);
+                    foreach ($this->styles($media, $obfuscator) as $href) {
+                        $this->addStyle($href, $media);
                     }
                 }
                 $zoom = Library::data($isbn, 'zoom.json', 'array');
