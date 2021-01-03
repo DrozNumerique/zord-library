@@ -28,6 +28,14 @@
 			"type": "text/javascript",
 			"src": "/library/js/portal.js"
 		},
+		"CSL": {
+			"type": "text/javascript",
+			"src": "/library/js/CSL.js"
+		},
+		"biblio": {
+			"type": "text/javascript",
+			"src": "/library/js/biblio.js"
+		},
 		"quotes": {
 			"type": "text/javascript",
 			"src": "/library/js/quotes.js"

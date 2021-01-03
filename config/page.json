@@ -18,14 +18,6 @@
 		"scripts": [
 			{
 				"type": "text/javascript",
-				"src": "/library/js/CSL.js"
-			},
-			{
-				"type": "text/javascript",
-				"src": "/library/js/biblio.js"
-			},
-			{
-				"type": "text/javascript",
 				"src": "/library/js/search.js"
 			},
 			{
@@ -55,14 +47,6 @@
 			}
 		],
 		"scripts": [
-			{
-				"type": "text/javascript",
-				"src": "/library/js/biblio.js"
-			},
-			{
-				"type": "text/javascript",
-				"src": "/library/js/CSL.js"
-			},
 			{
 				"type": "text/javascript",
 				"template": "/portal/page/quotes/script/label"
@@ -105,10 +89,6 @@
 			{
 				"type": "text/javascript",
 				"src": "/library/js/book.js"
-			},
-			{
-				"type": "text/javascript",
-				"src": "/library/js/biblio.js"
 			}
 		]
 	}

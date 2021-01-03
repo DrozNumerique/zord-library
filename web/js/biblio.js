@@ -8,21 +8,21 @@ var CSL_URL     = {
 	'csl.styles' : '/library/csl/styles/' + CSL_KEY + '.csl'
 }
 
-function getCSLObjects(name) {
+var getCSLObjects = function(name) {
 	return getContextProperty(CSL_OBJECTS + '.' + name, {});
 }
 
-function setCSLObjects(name, cslObjects) {
+var setCSLObjects = function(name, cslObjects) {
 	setContextProperty(CSL_OBJECTS + '.' + name, cslObjects);
 }
 
-function addCSLObject(name, object) {
+var addCSLObject = function(name, object) {
 	cslObjects = getCSLObjects(name);
 	cslObjects[object.id] = object;
 	setCSLObjects(name, cslObjects);
 }
 
-function removeCSLObject(name, id) {
+var removeCSLObject = function(name, id) {
 	cslObjects = getCSLObjects(name);
 	if (cslObjects[id] !== undefined) {
 		delete cslObjects[id];
@@ -30,7 +30,7 @@ function removeCSLObject(name, id) {
 	setCSLObjects(name, cslObjects);
 }
 
-function getCSLResource(key, name) {
+var getCSLResource = function(key, name) {
 	resources = getSessionProperty(key);
 	if (resources == undefined || resources == null) {
 		resources = {};
@@ -48,7 +48,7 @@ function getCSLResource(key, name) {
 	return resource;
 }
 
-function getCSLEngine(name, style, lang) {
+var getCSLEngine = function(name, style, lang) {
 	cslEngine = new CSL.Engine({
 		retrieveLocale: function(l) {
 			return getCSLResource(CSL_LOCALES, lang);
@@ -65,7 +65,7 @@ function getCSLEngine(name, style, lang) {
 	return cslEngine;
 }
 
-function getCSLParam(key) {
+var getCSLParam = function(key) {
 	params = getSessionProperty(CSL_PARAMS, {
 		'lang':  LANG,
 		'style': PORTAL.default.csl.style
@@ -73,23 +73,23 @@ function getCSLParam(key) {
 	return params[key];
 }
 
-function setCSLParams(params) {
+var setCSLParams = function(params) {
 	setSessionProperty(CSL_PARAMS, params);
 }
 
-function getBiblio(name, id) {
+var getBiblio = function(name, id) {
 	cslEngine = getCSLEngine(name, getCSLParam('style'), getCSLParam('lang'));
 	cslEngine.updateItems([id]);
 	result = cslEngine.makeBibliography(id);
 	return result[1].join('');
 }
 
-function setBiblio(name, element, reference) {
+var setBiblio = function(name, element, reference) {
 	element.setAttribute('data-ref', reference.id)
 	element.innerHTML = getBiblio(name, element.getAttribute('data-ref'));
 }
 
-function refreshBiblio(name, elements) {
+var refreshBiblio = function(name, elements) {
 	cslObjects = getCSLObjects(name);
 	if (cslObjects !== undefined && cslObjects !== null) {
 		[].forEach.call(elements, function(element) {
