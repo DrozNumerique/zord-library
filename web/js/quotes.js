@@ -13,16 +13,42 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 		});
 	};
+
 	var quotes = getCSLObjects('quotes');
 
-	[].forEach.call(document.getElementById('marker_styles_select').options, function(option) {
-		if (option.value == getCSLParam('style')) {
-			option.selected = true;
+	var checkQuotes = function() {
+		menu = document.getElementById('menu_quotes');
+		if (menu) {
+			active = false;
+			for (var key in quotes) {
+				active = true;
+				break;
+			}
+			if (active) {
+				menu.classList.remove('inactive');
+			} else {
+				menu.classList.add('inactive');
+			}
 		}
-	});
+	}
 
-	var saveCitations = function(){
+	checkQuotes();
+
+	marker_styles_select = document.getElementById('marker_styles_select');
+	if (marker_styles_select) {
+		[].forEach.call(marker_styles_select.options, function(option) {
+			if (option.value == getCSLParam('style')) {
+				option.selected = true;
+			}
+		});
+		marker_styles_select.addEventListener("change", function(event) {
+			renderBib();
+		});
+	}
+
+	var saveCitations = function() {
 		setCSLObjects('quotes', quotes);
+		checkQuotes();
 	};
 
 	var saveChangeNote = function(el){
@@ -99,29 +125,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	};
 
-	document.getElementById('marker_styles_select').addEventListener("change", function(event) {
-		renderBib();
-	});
-
-	document.getElementById('markers_export').addEventListener("click", function(event) {
-		markers = document.getElementById('markers').cloneNode(true);
-		[].forEach.call(markers.childNodes, function(marker) {
-			[].forEach.call(marker.querySelectorAll('span.marker-del, span.marker-addnote'), function(span) {
-				marker.removeChild(span);
+	markers_export = document.getElementById('markers_export');
+	if (markers_export) {
+		markers_export.addEventListener("click", function(event) {
+			markers = document.getElementById('markers').cloneNode(true);
+			[].forEach.call(markers.childNodes, function(marker) {
+				[].forEach.call(marker.querySelectorAll('span.marker-del, span.marker-addnote'), function(span) {
+					marker.removeChild(span);
+				});
+			});
+			invokeZord({
+				module:'Book',
+				action:'quotes',
+				markers:markers.innerHTML
 			});
 		});
-		invokeZord({
-			module:'Book',
-			action:'quotes',
-			markers:markers.innerHTML
-		});
-	});
+	}
 
-	document.getElementById('markers_clear').addEventListener("click", function(event) {
-		quotes = {};
-		saveCitations();
-		renderBib();
-	});
+	markers_clear = document.getElementById('markers_clear');
+	if (markers_clear) {
+		markers_clear.addEventListener("click", function(event) {
+			quotes = {};
+			saveCitations();
+			renderBib();
+		});
+	}
 	
 	[].forEach.call(document.querySelectorAll('.help_bubble_red'), function (el) {
 		el.addEventListener("click", function(event) {
@@ -129,5 +157,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	});
 
-	renderBib();
+	if (marker_styles_select) {
+		renderBib();
+	}
+	
 });

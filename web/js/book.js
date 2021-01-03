@@ -40,6 +40,10 @@ window.$quote = {
 										reference.zord_URL  = reference.baseURL + data.zord_path;
 									}
 									addCSLObject('quotes', reference);
+									menu = document.getElementById('menu_quotes');
+									if (menu) {
+										menu.classList.remove('inactive');
+									}
 								}
 							}
 						);

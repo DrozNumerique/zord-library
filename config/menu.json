@@ -10,7 +10,7 @@
 	},
 	"quotes": {
 		"type": "page",
-		"class": ["bright"]
+		"class": ["bright","inactive"]
 	},
 	"counter": {
 		"type": "shortcut",

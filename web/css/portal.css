@@ -249,6 +249,10 @@ input.account[type="submit"] {
 	margin:18px 5px;
 }
 
+#navbar li.inactive {
+	display: none;
+}
+
 #navbar select {
 	color:#FFFFFF;
 	border:none;

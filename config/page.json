@@ -57,10 +57,6 @@
 		"scripts": [
 			{
 				"type": "text/javascript",
-				"src": "/library/js/quotes.js"
-			},
-			{
-				"type": "text/javascript",
 				"src": "/library/js/biblio.js"
 			},
 			{

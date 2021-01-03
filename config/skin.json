@@ -27,6 +27,10 @@
 		"library": {
 			"type": "text/javascript",
 			"src": "/library/js/portal.js"
+		},
+		"quotes": {
+			"type": "text/javascript",
+			"src": "/library/js/quotes.js"
 		}
 	}
 }
