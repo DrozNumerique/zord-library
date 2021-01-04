@@ -19,15 +19,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var checkQuotes = function() {
 		menu = document.getElementById('menu_quotes');
 		if (menu) {
-			active = false;
+			empty = true;
 			for (var key in quotes) {
-				active = true;
+				empty = false;
 				break;
 			}
-			if (active) {
-				menu.classList.remove('inactive');
+			if (empty) {
+				menu.classList.remove('bright');
 			} else {
-				menu.classList.add('inactive');
+				menu.classList.add('bright');
 			}
 		}
 	}

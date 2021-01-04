@@ -567,6 +567,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	});
 	
+	document.getElementById('queryInput').addEventListener("keypress", function(event) {
+	    var key = event.which || event.keyCode;
+	    if (key === 13) {
+	    	fetch(getCriteria());
+	    }
+	});
+	
 	[].forEach.call(document.querySelectorAll('td.search'), function(td) {
 		td.addEventListener('click', function(event) {
 			var isbn = td.getAttribute('data-isbn');
@@ -576,13 +583,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				addCorpus(isbn);
 			}
 		});
-	});
-	
-	document.getElementById('queryInput').addEventListener("keypress", function(event) {
-	    var key = event.which || event.keyCode;
-	    if (key === 13) {
-	    	fetch(getCriteria());
-	    }
 	});
 	
 	var instances = document.getElementById('shelves').querySelectorAll('.keyword');
@@ -632,6 +632,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 window.addEventListener("load", function(event) {
+	
+	//$.fancybox.open(document.getElementById("searchResults").innerHTML);
 	
 	if (typeof ALERT !== 'undefined' && ALERT !== null && ALERT.length > 0) {
 		alert(ALERT);

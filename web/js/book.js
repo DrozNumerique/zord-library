@@ -42,7 +42,7 @@ window.$quote = {
 									addCSLObject('quotes', reference);
 									menu = document.getElementById('menu_quotes');
 									if (menu) {
-										menu.classList.remove('inactive');
+										menu.classList.add('bright');
 									}
 								}
 							}

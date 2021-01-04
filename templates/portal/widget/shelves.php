@@ -1,4 +1,4 @@
-		<div id="shelves">
+		<div id="shelves" class="<?php echo count($models['shelves']) == 1 && isset($models['shelves']['search']) ? 'results' : '' ?>">
 <?php if (isset($models['search']['matches'])) { ?>
     		<div id="fetch">
     			<span id="first" class="fa fa-backward fa-fw"></span>

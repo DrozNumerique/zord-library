@@ -16,4 +16,6 @@
   </div>
 </div>
 <?php } ?>
+<div id="searchResults" align="center">
 <?php $this->render('/portal/widget/shelves'); ?>
+</div>

@@ -1,6 +1,6 @@
 table {
 	background:#fff;
-	max-width:855px;
+	max-width:100%;
 	border-spacing:0;
 	margin:10px 0;
 	border-collapse:collapse;
@@ -12,6 +12,10 @@ table {
 
 table tr {
 	color: #666666;
+}
+
+table tr.matches {
+	background: #eaeaea;
 }
 
 table tr.unreadable {
