@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/<?php echo $css; ?>.css"/>
 <?php } ?>
     </head>
-    <body>
+    <body class="epub">
 		<div id="text">
 <?php echo $models['text']; ?>
 		</div>
