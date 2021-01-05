@@ -86,13 +86,18 @@ class Book extends Module {
     }
     
     public function search() {
+        $results = $this->classify($this->fetch());
+        $fetch = $this->params['fetch'] ?? false;
+        if ($fetch === 'true') {
+            return $this->view('/portal/widget/shelves', $results, 'text/html;charset=UTF-8', false, false);
+        }
         $facets = [];
         foreach ($this->facets() as $facet) {
             if (!empty($this->facets($facet))) {
                 $facets[] = $facet;
             }
         }
-        return $this->page('search', array_merge($this->classify($this->fetch()), ['pullout' => SEARCH_PULLOUT, 'facets' => $facets]));
+        return $this->page('search', array_merge($results, ['pullout' => SEARCH_PULLOUT, 'facets' => $facets]));
     }
     
     public function style($scope, $obfuscator, $path) {

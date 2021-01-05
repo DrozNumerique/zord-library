@@ -81,11 +81,7 @@
 	appearance: none;
 	-moz-appearance: none;
 	-webkit-appearance: none;
-	background: -webkit-linear-gradient(#6E97CB, #6E97CB) no-repeat, -webkit-linear-gradient(225deg, transparent 50%, #6E97CB 50%) no-repeat, -webkit-linear-gradient(315deg, transparent 50%, #6E97CB 50%) no-repeat, -webkit-linear-gradient(white, white) no-repeat;
-	background: linear-gradient(#6E97CB, #6E97CB) no-repeat, linear-gradient(-135deg, transparent 50%, #6E97CB 50%) no-repeat, linear-gradient(-225deg, transparent 50%, #6E97CB 50%) no-repeat, linear-gradient(white, white) no-repeat;
 	background-color: #6E97CB;
-	background-size: 1px 100%, 20px 20px, 20px 20px, 20px 60%;
-	background-position: right 20px center, right bottom, right bottom, right bottom;
 }
 
 #marker_styles_select:focus {

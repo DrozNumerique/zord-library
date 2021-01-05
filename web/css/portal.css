@@ -292,9 +292,9 @@ input.account[type="submit"] {
 	color: white !important;
 }
 
-#navbar li#menu_quotes:before {
+#navbar li#menu_quotes:before,
+#navbar li#menu_quotes:after {
 	color: white;
-	content: "“";
 	font-size: 2.2em;
 	position: relative;
 	left: 0px;
@@ -303,11 +303,22 @@ input.account[type="submit"] {
 	font-family: times;
 }
 
-#navbar li#menu_quotes:hover:before {
+#navbar li#menu_quotes:before {
+	content: "“";
+}
+
+#navbar li#menu_quotes:after {
+	content: "”";
+}
+
+
+#navbar li#menu_quotes:hover:before,
+#navbar li#menu_quotes:hover:after {
 	color: #A3CBFF;
 }
 
-#navbar li#menu_quotes.bright:hover:before {
+#navbar li#menu_quotes.bright:hover:before,
+#navbar li#menu_quotes.bright:hover:after {
 	color: white;
 }
 
@@ -439,6 +450,14 @@ form.account div {
 
 #shelves.results {
 	width: 1200px;
+}
+
+#shelves.popup {
+	display: none;
+}
+
+#shelves.results div.tabs {
+	display: none;
 }
 
 #shelves .apart {

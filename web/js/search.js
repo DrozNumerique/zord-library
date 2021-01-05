@@ -196,29 +196,16 @@ function getCriteria() {
 		from:getYear('search_source_from'),
 		to:getYear('search_source_to')
 	}
+	rows = Number(document.getElementById('searchSize').value);
 	searchCriteria = {
 		query:query,
 		scope:searchScope,
 		filters:filters,
 		operator:operator,
-		context:CONTEXT
+		context:CONTEXT,
+		start:0,
+		rows:rows
 	};
-}
-
-function fetch(start, rows) {
-	if (start == undefined || start == null) {
-		start = 0;
-	}
-	if (rows == undefined || rows == null) {
-		rows = Number(document.getElementById('searchSize').value);
-	}
-	searchCriteria.start = start;
-	searchCriteria.rows = rows;
-	setContextProperty('search.criteria', searchCriteria);
-	searchHistory.push(searchCriteria);
-	searchIndex = searchHistory.length;
-	saveHistory();
-	search(searchCriteria, undefined, true);
 }
 
 function updateSelectedCorpus(books) {
@@ -254,8 +241,179 @@ function updateCorpus(only) {
 		refreshBiblio('corpus',	list);
 	}
 }
+	
+function removeCorpus(books, results, isbn) {
+	if (results) {
+		var search = results.querySelector('td.search[data-isbn="' + isbn + '"]');
+		if (search) {
+			search.classList.remove('selected');
+		}
+	}
+	var entry = books.querySelector('li[data-isbn="' + isbn + '"]');
+	if (entry) {
+		removeCSLObject('corpus', entry.getAttribute('data-ref'));
+		books.removeChild(entry);
+		updateSelectedCorpus(books.querySelectorAll('li[data-isbn]'));
+	}
+}
+	
+function addCorpus(books, results, isbn, reference) {
+	var entry = books.querySelector('li[data-isbn="' + isbn + '"]');
+	if (entry) {
+		return;
+	}
+	if (results) {
+		var search = results.querySelector('td.search[data-isbn="' + isbn + '"]');
+		if (search) {
+			search.classList.add('selected');
+		}
+	}
+	entry = document.createElement('li');
+	entry.setAttribute('data-isbn', isbn);
+	entry.addEventListener('click', function(event) {
+		removeCorpus(books, results, entry.getAttribute('data-isbn'));
+	});
+	books.appendChild(entry);
+	updateSelectedCorpus(books.querySelectorAll('li[data-isbn]'));
+	if (reference !== undefined && reference !== null) {
+		setBiblio('corpus', entry, reference);
+	} else {
+		invokeZord({
+			module:'Book',
+			action:'reference',
+			isbn:isbn,
+			success:function(reference) {
+				addCSLObject('corpus', reference);
+				setBiblio('corpus', entry, reference);
+			}
+		});
+	}
+}
+
+function updateResults(start, rows) {
+	searchCriteria.start = start;
+	searchCriteria.rows = rows;
+	setContextProperty('search.criteria', searchCriteria);
+	searchHistory.push(searchCriteria);
+	searchIndex = searchHistory.length;
+	saveHistory();
+	search(searchCriteria, function(html) {
+		nodes = $.parseHTML(html);
+		results = null;
+		$.each(nodes, function(index, node) {
+			if (node.nodeName == 'DIV' && node.classList.contains('results')) {
+				results = node;
+			}
+		});
+		if (results) {
+	 		popup = results.classList.contains('popup');
+			if (popup && document.querySelector('div.fancybox-container') !== null) {
+				$.fancybox.close();
+			}
+			parent = document.getElementById('searchResults');
+			if (parent) {
+				parent.replaceChild(results, parent.firstElementChild);
+				if (popup) {
+					popupResults();
+				} else {
+					dressResults(results);
+				}
+			}
+		}
+	});
+}
+
+var dressResults = function(results, popup) {
+	showPanel('search', true);
+	if (popup !== undefined && popup == true) {
+		dressSortingToggles(results);
+	}
+	books = document.getElementById('books');
+	if (books) {
+		[].forEach.call(results.querySelectorAll('td.search'), function(td) {
+			td.addEventListener('click', function(event) {
+				var isbn = td.getAttribute('data-isbn');
+				if (td.classList.contains('selected')) {
+					removeCorpus(books, results, isbn);
+				} else {
+					addCorpus(books, results, isbn);
+				}
+			});
+		});
+	}
+	[].forEach.call(results.querySelectorAll('.keyword'), function(instance) {
+		instance.addEventListener("click", function(event) {
+			var snip = this.parentNode;
+			var isbn = snip.getAttribute('data-book');
+			var part = snip.getAttribute('data-part');
+			var match = snip.getAttribute('data-match');
+			var index = snip.getAttribute('data-index');
+			invokeZord({
+				module:"Book",
+				action:"show",
+				isbn:isbn,
+				part:part,
+				search:SEARCH,
+				match:match,
+				index:index
+			});
+		});
+	});
+	[].forEach.call(['first','previous','next','last'], function(id) {
+		var control = results.querySelector('div.fetch span.' + id);
+		var start = Number(results.dataset.start);
+		var rows  = Number(results.dataset.rows);
+		var found = Number(results.dataset.found);
+		if (control) {
+			if ((start == 0 && (id == 'first' || id == 'previous')) ||
+				(start + rows >= found && (id == 'next' || id == 'last'))) {
+				control.classList.add('disabled');
+			} else {
+				control.addEventListener("click", function(event) {
+					var newStart;
+					switch(id) {
+						case 'first': {
+							newStart = 0;
+							break;
+						}
+						case 'previous': {
+							newStart = (Math.trunc(start / rows) - 1) * rows;
+							break;
+						}
+						case 'next': {
+							newStart = (Math.trunc(start / rows) + 1) * rows;
+							break;
+						}
+						case 'last': {
+							newStart = (Math.trunc((found - 1) / rows)) * rows;
+							break;
+						}
+					}
+					if (newStart >= 0) {
+						updateResults(newStart, rows);
+					}
+				});
+			}
+		}
+	});
+}
+
+var popupResults = function() {
+	$.fancybox.open(document.getElementById("searchResults").innerHTML);
+	results = document.querySelector('div.fancybox-slide--html.fancybox-slide--current div.results');
+	results.style.display = 'inline-block';
+	dressResults(results, true);
+}
 
 document.addEventListener("DOMContentLoaded", function(event) {
+
+	var refine     = document.getElementById('searchRefine');
+	var controls   = document.getElementById('searchControls');
+	var rows       = document.getElementById('searchSize');
+	var titles     = document.getElementById('titles');
+	var books      = document.getElementById('books');
+	var results    = document.getElementById('shelves');
+	var references = getCSLObjects('corpus');
 
 	if (searchFacets == undefined) {
 		searchFacets = {};
@@ -352,7 +510,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	}
 
-	var titles = document.getElementById('titles');
 	if (titles) {
 		titles.setAttribute('data-loading', 'true');
 		for (var key in searchTitles) {
@@ -365,11 +522,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		titles.setAttribute('data-loading', 'false');
 		window.dispatchEvent(new Event("selectLoaded"));
 		$('#titles').on('change', function(event) {
-			addCorpus(titles.value);
+			addCorpus(books, results, titles.value);
 		});
 	}
 	
-	var books = document.getElementById('books');
 	if (books) {
 		[].forEach.call(books.querySelectorAll('li[data-isbn]'), function(entry) {
 			var isbn = entry.getAttribute('data-isbn');
@@ -392,9 +548,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	}
 	
-	var refine   = document.getElementById('searchRefine');
-	var controls = document.getElementById('searchControls');
-
+	if (results) {
+		dressResults(results);
+	}
+	
 	function switchRefine(status) {
 		if (status) {
 			refine.classList.add('opened');
@@ -456,9 +613,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		saveHistory();
 	});
 	
-	[].forEach.call(document.querySelectorAll('#queryButton, button.search'), function(search) {
-		search.addEventListener("click", function(event) {
-			fetch(getCriteria());
+	[].forEach.call(document.querySelectorAll('#queryButton, button.search'), function(button) {
+		button.addEventListener("click", function(event) {
+			getCriteria();
+			updateResults(0, rows.value);
 		});
 	});
 	
@@ -474,139 +632,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			});
 		});
 	});
-
-	[].forEach.call(['first','previous','next','last'], function(id) {
-		var control = document.getElementById(id);
-		if (control) {
-			if ((START == 0 && (id == 'first' || id == 'previous')) ||
-				(START + ROWS >= FOUND && (id == 'next' || id == 'last'))) {
-				control.classList.add('disabled');
-			} else {
-				control.addEventListener("click", function(event) {
-					var newStart;
-					switch(id) {
-						case 'first': {
-							newStart = 0;
-							break;
-						}
-						case 'previous': {
-							newStart = (Math.trunc(START / ROWS) - 1) * ROWS;
-							break;
-						}
-						case 'next': {
-							newStart = (Math.trunc(START / ROWS) + 1) * ROWS;
-							break;
-						}
-						case 'last': {
-							newStart = (Math.trunc((FOUND - 1) / ROWS)) * ROWS;
-							break;
-						}
-					}
-					if (newStart >= 0) {
-						fetch(newStart, ROWS);
-					}
-				});
-			}
-		}
-	});
-	
-	function removeCorpus(isbn) {
-		var search = document.querySelector('td.search[data-isbn="' + isbn + '"]');
-		if (search) {
-			search.classList.remove('selected');
-		}
-		var entry = books.querySelector('li[data-isbn="' + isbn + '"]');
-		if (entry) {
-			removeCSLObject('corpus', entry.getAttribute('data-ref'));
-			books.removeChild(entry);
-			updateSelectedCorpus(books.querySelectorAll('li[data-isbn]'));
-		}
-	}
-	
-	function addCorpus(isbn, reference) {
-		var entry = books.querySelector('li[data-isbn="' + isbn + '"]');
-		if (entry) {
-			return;
-		}
-		var search = document.querySelector('td.search[data-isbn="' + isbn + '"]');
-		if (search) {
-			search.classList.add('selected');
-		}
-		entry = document.createElement('li');
-		entry.setAttribute('data-isbn', isbn);
-		entry.addEventListener('click', function(event) {
-			removeCorpus(entry.getAttribute('data-isbn'));
-		});
-		books.appendChild(entry);
-		updateSelectedCorpus(books.querySelectorAll('li[data-isbn]'));
-		if (reference !== undefined && reference !== null) {
-			setBiblio('corpus', entry, reference);
-		} else {
-			invokeZord({
-				module:'Book',
-				action:'reference',
-				isbn:isbn,
-				success:function(reference) {
-					addCSLObject('corpus', reference);
-					setBiblio('corpus', entry, reference);
-				}
-			});
-		}
-	}
-	
-	var references = getCSLObjects('corpus');
+		
 	if (references !== undefined && references !== null) {
 		for (var id in references) {
-			addCorpus(references[id].ean, references[id]);
+			addCorpus(books, results, references[id].ean, references[id]);
 		}
 	}
 
 	[].forEach.call(document.querySelectorAll('#books > li[data-isbn]'), function(entry) {
 		entry.addEventListener('click', function(event) {
-			removeCorpus(entry.getAttribute('data-isbn'));
+			removeCorpus(books, results, entry.getAttribute('data-isbn'));
 		});
 	});
 	
 	document.getElementById('queryInput').addEventListener("keypress", function(event) {
 	    var key = event.which || event.keyCode;
 	    if (key === 13) {
-	    	fetch(getCriteria());
+			getCriteria();
+			updateResults(0, rows.value)
 	    }
 	});
-	
-	[].forEach.call(document.querySelectorAll('td.search'), function(td) {
-		td.addEventListener('click', function(event) {
-			var isbn = td.getAttribute('data-isbn');
-			if (td.classList.contains('selected')) {
-				removeCorpus(isbn);
-			} else {
-				addCorpus(isbn);
-			}
-		});
-	});
-	
-	var instances = document.getElementById('shelves').querySelectorAll('.keyword');
-	if (instances) {
-		[].forEach.call(instances, function(instance) {
-			instance.addEventListener("click", function(event) {
-				var snip = this.parentNode;
-				var isbn = snip.getAttribute('data-book');
-				var part = snip.getAttribute('data-part');
-				var match = snip.getAttribute('data-match');
-				var index = snip.getAttribute('data-index');
-				invokeZord({
-					module:"Book",
-					action:"show",
-					isbn:isbn,
-					part:part,
-					search:SEARCH,
-					match:match,
-					index:index
-				});
-			});
-		});
-	}
-	
+		
 	[].forEach.call(document.querySelectorAll('select.facet'), function(select) {
 		var background = select.style.background;
 		select.style.background = "url('/img/wait.gif') no-repeat center";
@@ -633,7 +679,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 window.addEventListener("load", function(event) {
 	
-	//$.fancybox.open(document.getElementById("searchResults").innerHTML);
+	if (SEARCH !== 'none' && POPUP) {
+		popupResults();
+	}
 	
 	if (typeof ALERT !== 'undefined' && ALERT !== null && ALERT.length > 0) {
 		alert(ALERT);

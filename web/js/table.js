@@ -80,9 +80,9 @@ var quick = function(rows, column, order) {
 	  }
 	  return quick(left, column, order).concat(pivot, quick(right, column, order));
 };
-	
-document.addEventListener("DOMContentLoaded", function(event) {
-	[].forEach.call(document.querySelectorAll('thead .sort'), function (toggle) {
+
+var dressSortingToggles = function(element) {
+	[].forEach.call(element.querySelectorAll('thead .sort'), function (toggle) {
 		toggle.addEventListener("click", function(event) {
 			toggle.style.cursor = 'wait';
 			document.body.style.cursor = 'wait';
@@ -118,5 +118,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			document.body.style.cursor = 'auto';
 		});
 	});
+}
+	
+document.addEventListener("DOMContentLoaded", function(event) {
+	dressSortingToggles(document);
 });
 

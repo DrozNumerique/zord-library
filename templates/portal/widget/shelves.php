@@ -1,11 +1,11 @@
-		<div id="shelves" class="<?php echo count($models['shelves']) == 1 && isset($models['shelves']['search']) ? 'results' : '' ?>">
+		<div id="shelves" data-start="<?php echo $models['search']['criteria']['start'] ?? 0 ?>" data-rows="<?php echo $models['search']['criteria']['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE; ?>" data-found="<?php echo $models['search']['found'] ?? 0; ?>" class="<?php echo count($models['shelves']) == 1 && isset($models['shelves']['search']) ? 'results'.(POPUP_SEARCH_RESULTS ? ' popup' : '') : '' ?>">
 <?php if (isset($models['search']['matches'])) { ?>
-    		<div id="fetch">
-    			<span id="first" class="fa fa-backward fa-fw"></span>
-    			<span id="previous" class="fa fa-step-backward fa-fw"></span>
-    			<span id="resultSet"><?php echo ($models['search']['criteria']['start'] + 1).$locale->to.($models['search']['end']).$locale->outof.$models['search']['found']; ?></span>
-    			<span id="next" class="fa fa-step-forward fa-fw"></span>
-    			<span id="last" class="fa fa-forward fa-fw"></span>
+    		<div class="fetch">
+    			<span class="first fa fa-backward fa-fw"></span>
+    			<span class="previous fa fa-step-backward fa-fw"></span>
+    			<span class="resultSet"><?php echo ($models['search']['criteria']['start'] + 1).$locale->to.($models['search']['end']).$locale->outof.$models['search']['found']; ?></span>
+    			<span class="next fa fa-step-forward fa-fw"></span>
+    			<span class="last fa fa-forward fa-fw"></span>
     		</div>
 <?php } ?>
 <?php foreach ($models['shelves'] as $name => $shelf) { ?>

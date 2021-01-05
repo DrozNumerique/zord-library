@@ -29,16 +29,23 @@ var toScroll = function() {
 	}
 };
 
-var search = function(criteria, callback, wait) {
+var search = function(criteria, callback) {
+	fetch = (callback === undefined || typeof callback !== 'function') ? 'false' : 'true';
 	invokeZord({
 		module:"Book",
 		action:"search",
+		fetch: fetch,
 		criteria:JSON.stringify(criteria),
 		before:function() {
 			$dialog.wait();
 		},
 		after:function() {
 			$dialog.hide();
+		},
+		success: function(html) {
+			if (callback !== undefined && typeof callback == 'function') {
+				callback(html);
+			}
 		}
 	});
 }
