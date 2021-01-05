@@ -180,7 +180,7 @@ function searchInBook() {
 		setContextProperty('search.index',    searchIndex);
 		setContextProperty('search.history',  searchHistory);
 		setContextProperty('search.criteria', searchCriteria);
-		search(searchCriteria, undefined, false);
+		search(searchCriteria);
 	}
 }
 

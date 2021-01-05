@@ -3,9 +3,9 @@
     <head>
         <title><?php echo htmlspecialchars($models['title']); ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/common.css"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/epub.css"/>
+<?php foreach ($models['styles'] as $css) { ?>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/<?php echo $css; ?>.css"/>
+<?php } ?>
     </head>
     <body>
 		<div id="text">

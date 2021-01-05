@@ -36,9 +36,9 @@
 	<manifest>
 		<item id="ncx" href="navigation.ncx" media-type="application/x-dtbncx+xml"/>
 		<item id="nav" href="navigation.xhtml" media-type="application/xhtml+xml" properties="nav"/>
-		<item id="common-css" href="css/common.css" media-type="text/css"/>
-		<item id="screen-css" href="css/screen.css" media-type="text/css"/>
-		<item id="epub-css" href="css/epub.css" media-type="text/css"/>
+<?php foreach ($models['styles'] as $css) { ?>
+		<item id="<?php echo $css; ?>-css" href="css/<?php echo $css; ?>.css" media-type="text/css"/>
+<?php } ?>
 		<item id="cover-page" href="cover.xhtml" media-type="application/xhtml+xml"/>
 		<item id="cover-image" href="medias/cover.jpg" media-type="image/jpeg"/>
 <?php foreach ($models['items'] as $path => $info) { ?>

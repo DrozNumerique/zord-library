@@ -106,8 +106,9 @@ class Book extends Module {
     
     public function styles($media, $obfuscator = null) {
         $styles = [];
-        foreach (['common',$media] as $scope) {
-            $styles[] = $this->style($scope, $obfuscator, '/library');
+        $scopes = array_merge(['common'], is_array($media) ? $media : [$media]);
+        foreach ($scopes as $scope) {
+            $styles[$scope] = $this->style($scope, $obfuscator, '/library');
         }
         return $styles;
     }

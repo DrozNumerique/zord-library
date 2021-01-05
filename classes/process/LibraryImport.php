@@ -802,12 +802,15 @@ class LibraryImport extends Import {
                 }
                 Zord::addRecursive($epub, Zord::getComponentPath('templates'.DS.'epub'));
                 $obfuscator = new Obfuscator();
-                foreach (['common','screen','epub'] as $css) {
+                $styles = array_keys(Zord::getInstance('Book', null)->styles(['screen','epub']));
+                foreach ($styles as $css) {
                     $file = Zord::getComponentPath('web'.DS.'css'.DS.'book'.DS.$css.'.css');
-                    if (OBFUSCATE_BOOK) {
-                        $file = BUILD_FOLDER.$obfuscator->getCSS($css);
+                    if ($file) {
+                        if (OBFUSCATE_BOOK) {
+                            $file = BUILD_FOLDER.$obfuscator->getCSS($css);
+                        }
+                        $epub->addFromString('OPF/css/'.$css.'.css', file_get_contents($file));
                     }
-                    $epub->addFromString('OPF/css/'.$css.'.css', file_get_contents($file));
                 }
                 $id = 1;
                 $items = [];
@@ -815,6 +818,7 @@ class LibraryImport extends Import {
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
+                        $part['styles'] = $styles;
                         $part['text'] = Library::data($ean, $part['name'].'.xhtml', 'content');
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
@@ -907,7 +911,8 @@ class LibraryImport extends Import {
                     $epub->addFromString('OPF/'.$metaFile, (new View('/epub/OPF/'.$metaFile, [
                         'metadata' => $metadata,
                         'navbar'   => $navbar,
-                        'items'    => $items
+                        'items'    => $items,
+                        'styles'   => $styles
                     ]))->render());
                 }
                 if ($epub->close()) {

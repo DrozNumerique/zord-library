@@ -31,7 +31,7 @@ var toScroll = function() {
 
 var search = function(criteria, callback) {
 	fetch = (callback === undefined || typeof callback !== 'function') ? 'false' : 'true';
-	invokeZord({
+	parameters = {
 		module:"Book",
 		action:"search",
 		fetch: fetch,
@@ -41,13 +41,14 @@ var search = function(criteria, callback) {
 		},
 		after:function() {
 			$dialog.hide();
-		},
-		success: function(html) {
-			if (callback !== undefined && typeof callback == 'function') {
-				callback(html);
-			}
 		}
-	});
+	};
+	if (fetch == 'true') {
+		parameters['success'] = function(html) {
+			callback(html);
+		}
+	}
+	invokeZord(parameters);
 }
 
 window.addEventListener("load", function(event) {
