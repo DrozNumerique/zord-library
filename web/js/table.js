@@ -82,42 +82,45 @@ var quick = function(rows, column, order) {
 };
 
 var dressSortingToggles = function(element) {
-	[].forEach.call(element.querySelectorAll('thead .sort'), function (toggle) {
-		toggle.addEventListener("click", function(event) {
-			toggle.style.cursor = 'wait';
-			document.body.style.cursor = 'wait';
-			var table = toggle.parentNode;
-			while (table !== undefined && table.tagName !== 'TABLE') {
-				table = table.parentNode;
-			}
-			if (table !== undefined) {
-				var column = toggle.getAttribute('data-column');
-				var order = toggle.hasAttribute('data-order') ? toggle.getAttribute('data-order') : 'ASC';
-				sort(table, column, order);
-				[].forEach.call(table.querySelectorAll('thead .sort .fa'), function (icon) {
-					icon.classList.remove('fa-caret-up');
-					icon.classList.remove('fa-caret-down');
-					icon.classList.add('fa-sort');
-				});
-				if (order == 'ASC') {
-					[].forEach.call(toggle.querySelectorAll('.fa'), function (icon) {
-						icon.classList.remove('fa-sort');
-						icon.classList.add('fa-caret-up');
-					});
-					order = 'DESC';
-				} else {
-					[].forEach.call(toggle.querySelectorAll('.fa'), function (icon) {
-						icon.classList.remove('fa-sort');
-						icon.classList.add('fa-caret-down');
-					});
-					order = 'ASC';
+	if (element.dataset.dressed == undefined || element.dataset.dressed !== 'true') {
+		[].forEach.call(element.querySelectorAll('thead .sort'), function (toggle) {
+			toggle.addEventListener("click", function(event) {
+				toggle.style.cursor = 'wait';
+				document.body.style.cursor = 'wait';
+				var table = toggle.parentNode;
+				while (table !== undefined && table.tagName !== 'TABLE') {
+					table = table.parentNode;
 				}
-				toggle.setAttribute('data-order', order);
-			}
-			toggle.style.cursor = 'pointer';
-			document.body.style.cursor = 'auto';
+				if (table !== undefined) {
+					var column = toggle.getAttribute('data-column');
+					var order = toggle.hasAttribute('data-order') ? toggle.getAttribute('data-order') : 'ASC';
+					sort(table, column, order);
+					[].forEach.call(table.querySelectorAll('thead .sort .fa'), function (icon) {
+						icon.classList.remove('fa-caret-up');
+						icon.classList.remove('fa-caret-down');
+						icon.classList.add('fa-sort');
+					});
+					if (order == 'ASC') {
+						[].forEach.call(toggle.querySelectorAll('.fa'), function (icon) {
+							icon.classList.remove('fa-sort');
+							icon.classList.add('fa-caret-up');
+						});
+						order = 'DESC';
+					} else {
+						[].forEach.call(toggle.querySelectorAll('.fa'), function (icon) {
+							icon.classList.remove('fa-sort');
+							icon.classList.add('fa-caret-down');
+						});
+						order = 'ASC';
+					}
+					toggle.setAttribute('data-order', order);
+				}
+				toggle.style.cursor = 'pointer';
+				document.body.style.cursor = 'auto';
+			});
 		});
-	});
+		element.dataset.dressed = 'true';
+	}
 }
 	
 document.addEventListener("DOMContentLoaded", function(event) {

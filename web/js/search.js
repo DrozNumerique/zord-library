@@ -323,11 +323,9 @@ function updateResults(start, rows) {
 	});
 }
 
-var dressResults = function(results, popup) {
+var dressResults = function(results) {
 	showPanel('search', true);
-	if (popup !== undefined && popup == true) {
-		dressSortingToggles(results);
-	}
+	dressSortingToggles(results);
 	books = document.getElementById('books');
 	if (books) {
 		[].forEach.call(results.querySelectorAll('td.search'), function(td) {
@@ -408,7 +406,8 @@ var popupResults = function() {
 	$.fancybox.open(document.getElementById("searchResults").innerHTML);
 	results = document.querySelector('div.fancybox-slide--html.fancybox-slide--current div.results');
 	results.style.display = 'inline-block';
-	dressResults(results, true);
+	results.dataset.dressed = 'false';
+	dressResults(results);
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
