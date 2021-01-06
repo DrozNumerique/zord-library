@@ -385,6 +385,8 @@ div.fetch {
 div.fetch span.first, div.fetch span.previous, div.fetch span.next, div.fetch span.last {
 	color: gray;
 	cursor: pointer;
+	top: -1px;
+	position: relative;
 }
 
 div.fetch span.first.disabled, div.fetch span.previous.disabled, div.fetch span.next.disabled, div.fetch span.last.disabled {
@@ -394,6 +396,21 @@ div.fetch span.first.disabled, div.fetch span.previous.disabled, div.fetch span.
 
 div.fetch span.resultSet {
 	color: black;
+}
+
+div.fetch span.resultSet.select {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+div.fetch span.resultSet select {
+	appearance: none;
+	border: none;
+	background: white;
+	font-family: inherit;
+	font-size: inherit;
+	text-align: center;
+	cursor: pointer;
 }
 
 div#selected {

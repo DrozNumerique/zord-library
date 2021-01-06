@@ -28,7 +28,7 @@
     			</div>
     			<div id="search_type">
     				<input id="searchInIndex" type="checkbox"/>
-    				<label for="searchInIndex" ><?php echo $locale->include_index; ?></label>
+    				<label for="searchInIndex"><?php echo $locale->include_index; ?></label>
     			</div>
     			<div id="search_size">
     				<label for="searchSize" ><?php echo $locale->page_size; ?></label>

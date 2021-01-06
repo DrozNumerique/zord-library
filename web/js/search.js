@@ -359,11 +359,17 @@ var dressResults = function(results, popup) {
 			});
 		});
 	});
+	var rows  = Number(results.dataset.rows);
+	var start = Number(results.dataset.start);
+	var found = Number(results.dataset.found);
+	select = results.querySelector('div.fetch span select');
+	if (select) {
+		select.addEventListener('change', function(event) {
+			updateResults(select.value, rows);
+		});
+	}
 	[].forEach.call(['first','previous','next','last'], function(id) {
 		var control = results.querySelector('div.fetch span.' + id);
-		var start = Number(results.dataset.start);
-		var rows  = Number(results.dataset.rows);
-		var found = Number(results.dataset.found);
 		if (control) {
 			if ((start == 0 && (id == 'first' || id == 'previous')) ||
 				(start + rows >= found && (id == 'next' || id == 'last'))) {

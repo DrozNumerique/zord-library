@@ -3,7 +3,12 @@
     		<div class="fetch">
     			<span class="first fa fa-backward fa-fw"></span>
     			<span class="previous fa fa-step-backward fa-fw"></span>
-    			<span class="resultSet"><?php echo ($models['search']['criteria']['start'] + 1).$locale->to.($models['search']['end']).$locale->outof.$models['search']['found']; ?></span>
+    			<span class="resultSet select"><select>
+<?php   for ($index = 0; $index < $models['search']['found']; $index += ($models['search']['criteria']['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE)) { ?>
+						<option value="<?php echo $index; ?>"<?php echo $index == $models['search']['criteria']['start'] ? ' selected' : ''?>><?php echo ($index + 1).$locale->to.min([$index + $models['search']['criteria']['rows'], $models['search']['found']]); ?></option>	
+<?php   } ?>
+    			</select></span>
+    			<span class="resultSet found"><?php echo $locale->outof.$models['search']['found']; ?></span>
     			<span class="next fa fa-step-forward fa-fw"></span>
     			<span class="last fa fa-forward fa-fw"></span>
     		</div>
