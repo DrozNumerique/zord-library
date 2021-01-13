@@ -124,6 +124,6 @@ var dressSortingToggles = function(element) {
 }
 	
 document.addEventListener("DOMContentLoaded", function(event) {
-	dressSortingToggles(document);
+	dressSortingToggles(document.body);
 });
 
