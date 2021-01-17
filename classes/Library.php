@@ -234,4 +234,23 @@ class Library {
 	    }
 	    return implode(',', $categories);
 	}
+	
+	public static function facets($context, $type) {
+	    $facets = [];
+	    foreach (self::inContext($context, 'BookHasFacetEntity', "BookHasFacetEntity.facet = '".$type."'") as $facet) {
+	        $facets[] = $facet->value;
+	    }
+	    return $facets;
+	}
+	
+	public static function inContext($context, $type, $where = null) {
+	    return (new $type())->retrieve([
+	        'many'  => true,
+	        'join'  => 'BookHasContextEntity',
+	        'where' => [
+	            'raw'        => 'BookHasContextEntity.context = ?'.(isset($where) ? ' AND '.$where : ''),
+	            'parameters' => [$context]
+	        ]
+	    ]);
+	}
 }

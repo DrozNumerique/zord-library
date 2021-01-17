@@ -2,8 +2,6 @@ var searchRefine   = getContextProperty('search.refine', false);
 var searchHistory  = getContextProperty('search.history', []);
 var searchIndex    = getContextProperty('search.index', 0);
 var searchScope    = getContextProperty('search.scope', PORTAL.default.search.scope);
-var searchFacets   = getContextProperty('search.facets', undefined);
-var searchTitles   = getContextProperty('search.titles', undefined);
 var searchCriteria = getContextProperty('search.criteria', {
 	filters: {
 		contentType: PORTAL.default.search.type,
@@ -419,53 +417,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var books      = document.getElementById('books');
 	var results    = document.getElementById('shelves');
 	var references = getCSLObjects('corpus');
-
-	if (searchFacets == undefined) {
-		searchFacets = {};
-		invokeZord({
-			module: 'Book',
-			action: 'facets',
-			async:  false,
-			before: function() {
-				$dialog.wait();
-			},
-			after: function() {
-				$dialog.hide();
-			},
-			success: function(facets) {
-				[].forEach.call(facets, function(facet) {
-					invokeZord({
-						module:'Book',
-						action:'facets',
-						key:   facet,
-						async: false,
-						success: function(entries) {
-							searchFacets[facet] = entries;
-							setContextProperty('search.facets', searchFacets);
-						}
-					});
-				});
-			}
-		});
-	}
-
-	if (searchTitles == undefined) {
-		invokeZord({
-			module:'Book',
-			action:'titles',
-			async: false,
-			before: function() {
-				$dialog.wait();
-			},
-			after: function() {
-				$dialog.hide();
-			},
-			success: function(titles) {
-				searchTitles = titles;
-				setContextProperty('search.titles', searchTitles);
-			}
-		});
-	}
 	
 	[].forEach.call(document.querySelectorAll('div[data-scope="' + searchScope + '"]'), function(element) {
 		element.classList.add('current');
@@ -481,6 +432,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	updateCorpus();
 	refreshHistory();
+	loadOptions();
 
 	if (searchCriteria.filters !== undefined) {
 		if (searchCriteria.filters.contentType !== undefined && Array.isArray(searchCriteria.filters.contentType)) {
@@ -517,10 +469,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	if (titles) {
 		titles.setAttribute('data-loading', 'true');
-		for (var key in searchTitles) {
+		for (var key in PORTAL.options['titles']) {
 			var option = document.createElement('option');
 			option.value = key;
-			var text = document.createTextNode(searchTitles[key]);
+			var text = document.createTextNode(PORTAL.options['titles'][key]);
 			option.appendChild(text);
 			titles.appendChild(option);
 		}
@@ -662,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var background = select.style.background;
 		select.style.background = "url('/img/wait.gif') no-repeat center";
 		select.setAttribute('data-loading', 'true');
-		for (var key in searchFacets[select.id]) {
+		for (var key in PORTAL.options[select.id]) {
 			var option = document.createElement('option');
 			option.value = key;
 			if (searchCriteria.filters !== undefined && searchCriteria.filters !== null) {
@@ -671,7 +623,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					option.selected = true;
 				}
 			}
-			var text = document.createTextNode(searchFacets[select.id][key]);
+			var text = document.createTextNode(PORTAL.options[select.id][key]);
 			option.appendChild(text);
 			select.appendChild(option);
 		}

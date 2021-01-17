@@ -74,15 +74,6 @@
 				"book": "FILTER_SANITIZE_STRING"
 			}
 		},
-		"facets": {
-			"response": "DATA",
-			"parameters": {
-				"key": "FILTER_SANITIZE_STRING"
-			}
-		},
-		"titles": {
-			"response": "DATA"
-		},
 		"counter": {
 			"shortcut": "counter",
 			"parameters": {

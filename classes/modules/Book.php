@@ -92,9 +92,9 @@ class Book extends Module {
             return $this->view('/portal/widget/shelves', $results, 'text/html;charset=UTF-8', false, false);
         }
         $facets = [];
-        foreach ($this->facets() as $facet) {
-            if (!empty($this->facets($facet))) {
-                $facets[] = $facet;
+        foreach (Zord::value('search', 'facets') ?? [] as $type) {
+            if (!empty(Library::facets($this->context, $type))) {
+                $facets[] = $type;
             }
         }
         return $this->page('search', array_merge($results, ['pullout' => SEARCH_PULLOUT, 'facets' => $facets]));
@@ -500,71 +500,6 @@ class Book extends Module {
         }
         return false;
     }
-
-    public function titles() {
-        $titles = [];
-        foreach ($this->inContext('BookEntity') as $book) {
-            $titles[$book->ean] = Library::title($book->title, $book->subtitle);
-        }
-        Zord::sort($titles);
-        return $titles;
-    }
-    
-    public function facets($type = null) {
-        if (isset($type)) {
-            $facets = [];
-            foreach ($this->inContext('BookHasFacetEntity', "BookHasFacetEntity.facet = '".$type."'") as $facet) {
-                $facets[] = $facet->value;
-            }
-            return $facets;
-        }
-        if (isset($this->params['key'])) {
-            $name = $this->params['key'];
-            $facets = $this->facets($name);
-            $keys   = [];
-            $values = [];
-            $locale = Zord::value($name, $this->context);
-            foreach ($facets as $key) {
-                if (isset($locale)) {
-                    if (isset($locale[$key])) {
-                        $keys[$key]   = $key;
-                        $values[$key] = $locale[$key];
-                    }
-                } else {
-                    $keys[$key]   = $key;
-                    $values[$key] = $key;
-                }
-            }
-            $facets = array_combine($keys, $values);
-            Zord::sort($facets);
-            return $facets;
-        } else {
-            return Zord::value('search', 'facets');
-        }
-    }
-
-/*
-    public function facets() {
-        $field = $this->field($this->params['key']);
-        $client = new SolrClient(Zord::value('connection', ['solr','zord']));
-        $query = new SolrQuery();
-        $query->setQuery('*.*');
-        $query->setRows(0);
-        $query->setFacet(true);
-        $query->addFacetField($field);
-        $query->addFilterQuery($this->inContextFilterQuery());
-        $result = $client->query($query)->getResponse();
-        $list = $result['facet_counts']['facet_fields'][$field];
-        $facets = [];
-        foreach ($list as $index => $entry) {
-            if (($index + 1) % 2 && (!is_string($entry) || $entry !== "")) {
-                $facets[$entry] = $list[$index + 1];
-            }
-        }
-        ksort($facets);
-        return array_keys($facets);
-    }
-*/
     
     public function criteria() {
         $criteria = json_decode($this->params['criteria']);
@@ -628,17 +563,6 @@ class Book extends Module {
             ]);
         }
         return ['send' => $send];
-    }
-    
-    private function inContext($type, $where = null) {
-        return (new $type())->retrieve([
-            'many'  => true,
-            'join'  => 'BookHasContextEntity',
-            'where' => [
-                'raw'        => 'BookHasContextEntity.context = ?'.(isset($where) ? ' AND '.$where : ''),
-                'parameters' => [$this->context]
-            ]
-        ]);
     }
     
     private function inContextFilterQuery() {

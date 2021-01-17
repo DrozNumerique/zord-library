@@ -27,6 +27,40 @@ class LibraryPortal extends StorePortal {
             'editor'    => $metadata['editor'] ?? null
         ];
     }
+    
+    protected function _options($type) {
+        $options = parent::_options($type);
+        $facets = Zord::value('search', 'facets') ?? [];
+        if (!isset($type)) {
+            foreach ($facets as $facet) {
+                $options[] = $facet;
+            }
+        } else {
+            $options = [];
+            if ($type == 'titles') {
+                foreach (Library::inContext($this->context, 'BookEntity') as $book) {
+                    $options[$book->ean] = Library::title($book->title, $book->subtitle);
+                }
+            } else if (in_array($type, $facets)) {
+                $keys   = [];
+                $values = [];
+                $locale = Zord::value($type, $this->context);
+                foreach (Library::facets($this->context, $type) as $key) {
+                    if (isset($locale)) {
+                        if (isset($locale[$key])) {
+                            $keys[$key]   = $key;
+                            $values[$key] = $locale[$key];
+                        }
+                    } else {
+                        $keys[$key]   = $key;
+                        $values[$key] = $key;
+                    }
+                }
+                $options = array_combine($keys, $values);
+            }
+        }
+        return $options;
+    }
 }
 
 ?>
