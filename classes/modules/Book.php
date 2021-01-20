@@ -324,9 +324,13 @@ class Book extends Module {
     }
         
     private function resource($type) {
-        $isbn = $this->params['isbn'];
-        $path = $this->params['path'];
-        return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path, 'reader');
+        $isbn = $this->params['isbn'] ?? null;
+        $path = $this->params['path'] ?? null;
+        if ($isbn && $path) {
+            return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path, 'reader');
+        } else {
+            return $this->error(404);
+        }
     }
     
     public function epub() {

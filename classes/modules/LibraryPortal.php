@@ -28,35 +28,37 @@ class LibraryPortal extends StorePortal {
         ];
     }
     
-    protected function _options($type) {
-        $options = parent::_options($type);
-        $facets = Zord::value('search', 'facets') ?? [];
-        if (!isset($type)) {
-            foreach ($facets as $facet) {
-                $options[] = $facet;
-            }
-        } else {
-            $options = [];
-            if ($type == 'titles') {
-                foreach (Library::inContext($this->context, 'BookEntity') as $book) {
-                    $options[$book->ean] = Library::title($book->title, $book->subtitle);
+    protected function _options($scope, $key) {
+        $options = parent::_options($scope, $key);
+        if ($scope == 'context') {
+            $facets = Zord::value('search', 'facets') ?? [];
+            if (!isset($key)) {
+                foreach ($facets as $facet) {
+                    $options[] = $facet;
                 }
-            } else if (in_array($type, $facets)) {
-                $keys   = [];
-                $values = [];
-                $locale = Zord::value($type, $this->context);
-                foreach (Library::facets($this->context, $type) as $key) {
-                    if (isset($locale)) {
-                        if (isset($locale[$key])) {
-                            $keys[$key]   = $key;
-                            $values[$key] = $locale[$key];
-                        }
-                    } else {
-                        $keys[$key]   = $key;
-                        $values[$key] = $key;
+            } else {
+                $options = [];
+                if ($key == 'titles') {
+                    foreach (Library::inContext($this->context, 'BookEntity') as $book) {
+                        $options[$book->ean] = Library::title($book->title, $book->subtitle);
                     }
+                } else if (in_array($key, $facets)) {
+                    $keys   = [];
+                    $values = [];
+                    $locale = Zord::value($key, $this->context);
+                    foreach (Library::facets($this->context, $key) as $name) {
+                        if (isset($locale)) {
+                            if (isset($locale[$name])) {
+                                $keys[$name]   = $name;
+                                $values[$name] = $locale[$name];
+                            }
+                        } else {
+                            $keys[$name]   = $name;
+                            $values[$name] = $name;
+                        }
+                    }
+                    $options = array_combine($keys, $values);
                 }
-                $options = array_combine($keys, $values);
             }
         }
         return $options;

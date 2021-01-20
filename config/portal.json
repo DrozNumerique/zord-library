@@ -24,6 +24,10 @@
 		}
 	},
 	"options": {
-		"titles": []
+		"context" : {
+			"*": {
+				"titles": []
+			}
+		}
 	}
 }

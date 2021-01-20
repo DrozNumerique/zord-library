@@ -1,17 +1,8 @@
 var searchRefine   = getContextProperty('search.refine', false);
 var searchHistory  = getContextProperty('search.history', []);
 var searchIndex    = getContextProperty('search.index', 0);
-var searchScope    = getContextProperty('search.scope', PORTAL.default.search.scope);
-var searchCriteria = getContextProperty('search.criteria', {
-	filters: {
-		contentType: PORTAL.default.search.type,
-		source: {
-			from: PORTAL.default.search.source.from,
-			to: PORTAL.default.search.source.to
-		}
-	},
-	operator: PORTAL.default.search.operator
-});
+var searchScope    = getContextProperty('search.scope', undefined);
+var searchCriteria = getContextProperty('search.criteria', undefined);
 
 function saveHistory() {
 	setContextProperty('search.history', searchHistory);
@@ -165,7 +156,7 @@ function getSelected(select) {
 
 function getCriteria() {
 	var query = document.getElementById('queryInput').value;
-	var operator = PORTAL.default.search.operator;
+	var operator = CONFIG.default.search.operator;
 	[].forEach.call(['AND','OR'], function(value) {
 		radio = document.getElementById('search_operator_' + value);
 		if (radio.checked) {
@@ -410,6 +401,25 @@ var popupResults = function() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
+	if (searchScope == undefined) {
+		searchScope = CONFIG.default.search.scope;
+		setContextProperty('search.scope', searchScope);
+	}
+
+	if (searchCriteria == undefined) {
+		searchCriteria = {
+			filters: {
+				contentType: CONFIG.default.search.type,
+				source: {
+					from: CONFIG.default.search.source.from,
+					to: CONFIG.default.search.source.to
+				}
+			},
+			operator: CONFIG.default.search.operator
+		};
+		setContextProperty('search.criteria', searchCriteria);
+	}
+
 	var refine     = document.getElementById('searchRefine');
 	var controls   = document.getElementById('searchControls');
 	var rows       = document.getElementById('searchSize');
@@ -432,7 +442,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	updateCorpus();
 	refreshHistory();
-	loadOptions();
+	loadData({
+		scope : 'context',
+		type  : 'options',
+		wait  : true
+	});
 
 	if (searchCriteria.filters !== undefined) {
 		if (searchCriteria.filters.contentType !== undefined && Array.isArray(searchCriteria.filters.contentType)) {
@@ -469,10 +483,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	if (titles) {
 		titles.setAttribute('data-loading', 'true');
-		for (var key in PORTAL.options['titles']) {
+		values = getData('context', 'options.titles');
+		for (var key in values) {
 			var option = document.createElement('option');
 			option.value = key;
-			var text = document.createTextNode(PORTAL.options['titles'][key]);
+			var text = document.createTextNode(values[key]);
 			option.appendChild(text);
 			titles.appendChild(option);
 		}
@@ -614,7 +629,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var background = select.style.background;
 		select.style.background = "url('/img/wait.gif') no-repeat center";
 		select.setAttribute('data-loading', 'true');
-		for (var key in PORTAL.options[select.id]) {
+		values = getData('context', 'options.' + select.id);
+		for (var key in values) {
 			var option = document.createElement('option');
 			option.value = key;
 			if (searchCriteria.filters !== undefined && searchCriteria.filters !== null) {
@@ -623,7 +639,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					option.selected = true;
 				}
 			}
-			var text = document.createTextNode(PORTAL.options[select.id][key]);
+			var text = document.createTextNode(values[key]);
 			option.appendChild(text);
 			select.appendChild(option);
 		}

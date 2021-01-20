@@ -308,7 +308,7 @@ function displayTEI(selectorIndex) {
 						previous.style.visibility = "visible";
 						previous.setAttribute('data-part', ARIADNE[index - 1].link);
 						previous.setAttribute('data-id', ARIADNE[index - 1].id);
-						previous.setAttribute('title', PORTAL.locales[LANG].ariadne.chapter.previous + ' : ' + ARIADNE[index - 1].title);
+						previous.setAttribute('title', LOCALE.ariadne.chapter.previous + ' : ' + ARIADNE[index - 1].title);
 					} else {
 						previous.style.visibility = "hidden";
 					}
@@ -318,7 +318,7 @@ function displayTEI(selectorIndex) {
 						next.style.visibility = "visible";
 						next.setAttribute('data-part', ARIADNE[index + 1].link);
 						next.setAttribute('data-id', ARIADNE[index + 1].id);
-						next.setAttribute('title', PORTAL.locales[LANG].ariadne.chapter.next + ' : ' + ARIADNE[index + 1].title);
+						next.setAttribute('title', LOCALE.ariadne.chapter.next + ' : ' + ARIADNE[index + 1].title);
 					} else {
 						next.style.visibility = "hidden";
 					}
@@ -465,25 +465,25 @@ function displayTEI(selectorIndex) {
 
 		// switchTemoin
 		var switchTemoinEl = document.getElementById('switchTemoin');
-		var switchTemoin = getSessionProperty("switch.temoin", true);
+		var displayTemoin = getContextProperty("display.temoin", true);
 		var switchTemoinFC = function() {
-			if (switchTemoin) {
-				[].forEach.call(contentTEI.querySelectorAll(selectorTemoin), function (el,i) {
+			if (displayTemoin) {
+				[].forEach.call(contentTEI.querySelectorAll(selectorTemoin), function (el) {
 					el.classList.add("__switchTemoin");
 				});
 				switchTemoinEl.classList.add("__disabled");
 			} else {
-				[].forEach.call(contentTEI.querySelectorAll(selectorTemoin), function (el,i) {
+				[].forEach.call(contentTEI.querySelectorAll(selectorTemoin), function (el) {
 					el.classList.remove("__switchTemoin");
 				});
 				switchTemoinEl.classList.remove("__disabled");
 			}
-			switchTemoin = !switchTemoin;
-			setSessionProperty("switch.temoin", switchTemoin);
+			displayTemoin = !displayTemoin;
+			setContextProperty("display.temoin", displayTemoin);
 		};
-		switchTemoinFC(switchTemoin);
+		switchTemoinFC();
 		switchTemoinEl.addEventListener('click', function(event) {
-			switchTemoinFC(false);
+			switchTemoinFC();
 		});
 
 		// footnote ----------------------------------------------------------

@@ -13,6 +13,17 @@
 	color: #C03938;
 }
 
+#searchControls select.facet, 
+#searchControls #titles, 
+#searchControls #corpusStyles {
+	height: 30px;
+	width: 100%;
+}
+
+#searchControls #corpusStyles {
+	height: 25px ! important;
+}
+
 #searchRefine > label {
 	cursor: pointer;
 }
