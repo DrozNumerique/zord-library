@@ -28,7 +28,7 @@ class LibraryMenu extends Menu {
                 foreach (Zord::value('portal', 'lang') as $lang) {
                     $entry['menu'][$lang] = [
                         'type'  => 'nolink',
-                        'label' => Zord::getLocale('portal')->lang->$lang
+                        'label' => Zord::getLocale('portal', $this->lang)->lang->$lang
                     ];
                 }
                 break;
