@@ -51,6 +51,10 @@ var search = function(criteria, callback) {
 	invokeZord(parameters);
 }
 
+var setWindowHeight = function() {
+	windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+};
+
 window.addEventListener("load", function(event) {
 	
 	var content = document.getElementById('content');
