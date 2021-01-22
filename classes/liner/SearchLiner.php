@@ -4,7 +4,7 @@ class SearchLiner extends Liner {
     
     public function getLocale() {
         $locale = [];
-        foreach (array_keys(Zord::value('portal', 'lang')) as $lang) {
+        foreach (Zord::value('portal', 'lang') as $lang) {
             $locale[$lang] = Zord::getLocale('search', $lang)->results;
         }
         return ['search' => $locale];
