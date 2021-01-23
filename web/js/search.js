@@ -443,9 +443,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	updateCorpus();
 	refreshHistory();
 	loadData({
-		scope : 'context',
-		type  : 'options',
-		wait  : true
+		data_scope : 'context',
+		data_type  : 'options',
+		wait       : true
 	});
 
 	if (searchCriteria.filters !== undefined) {
@@ -486,7 +486,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		values = getData('context', 'options.titles');
 		for (var key in values) {
 			var option = document.createElement('option');
-			option.value = key;
+			option.value = getOptionValue(key);
 			var text = document.createTextNode(values[key]);
 			option.appendChild(text);
 			titles.appendChild(option);
@@ -632,10 +632,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		values = getData('context', 'options.' + select.id);
 		for (var key in values) {
 			var option = document.createElement('option');
-			option.value = key;
+			value = getOptionValue(key);
+			option.value = value;
 			if (searchCriteria.filters !== undefined && searchCriteria.filters !== null) {
 				var filter = searchCriteria.filters[select.id];
-				if (filter !== undefined && filter !== null && filter.includes(key)) {
+				if (filter !== undefined && filter !== null && filter.includes(value)) {
 					option.selected = true;
 				}
 			}
