@@ -8,7 +8,7 @@ function listBooks(button) {
 	});
 }
 
-function getData() {
+function getPublishData() {
 	var books = [];
 	var context = document.getElementById('context').value;
 	var booksElement = document.getElementById('books');
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var submitPublish = document.getElementById('submit-publish');
 	if (submitPublish != undefined) {
 		submitPublish.addEventListener("click", function(event) {
-			var data = getData();
+			var data = getPublishData();
 			invokeZord({
 				module:'Admin',
 				action:'publish',
