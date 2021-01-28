@@ -25,7 +25,7 @@ function updateStyle(select, id) {
 			}
 		});
 		$('#' + id).trigger('chosen:updated');
-		updateCorpus(true);
+		updateCorpus(null, null, true);
 	}
 }
 
@@ -218,7 +218,7 @@ function updateSelectedCorpus(books) {
 	}
 }
 
-function updateCorpus(only) {
+function updateCorpus(event, params, only) {
 	style = document.getElementById('corpusStyles');
 	books = document.getElementById('books');
 	if (style !== null && books !== null) {
@@ -440,7 +440,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	});
 	
-	updateCorpus();
+	updateCorpus(null, null);
 	refreshHistory();
 	loadData({
 		data_scope : 'context',
@@ -515,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				}
 			}
 			styles.addEventListener("change", function(event) {
-				updateCorpus();
+				updateCorpus(null, null);
 			});
 		}
 	}
