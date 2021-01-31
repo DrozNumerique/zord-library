@@ -442,11 +442,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	updateCorpus(null, null);
 	refreshHistory();
+
 	loadData({
-		data_scope : 'context',
-		data_type  : 'options',
-		wait       : true
+		module : 'Portal',
+		action : 'options',
+		scope  : 'context',
+		locale : false,
+		async  : false
 	});
+
+	options = getSessionProperty('context.' + CONTEXT + '.options._keys', {});
+	for (var index in options) {
+		loadData({
+			module : 'Portal',
+			action : 'options',
+			scope  : 'context',
+			locale : false,
+			async  : false,
+			key    : options[index],
+			wait   : true
+		});
+	}
 
 	if (searchCriteria.filters !== undefined) {
 		if (searchCriteria.filters.contentType !== undefined && Array.isArray(searchCriteria.filters.contentType)) {
@@ -483,7 +499,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	if (titles) {
 		titles.setAttribute('data-loading', 'true');
-		values = getData('context', 'options.titles');
+		values = getSessionProperty('context.' + CONTEXT + '.options.titles');
 		for (var key in values) {
 			var option = document.createElement('option');
 			option.value = getOptionValue(key);
@@ -629,7 +645,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var background = select.style.background;
 		select.style.background = "url('/img/wait.gif') no-repeat center";
 		select.setAttribute('data-loading', 'true');
-		values = getData('context', 'options.' + select.id);
+		values = getSessionProperty('context.' + CONTEXT + '.options.' + select.id);
 		for (var key in values) {
 			var option = document.createElement('option');
 			value = getOptionValue(key);
