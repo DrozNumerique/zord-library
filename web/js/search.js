@@ -447,8 +447,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		module   : 'Portal',
 		action   : 'options',
 		scope    : 'context',
-		_context : CONTEXT,
-		async    : false
+		_context : CONTEXT
 	});
 
 	options = getSessionProperty('context.' + CONTEXT + '.options._keys', {});
