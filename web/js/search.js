@@ -444,23 +444,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	refreshHistory();
 
 	loadData({
-		module : 'Portal',
-		action : 'options',
-		scope  : 'context',
-		locale : false,
-		async  : false
+		module   : 'Portal',
+		action   : 'options',
+		scope    : 'context',
+		_context : CONTEXT,
+		async    : false
 	});
 
 	options = getSessionProperty('context.' + CONTEXT + '.options._keys', {});
 	for (var index in options) {
 		loadData({
-			module : 'Portal',
-			action : 'options',
-			scope  : 'context',
-			locale : false,
-			async  : false,
-			key    : options[index],
-			wait   : true
+			module   : 'Portal',
+			action   : 'options',
+			scope    : 'context',
+			key      : options[index],
+			_context : CONTEXT,
+			wait     : true
 		});
 	}
 
