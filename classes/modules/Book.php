@@ -259,7 +259,9 @@ class Book extends Module {
                 if (!is_array($steps)) {
                     $steps = [$steps];
                 }
-                $content = (new View('/xml/'.$steps[0], ['books' => $books], $this->controler))->render();
+                $view = new View('/xml/'.$steps[0], ['books' => $books], $this->controler);
+                $view->setMark(false);
+                $content = $view->render();
                 for ($index = 1 ; $index < count($steps) ; $index++) {
                     $document = new DOMDocument();
                     $document->preserveWhiteSpace = false;
