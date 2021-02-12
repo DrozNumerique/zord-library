@@ -263,6 +263,13 @@ class LibraryImport extends Import {
             if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher)) {
                 $metadata['rights'] = '© '.$header->fileDesc->sourceDesc->biblFull->publicationStmt->publisher;
             }
+            if (isset($header->fileDesc->sourceDesc->biblFull->publicationStmt->idno)) {
+                foreach ($header->fileDesc->sourceDesc->biblFull->publicationStmt->idno as $id) {
+                    if (isset($id['type']) && $id['type'] == 'ISBN-13') {
+                        $metadata['isbn'] = $id.'';
+                    }
+                }
+            }
             if (isset($header->fileDesc->sourceDesc->biblFull->seriesStmt->title)) {
                 $relation = [];
                 foreach ($header->fileDesc->sourceDesc->biblFull->seriesStmt->title as $line) {
