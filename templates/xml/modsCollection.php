@@ -74,14 +74,14 @@
 		    if (isset($metadata['language'])) {
 ?>
 		<language>
-			<languageTerm type="text"><?php echo $metadata['language']; ?></languageTerm>
+			<languageTerm type="text" authority="rfc3066"><?php echo $metadata['language']; ?></languageTerm>
 		</language>
 <?php
 		    }
 		    if (isset($metadata['rights'])) {
 ?>
 		<accessCondition type="restrictionOnAccess"><?php echo Library::xmlspecialchars($metadata['rights']); ?></accessCondition>
-		<?php
+<?php
 		    }
 		    if (isset($metadata['relation'])) {
 ?>

@@ -1174,6 +1174,21 @@
 		</xsl:call-template>
 	</xsl:template>
 	
+	<!-- workaround for unreachable children in XPath -->
+	<xsl:template match="mods:language">
+		<xsl:call-template name="datafield">
+			<xsl:with-param name="tag">041</xsl:with-param>
+			<xsl:with-param name="ind1">0</xsl:with-param>
+			<xsl:with-param name="ind2">7</xsl:with-param>
+			<xsl:with-param name="subfields">
+				<marc:subfield code='a'>
+					<xsl:value-of select="./mods:languageTerm"/>
+				</marc:subfield>
+				<marc:subfield code='2'>rfc3066</marc:subfield>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+	
 <!-- Physical Description -->	
 	<xsl:template match="mods:physicalDescription">
 		<xsl:apply-templates/>
@@ -2013,6 +2028,31 @@
 	</xsl:template>
 	<!--v3 location/url -->
 	<!-- 2.01 -->
+	
+	<!-- workaround for unreachable children in XPath -->
+	<xsl:template match="mods:location">
+		<xsl:call-template name="datafield">
+			<xsl:with-param name="tag">856</xsl:with-param>
+			<xsl:with-param name="subfields">
+				<marc:subfield code="u">
+					<xsl:value-of select="./mods:url"/>
+				</marc:subfield>
+				<!-- v3 displayLabel -->
+				<xsl:for-each select="./mods:url/@displayLabel">
+					<marc:subfield code="3">
+						<xsl:value-of select="."/>
+					</marc:subfield>
+				</xsl:for-each>
+				<xsl:for-each select="./mods:url/@dateLastAccessed">
+					<marc:subfield code="z">
+						<xsl:value-of select="concat('Last accessed: ',.)"/>
+					</marc:subfield>
+				</xsl:for-each>
+			</xsl:with-param>
+			</xsl:call-template>
+	</xsl:template>
+	
+	
 	<xsl:template match="mods:location/mods:url">
 		<xsl:call-template name="datafield">
 			<xsl:with-param name="tag">856</xsl:with-param>
