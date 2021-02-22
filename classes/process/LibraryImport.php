@@ -822,11 +822,13 @@ class LibraryImport extends Import {
                 $id = 1;
                 $items = [];
                 $navbar = [];
+                $epub->addFromString('OPF/cover.xhtml', (new View('/epub/OPF/cover.xhtml', ['lang' => $metadata['language'] ?? 'fr']))->render());
                 foreach ($parts as &$part) {
                     if ($part['epub']) {
                         $partFile = $part['name'].'.xhtml';
                         $part['styles'] = $styles;
                         $part['text'] = Library::data($ean, $part['name'].'.xhtml', 'content');
+                        $part['lang'] = $metadata['language'] ?? 'fr';
                         $partDoc = new DOMDocument();
                         $partDoc->loadXML($part['text']);
                         $partXPath = new DOMXPath($partDoc);
@@ -849,6 +851,12 @@ class LibraryImport extends Import {
                                 }
                             }
                             $img->setAttribute('src', $this->url($ean, $graphic, 'data-url'));
+                            $caption = $this->caption($graphic);
+                            if (isset($caption)) {
+                                $img->setAttribute('alt', $this->caption($graphic));
+                            } else {
+                                $img->setAttribute('role', 'presentation');
+                            }
                         }
                         $links = $partXPath->query('//a[@href]');
                         foreach ($links as $anchor) {
@@ -861,7 +869,9 @@ class LibraryImport extends Import {
                         foreach ($notes as $note) {
                             $anchor = $partDoc->createElement('a');
                             $anchor->setAttribute('href', '#footref_'.$note->getAttribute('id'));
-                            $anchor->appendChild($note->cloneNode(true));
+                            $clone = $note->cloneNode(true);
+                            $clone->appendChild($partDoc->createTextNode($note->getAttribute('data-n')));
+                            $anchor->appendChild($clone);
                             $note->parentNode->replaceChild($anchor, $note);
                         }
                         $counters = $partXPath->query('//div[@class="footnote-counter"][@data-id]');
@@ -1416,7 +1426,7 @@ class LibraryImport extends Import {
                     $caption->appendChild($child);
                 }
                 foreach ($tableHead->attributes as $name => $attribute) {
-                    if ($name != 'class') {
+                    if ($name !== 'class') {
                         $caption->setAttribute($name, $attribute->nodeValue);
                     }
                 }
@@ -1504,6 +1514,17 @@ class LibraryImport extends Import {
             }
         }
         return $this->base[$ean];
+    }
+    
+    private function caption($graphic) {
+        $caption = null;
+        foreach ([Zord::firstElementChild($graphic),Zord::nextElementSibling($graphic),Zord::previousElementSibling($graphic)] as $candidate) {
+            if (isset($candidate) && $candidate->hasAttribute('class') &&  $candidate->getAttribute('class') == 'caption') {
+                $caption = $candidate->nodeValue;
+                break;
+            }
+        }
+        return $caption;
     }
 }
 

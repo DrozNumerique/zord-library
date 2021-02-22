@@ -3,6 +3,13 @@
 	<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<meta name="cover" content="cover-image"/>
 		<meta property="dcterms:modified"><?php echo date("Y-m-d\Th:i:s\Z"); ?></meta>
+		<meta property="schema:accessModeSufficient">textual,visual</meta>
+		<meta property="schema:accessModeSufficient">textual</meta>
+		<meta property="schema:accessMode">textual</meta>
+		<meta property="schema:accessibilityFeature">alternativeText</meta>
+		<meta property="schema:accessibilityHazard">none</meta>
+		<meta property="schema:accessibilitySummary" xml:lang="fr">Cette publication est conforme au niveau AA des spécifications d'accessibilité EPUB.</meta>
+		<meta property="schema:accessibilitySummary" xml:lang="en">This publication conforms to the EPUB Accessibility specification at WCAG Level AA.</meta>
 		<dc:type>text</dc:type>
 		<dc:date><?php echo explode('-', $metadata['date'])[0]; ?></dc:date>
 		<dc:identifier id="ean"><?php echo $metadata['epub']; ?></dc:identifier>

@@ -14,6 +14,22 @@ graphic[data-rendition="logo"] {
 	max-width : 200px;
 }
 
+a {
+	text-decoration: none;
+}
+
+a > div.note {
+	color:#555753;
+	cursor:pointer;
+	position:relative;
+	top:-0.6em;
+	font-size:0.7em;
+}
+
+a > div.note:before {
+	content: '';
+}
+
 /*
 div.pb[id]:not([data-rend="temoin"]):before {
 	position:absolute;

@@ -973,6 +973,7 @@ div.footnotes div.footnote-counter {
 	width: 50px;
 	font-size: 0.9em;
 	left: -55px;
+	top: -3px;
 	position: relative;
 	color:#31455D;
 	display: inline-block ! important;
@@ -995,7 +996,7 @@ div.footnotes div.note div.note:before {
 div.footnote-note {
 	border-left:1px solid gainsboro;
 	margin-top: -27px;
-	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 div.notesdouble div.footnote-counter {
