@@ -32,6 +32,7 @@ class LibraryImport extends Import {
     protected $toc      = null;
     protected $tocXPath = null;
     protected $page     = null;
+    protected $check    = true;
     
     protected function contents($ean) {
         $metadata = Library::data($ean, 'metadata.json', 'array');
@@ -71,6 +72,9 @@ class LibraryImport extends Import {
         }
         if (isset($parameters['prefix'])) {
             $this->adjust = $parameters['prefix'];
+        }
+        if (isset($parameters['check'])) {
+            $this->check = $parameters['check'];
         }
         if (!isset($this->publish) && file_exists($this->folder.'publish.json')) {
             $this->publish = Zord::arrayFromJSONFile($this->folder.'publish.json');
@@ -933,21 +937,23 @@ class LibraryImport extends Import {
                     ]))->render());
                 }
                 if ($epub->close()) {
-                    $command = Zord::substitute(EPUBCHECK_COMMAND, [
-                        'EXEC' => defined('EPUBCHECK_PATH') ? 'java -jar '.EPUBCHECK_PATH.DS.'epubcheck.jar' : 'epubcheck',
-                        'LANG' => $this->lang,
-                        'EPUB' => $tmpFile
-                    ]);
-                    $this->info(2, $command);
-                    $errors = shell_exec($command);
-                    if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
-                        $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
-                        rename($tmpFile, $epubFile);
-                    } else {
-                        foreach (explode("\n", $errors) as $error) {
-                            $this->logError('epub', str_replace($tmpFile.DS, '', $error));
+                    if ($this->check) {
+                        $command = Zord::substitute(EPUBCHECK_COMMAND, [
+                            'EXEC' => defined('EPUBCHECK_PATH') ? 'java -jar '.EPUBCHECK_PATH.DS.'epubcheck.jar' : 'epubcheck',
+                            'LANG' => $this->lang,
+                            'EPUB' => $tmpFile
+                        ]);
+                        $this->info(2, $command);
+                        $errors = shell_exec($command);
+                        if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
+                            $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
+                            rename($tmpFile, $epubFile);
+                        } else {
+                            foreach (explode("\n", $errors) as $error) {
+                                $this->logError('epub', str_replace($tmpFile.DS, '', $error));
+                            }
+                            $result = false;
                         }
-                        $result = false;
                     }
                 } else {
                     $this->logError('epub', Zord::substitute($this->locale->messages->epub->error->close, [
