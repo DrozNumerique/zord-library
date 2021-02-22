@@ -937,6 +937,7 @@ class LibraryImport extends Import {
                     ]))->render());
                 }
                 if ($epub->close()) {
+                    $rename = !$this->check;
                     if ($this->check) {
                         $command = Zord::substitute(EPUBCHECK_COMMAND, [
                             'EXEC' => defined('EPUBCHECK_PATH') ? 'java -jar '.EPUBCHECK_PATH.DS.'epubcheck.jar' : 'epubcheck',
@@ -946,14 +947,17 @@ class LibraryImport extends Import {
                         $this->info(2, $command);
                         $errors = shell_exec($command);
                         if (substr($errors, 0, strlen($this->locale->messages->epub->info->ok)) == $this->locale->messages->epub->info->ok) {
-                            $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
-                            rename($tmpFile, $epubFile);
+                            $rename = true;
                         } else {
                             foreach (explode("\n", $errors) as $error) {
                                 $this->logError('epub', str_replace($tmpFile.DS, '', $error));
                             }
                             $result = false;
                         }
+                    }
+                    if ($rename) {
+                        $epubFile = STORE_FOLDER.'epub'.DS.$eanEPUB.'.epub';
+                        rename($tmpFile, $epubFile);
                     }
                 } else {
                     $this->logError('epub', Zord::substitute($this->locale->messages->epub->error->close, [
