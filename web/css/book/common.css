@@ -227,6 +227,11 @@ div.graphic {
 
 }
 
+/* ---------------------------------- loading ---------------------------------- */
+div.loading.graphic {
+	width: 50em;
+}
+
 /* ---------------------------------- head ---------------------------------- */
 
 div.head,
@@ -807,8 +812,9 @@ div.titlePage div.docAuthor {
 div.titlePage > div.docImprint {
 	font-size: 80%;
 	line-height: 120%;
-	margin-top: 90px;
-	display: block ! important;
+	display: block !important;
+	margin: 90px auto 0 auto;
+	width: 200px !important;
 }
 
 div.titlePage div.argument[data-rend="rights"],
