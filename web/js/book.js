@@ -14,6 +14,13 @@ var ELS = JSON.parse(els.join('') + '"}}');
 
 var viewers = {};
 
+var replaceGraphic = function(loading) {
+	graphic = loading.parentNode;
+	img = document.createElement('img');
+	img.setAttribute('src', '/medias/' + BOOK + '/' + graphic.getAttribute('data-' + ELS['graphic']['url']));
+	graphic.replaceChild(img, loading);
+};
+
 window.$quote = {	
 	add : function(data) {
 		var type = data.zord_type;
@@ -362,6 +369,15 @@ function displayTEI(selectorIndex) {
 
 	document.addEventListener("DOMContentLoaded", function(event) {
 
+		loadings = document.querySelectorAll('div.loading');
+		if (loadings) {
+			[].forEach.call(loadings, function(loading) {
+				if (window.ELS !== undefined && loading.parentNode.classList.contains(window.ELS['graphic']['elm']) && loading.dataset.load == undefined) {
+					loading.classList.add('graphic');
+					loading.dataset.load = 'replaceGraphic';
+				}
+			});
+		}
 		// elements
 		var tocEl = document.getElementById('toc');
 		var tocContentEl = document.getElementById('tocContent');
