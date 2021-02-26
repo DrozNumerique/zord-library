@@ -110,6 +110,9 @@ class Book extends Module {
         foreach ($scopes as $scope) {
             $styles[$scope] = $this->style($scope, $obfuscator, '/library');
         }
+        foreach (Zord::getSkin($this->context)->book->styles ?? [] as $scope => $path) {
+            $styles[$scope] = $this->style($scope, $obfuscator, $path);
+        }
         return $styles;
     }
     
@@ -329,6 +332,12 @@ class Book extends Module {
         $isbn = $this->params['isbn'] ?? null;
         $path = $this->params['path'] ?? null;
         if ($isbn && $path) {
+            if (in_array(pathinfo($path, PATHINFO_FILENAME), Zord::getSkin($this->context)->book->medias->public ?? [])) {
+                $file = STORE_FOLDER.'public'.DS.$path;
+                if (file_exists($file)) {
+                    return $this->send($file);
+                }
+            }
             return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path, 'reader');
         } else {
             return $this->error(404);
