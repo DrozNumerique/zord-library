@@ -36,7 +36,7 @@
 		<li>Entrer vos login/psw dans les champs indiqués,
             <ul>
                 <li>Votre login vous a été donné lors de la création de vos accès par Droz ou par l'instance dont vous êtes membre (Istex) ;</li>
-		<li>Si vous n'avez jamais généré de mot de passe, ou si vous l'avez oublié, cliquez sur  « Mot de passe oublié ? ». Dans le formulaire suivant indiquze votre email et cliquez sur « Envoi d'un mail ». Vous recevrez alors un (nouveau) lien. Le bon email est celui que vous nous avez donné lors de l'achat de votre abonnement. Nous vous recommandons de donner un email générique, non nominatif et de le conserver y compris dans le cas d'un changement de personnel.</li>
+		<li>Si vous n'avez jamais généré de mot de passe, ou si vous l'avez oublié, cliquez sur  « Mot de passe oublié ? ». Dans le formulaire suivant indiquez votre email et cliquez sur « Envoi d'un mail ». Vous recevrez alors un (nouveau) lien. Le bon email est celui que vous nous avez donné lors de l'achat de votre abonnement. Nous vous recommandons de donner un email générique, non nominatif et de le conserver y compris dans le cas d'un changement de personnel.</li>
             </ul>
         </li>
         <li>Une fois la connexion assurée dans ce mode « Admin » vous verrez apparaître dans la barre de menu le lien « Compteur ». Vous n'avez alors qu'à indiquer les dates pour l'intervalle qui vous intéresse et à cliquer sur le bouton « Rapport ». Les données s'affichent dans le navigateur mais vous pouvez également les télécharger au format Excel.</li>

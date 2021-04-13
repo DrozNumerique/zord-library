@@ -29,7 +29,7 @@
 	<li>Enter you login/psw in the appropriate fields,
             <ul>
                 <li>Your login was given to you by Droz or by the body of which you are a member (Istex)  when you created your access ;</li>
-		<li>If you have never created a password for this account, or if you have forgotten yours, clic on  « Forgot password ? ». In the next form enter your email adress then clic on « Reset ». You will then receive a (new) link. The correct email is the one you gave us when purchasing your subscription. We recommend that you give a generic, non-nominative email address and keep it even in the event of a change of personnel.</li>
+		<li>If you have never created a password for this account, or if you have forgotten yours, clic on  « Forgot password ? ». In the next form, enter your email adress and clic on « Reset ». You will then receive a (new) link. The correct email is the one you gave us when purchasing your subscription. We recommend that you give a generic, non-nominative email address and keep it even in the event of a change of personnel.</li>
             </ul>
         </li>
         <li>Once the connection is assured in this "Admin" mode, you will see a link labeled "Counter" in the menu bar. At this point, all you have to do is enter the dates that you are interested in and click on the “Report” button. The data will be displayed in the browser and can also be download as an Excel document.</li>
