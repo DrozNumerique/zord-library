@@ -10,9 +10,6 @@ table {
 	font-size:inherit;
 }
 
-table tr {
-	color: #666666;
-}
 
 table tr.matches {
 	background: #eaeaea;
