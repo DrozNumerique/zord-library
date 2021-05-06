@@ -7,7 +7,7 @@ table {
 	width: 1135px;
 	margin:auto;
 	text-align:center;
-	font-size:.8em;
+	font-size:inherit;
 }
 
 table tr {
@@ -40,8 +40,7 @@ table th:last-child {
 table td {
 	padding:3px 8px;
 	line-height:18px;
-	vertical-align: middle;
-	border: 1px solid gainsboro;
+	border: 0px solid gainsboro;
 }
 
 table .t_person {

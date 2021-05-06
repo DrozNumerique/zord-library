@@ -760,6 +760,7 @@ div.tei table {
 	border-spacing: 0.7em;
 	width: 100%;
 	margin-bottom: 1em;
+	margin-top:0.8em;
 }
 
 div.tei table[data-rend="vis-a-vis"],
@@ -778,7 +779,7 @@ div.tei table caption {
 	margin-top: 0;
 }
 
-div.tei table tr[data-role="label"], div.tei table tr[data-rend="thead"] {
+div.tei table tr[data-role="label"], div.tei table tr[data-rend="head"] {
 	font-variant: small-caps;
 	font-size: 1.2em;
 }
