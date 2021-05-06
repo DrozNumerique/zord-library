@@ -766,6 +766,7 @@ div.tei table {
 div.tei table[data-rend="vis-a-vis"],
 div.tei table[data-rendition="vis-à-vis"]  {
 	table-layout: fixed;
+	font-size: 0.8em;
 }
 
 div.tei table caption {
