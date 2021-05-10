@@ -7,7 +7,12 @@ table {
 	width: 1135px;
 	margin:auto;
 	text-align:center;
-	font-size:inherit;
+	font-size:0.8em;
+}
+
+
+table tr {
+	color: #666666;
 }
 
 
@@ -37,7 +42,7 @@ table th:last-child {
 table td {
 	padding:3px 8px;
 	line-height:18px;
-	border: 0px solid gainsboro;
+	border: 1px solid gainsboro;
 }
 
 table .t_person {

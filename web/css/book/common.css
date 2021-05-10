@@ -788,7 +788,6 @@ div.tei table tr[data-role="label"], div.tei table tr[data-rend="head"] {
 div.tei table td {
 	padding: 0 5px;
 	text-align: left;
-	vertical-align: top;
 }
 
 div.tei table td[rowspan] {
