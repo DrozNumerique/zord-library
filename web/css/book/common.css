@@ -542,6 +542,18 @@ div.div[data-type="index"] div.list {
 	list-style: none inside;
 }
 
+div.list div.head{
+    display: block !important;
+    color: #32455D;
+    line-height: 1.6em;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 110%;
+    padding-top: 1em;
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    text-align: left;
+}
+
 /*
 [data-type]
 	[data-0] => index
