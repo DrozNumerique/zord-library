@@ -544,7 +544,7 @@ div.div[data-type="index"] div.list {
 
 div.list div.head{
     display: block !important;
-    color: #32455D;
+    color: red;
     line-height: 1.6em;
     font-family: Verdana, Arial, sans-serif;
     font-size: 110%;
