@@ -455,7 +455,8 @@ function displayTEI(selectorIndex) {
 						caption = '';
 						[].forEach.call([element.firstElementChild, element.nextElementSibling, element.previousElementSibling], function(candidate) {
 							if (candidate !== null && (candidate.classList.contains('desc') || candidate.classList.contains('head'))) {
-								caption = candidate.textContent;
+								//caption = candidate.textContent;
+								caption = candidate.innerHTML;
 							}
 						});
 						captions.push(caption);
