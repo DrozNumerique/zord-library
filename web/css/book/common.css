@@ -371,7 +371,10 @@ div.hi[data-rend="i"], div.hi[data-rendition="i"], div.hi[data-rend="italic"] {
 }
 
 div.hi[data-rend="n"] {
+}
 
+div.hi[data-rend="lt"] {
+	text-decoration:line-through;
 }
 /*
 [data-rend]
@@ -539,6 +542,13 @@ div.div[data-type="index"] div.list {
 	list-style: none inside;
 }
 
+div.list div.head{
+    color: #666666;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 110%;
+    text-align: left;
+}
+
 /*
 [data-type]
 	[data-0] => index
@@ -634,6 +644,7 @@ div.pb[data-rend="temoin"] {
 	display: inline ! important;
 	color:#a40000;
 }
+
 
 div.pb[data-rend="temoin"]:before {
 	content: "[" attr(data-n) "]" ! important;
