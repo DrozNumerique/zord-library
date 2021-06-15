@@ -172,6 +172,7 @@ div.figure[data-rend="zoom"], div.figure[data-rend="facsimile"] {
 	width: 50em;
 	height: 400px;
 	background: whitesmoke;
+	margin-bottom: 2em;
 }
 
 div.figure[data-rend="zoom"] .navigator, div.figure[data-rend="facsimile"] .navigator {
