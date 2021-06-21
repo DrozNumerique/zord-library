@@ -804,6 +804,11 @@ div.tei table td {
 	text-align: left;
 }
 
+div.tei table[data-rend="vis-a-vis"] td,
+div.tei table[data-rendition="vis-à-vis"] td{
+	vertical-align: top;
+}
+
 div.tei table td[rowspan] {
 	vertical-align: top;
 }
