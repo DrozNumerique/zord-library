@@ -378,7 +378,6 @@ input.account[type="submit"] {
 
 /* -------------------------------- Account ------------------------------- */
 form.account  {
-	width:450px;
 	margin:70px auto;
 	text-align:center;
 	padding:30px;
@@ -389,14 +388,12 @@ form.account div.advert {
 }
 
 form.account label {
-	width:150px;
 	display: inline-block;
 	text-align: right;
 }
 
 form.account input {
 	background:#D6E8FF;
-	width: 250px;
 	height: 25px;
 	margin-left: 20px;
 	margin-bottom: 15px;
