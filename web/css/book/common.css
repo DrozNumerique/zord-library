@@ -780,6 +780,7 @@ div.tei table[data-rend="vis-a-vis"],
 div.tei table[data-rendition="vis-à-vis"]  {
 	table-layout: fixed;
 	font-size: 0.8em;
+	text-align:top;
 }
 
 div.tei table caption {
@@ -801,6 +802,11 @@ div.tei table tr[data-role="label"], div.tei table tr[data-rend="head"] {
 div.tei table td {
 	padding: 0 5px;
 	text-align: left;
+}
+
+div.tei table[data-rend="vis-a-vis"] td,
+div.tei table[data-rendition="vis-à-vis"] td{
+	vertical-align: top;
 }
 
 div.tei table td[rowspan] {
