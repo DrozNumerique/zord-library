@@ -711,16 +711,10 @@ function displayTEI(selectorIndex) {
 		setTimeout(function() {
 			setMarkerAnchor(true);
 			for (var id in viewers) {
-				var viewer = OpenSeadragon({
+				var viewer = OpenSeadragon(Object.assign(Object.assign({}, CONFIG.zoom), {
 					id: id,
-					prefixUrl: '/library/img/OpenSeadragon/',
-					showNavigator: true,
-					showRotationControl: true,
-					sequenceMode: true,
-					showReferenceStrip: true,
-					preload: true,
-					tileSources: viewers[id]['sources']
-				});
+					tileSources: viewers[id].sources
+				}));
 				viewer.addHandler('page', function(event) {
 					caption = document.getElementById(id).previousElementSibling;
 					if (caption) {

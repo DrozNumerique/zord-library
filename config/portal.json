@@ -29,5 +29,13 @@
 				"titles"
 			]
 		}
+	},
+	"zoom": {
+		"prefixUrl": "/library/img/OpenSeadragon/",
+		"showNavigator": true,
+		"showRotationControl": true,
+		"sequenceMode": true,
+		"showReferenceStrip": true,
+		"preload": true
 	}
 }
