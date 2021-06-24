@@ -717,6 +717,7 @@ function displayTEI(selectorIndex) {
 					showNavigator: true,
 					showRotationControl: true,
 					sequenceMode: true,
+					showReferenceStrip: true,
 					preload: true,
 					tileSources: viewers[id]['sources']
 				});
