@@ -1,1 +1,1 @@
-		<p><?php echo $locale->zord; ?></p>
+		<p id="enginedByZord"><?php echo $locale->footer->enginedByZord; ?></p>

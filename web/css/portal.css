@@ -186,27 +186,49 @@ input.account[type="submit"] {
 }
 
 .contextlink {
-    display: table;
     color: black;
     float: right;
-    width: 103px;
     height: 71px;
     text-decoration: none;
-    margin: 10px 0 0 0;
     font-family: sans-serif;
     font-size: 15px;
     text-align: center;
-    padding: 0;
-    margin: 0;
 }
 
-.contextlink div {
+.contextlink > div {
 	display: table-cell;
 	vertical-align: middle;
+    border: none;
+    height: 71px;
 }
 
 .vendorlink img, .contextlink img {
 	height: 71px;
+    border: none;
+    display: block;
+}
+
+#accessProvidedBy {
+	border-style: solid;
+	border-color: white;
+	border-width: 3px 10px;
+	height: 65px;
+	font-size: 12px;
+}
+
+#accessProvidedBy > div {
+	color: #6C757E;
+	background-image: linear-gradient(#ff8043, #ff8043),
+                      linear-gradient(#ff8043, #ff8043),
+                      linear-gradient(#ff8043, #ff8043),
+                      linear-gradient(#ff8043, #ff8043);
+	background-repeat: no-repeat;
+	background-size: 3px 3px;
+	background-position: top left, top right, bottom left, bottom right;
+	border: solid #ff8043;
+	border-width: 0 3px;
+	padding: 0 10px;
+	max-width: 150px;
 }
 
 /* ------------------------------- Navigation ------------------------------- */
