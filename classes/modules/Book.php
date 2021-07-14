@@ -464,6 +464,10 @@ class Book extends Module {
             }
             if (!empty($readers)) {
                 $select['user'] = $readers;
+                $_context = Zord::value('context', [$this->params['readers'], 'from']);
+                if ($_context && !isset($context)) {
+                    $select['context'] = $_context;
+                }
             }
             $query = '';
             foreach ($select as $key => $value) {
