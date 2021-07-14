@@ -382,6 +382,7 @@ class Book extends Module {
         }
         $user    = null;
         $context = null;
+        $readers = [];
         if (isset($this->params['context'])) {
             $context = $this->params['context'];
         }
@@ -389,10 +390,22 @@ class Book extends Module {
             if (isset($this->params['user'])) {
                 $user = new User($this->params['user']);
             }
+            if (isset($this->params['readers']) && Zord::value('context', $this->params['readers'])) {
+                $entities = (new UserHasRoleEntity())->retrieve([
+                    'many'  => true,
+                    'where' => [
+                        'role'    => 'reader',
+                        'context' => $this->params['readers']
+                    ]
+                ]);
+                foreach ($entities as $entity) {
+                    $readers[] = $entity->user;
+                }
+            }
         } else if ($this->user->isConnected()) {
             $user = $this->user;
         }
-        if (!isset($user) && !isset($context) && !$this->user->isManager()) {
+        if (!isset($user) && !isset($context) && empty($readers) && !$this->user->isManager()) {
             return $this->page('home');
         }
         if (isset($user)) {
@@ -407,12 +420,24 @@ class Book extends Module {
                 'label' => Zord::getLocaleValue('title', Zord::value('context',$context), $this->lang)
             ];
         }
+        if (!empty($readers)) {
+            $result['readers'] = [
+                'name'  => $this->params['readers'],
+                'label' => Zord::getLocaleValue('title', Zord::value('context',$this->params['readers']), $this->lang)
+            ];
+        }
         $prefix = '';
         if ($user) {
             $prefix .= $user->login.'_';
+            $result['scope'] = $result['user']['name'];
+        }
+        if ($readers) {
+            $prefix .= $this->params['readers'].'_';
+            $result['scope'] = $result['readers']['label'];
         }
         if ($context) {
             $prefix .= $context.'_';
+            $result['scope'] .= ' / '.$result['context']['label'];
         }
         $year = date("Y");
         $start = isset($this->params['start']) ? $this->params['start'] : $year.'-01-01';
@@ -436,6 +461,9 @@ class Book extends Module {
             }
             if (isset($context)) {
                 $select['context'] = $context;
+            }
+            if (!empty($readers)) {
+                $select['user'] = $readers;
             }
             $query = '';
             foreach ($select as $key => $value) {

@@ -4,7 +4,7 @@
                     <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>">Book Report <?php echo $models['type']; ?> (R4) - <?php echo $models['counter']['reports'][$models['type']]['title']; ?></th>
                 </tr>
                 <tr>
-                    <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>"><?php echo isset($models['counter']['context']) ? $models['counter']['context']['label'] : (isset($models['counter']['user']) ? $models['counter']['user']['name'] : $locale->all) ?></th>
+                    <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>"><?php echo $models['counter']['scope']?? $locale->all; ?></th>
                 </tr>
                 <tr>
                     <th class="counter" colspan="<?php echo count($models['counter']['months']) + 4; ?>"><?php echo 'Period covered by the report: '.$models['counter']['range']['start'].' to '.$models['counter']['range']['end']; ?></th>

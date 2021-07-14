@@ -9,7 +9,11 @@
     <input type="hidden" name="user"    value="<?php echo $models['counter']['user']['login']; ?>"/>
     <p><?php echo $models['counter']['user']['name']; ?></p>
 <?php } ?>
-<?php if (!isset($models['counter']['context']) && !isset($models['counter']['user']) && $user->isManager()) { ?>
+<?php if (isset($models['counter']['readers'])) { ?>
+    <input type="hidden" name="readers" value="<?php echo $models['counter']['readers']['name']; ?>"/>
+    <p><?php echo $models['counter']['readers']['label']; ?></p>
+<?php } ?>
+<?php if (!isset($models['counter']['context']) && !isset($models['counter']['user']) && !isset($models['counter']['readers']) && $user->isManager()) { ?>
 	<p><?php echo $locale->all; ?>
 <?php }?>
     <div>
