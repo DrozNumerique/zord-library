@@ -223,6 +223,15 @@ div.gloss {
 	border-radius:4px;
 }
 
+div.gloss[data-rend="margin"] {
+    position: absolute;
+    max-width: calc((100% - 750px) / 2 - 110px);
+    left: calc((100% + 750px) / 2);
+    margin-left: 10px;
+    text-align: left;
+    text-indent: 0;
+}
+
 /* --------------------------------- graphic --------------------------------- */
 
 div.graphic {
