@@ -225,7 +225,7 @@ div.gloss {
 
 div.gloss[data-rend="margin"] {
     position: absolute;
-    max-width: calc((100% - 750px) / 2 - 110px);
+    max-width: calc((100% - 750px) / 2 - 120px);
     left: calc((100% + 750px) / 2);
     margin-left: 10px;
     text-align: left;
