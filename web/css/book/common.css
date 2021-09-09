@@ -517,6 +517,16 @@ div.list {
 	list-style: square inside url('data:image/gif;base64,R0lGODlhBQAKAIABAAAAAP///yH5BAEAAAEALAAAAAAFAAoAAAIIjI+ZwKwPUQEAOw==');
 }
 
+div.list[data-rend="numbered"] > div.item[data-n] {
+    list-style: none;
+    text-indent: -1.3em;
+}
+
+div.list[data-rend="numbered"] > div.item[data-n]::before {
+    content: attr(data-n);
+	margin-right: 0.3em;
+}
+
 div.list[data-type="ordered"] {
 	list-style-position: inside;
 	display:block ! important;
@@ -553,7 +563,7 @@ div.div[data-type="index"] div.list {
 	list-style: none inside;
 }
 
-div.list div.head{
+div.list div.head {
     color: #666666;
     font-family: Verdana, Arial, sans-serif;
     font-size: 110%;
