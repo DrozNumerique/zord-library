@@ -14,6 +14,11 @@
 	        "s_to"
         ],
         "key": "ean",
+		"json": [
+			"creator",
+			"editor",
+			"category"
+		],
         "join": {
         	"BookHasContextEntity": ["ean","book"],
         	"BookHasPartEntity": ["ean","book"],
@@ -48,7 +53,8 @@
         "key": [
         	"book",
         	"part"
-        ]
+        ],
+		"json": "data"
     },
 	"BookHasFacetEntity": {
 		"table": "book_has_facet",

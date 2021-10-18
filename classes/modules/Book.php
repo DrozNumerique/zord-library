@@ -297,9 +297,9 @@ class Book extends Module {
                 if ($book) {
                     $books[$entry->status == 'new' ? 'new' : 'other'][] = [
                         'isbn'    => $isbn,
-                        'authors' => Zord::objectToArray(json_decode($book->creator)),
+                        'authors' => Zord::objectToArray($book->creator),
                         'title'   => $book->title,
-                        'editors' => Zord::objectToArray(json_decode($book->editor)),
+                        'editors' => Zord::objectToArray($book->editor),
                         'date'    => $book->date     
                     ];
                 }
@@ -801,7 +801,7 @@ class Book extends Module {
                     if (!isset($parts[$ean][$part])) {
                         $entity = (new BookHasPartEntity())->retrieve(['book' => $ean, 'part' => $part]);
                         if ($entity) {
-                            $parts[$ean][$part] = Zord::objectToArray(json_decode($entity['data']));
+                            $parts[$ean][$part] = Zord::objectToArray($entity['data']);
                         }
                     }
                 }
@@ -885,12 +885,12 @@ class Book extends Module {
                 'source'   => ((empty($book->s_from) && empty($book->s_to)) || (!empty($book->s_from) && !empty($book->s_to) && $book->s_from == $book->s_to)) ? 2 : 1,
                 'from'     => $book->s_from,
                 'to'       => $book->s_to,
-                'creator'  => Zord::objectToArray(json_decode($book->creator)),
+                'creator'  => Zord::objectToArray($book->creator),
                 'title'    => $book->title,
                 'subtitle' => $book->subtitle,
-                'editor'   => Zord::objectToArray(json_decode($book->editor)),
+                'editor'   => Zord::objectToArray($book->editor),
                 'date'     => $book->date,
-                'category' => Zord::objectToArray(json_decode($book->category)),
+                'category' => Zord::objectToArray($book->category),
                 'number'   => $book->number,
                 'readable' => $this->user->hasAccess($isbn, 'reader')
             ];
