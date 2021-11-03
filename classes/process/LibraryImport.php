@@ -1006,7 +1006,8 @@ class LibraryImport extends Import {
                 $this->ariadne[] = [
                     'id'    => $part['node']->getAttribute('id'),
                     'link'  => $ean,
-                    'title' => $part['title']
+                    'title' => $part['title'],
+                    'flat'  => $part['flat']
                 ];
             } else {
                 $element = null;
@@ -1026,6 +1027,7 @@ class LibraryImport extends Import {
                 }
                 if ($element != null) {
                     $partTitles = [$part['title']];
+                    $partFlats = [$part['flat']];
                     if ($this->is_fragment($part)) {
                         $part['link'] = $ean.'/'.$part['name'];
                     } else {
@@ -1039,9 +1041,11 @@ class LibraryImport extends Import {
                                     $toDo = ($part['name'] == $group[0]);
                                     $this->dones = array_merge($this->dones, $group);
                                     $partTitles = [];
+                                    $partFlats = [];
                                     foreach ($this->parts as $_part) {
                                         if (in_array($_part['name'], $group)) {
                                             $partTitles[] = $_part['title'];
+                                            $partFlats[] = $_part['flat'];
                                         }
                                     }
                                 }
@@ -1055,6 +1059,7 @@ class LibraryImport extends Import {
                         $li->setAttribute('data-id', $part['id']);
                         $li->setAttribute('data-level', $part['level']);
                         $title = implode(' | ', $partTitles);
+                        $flat = implode(' | ', $partFlats);
                         $span = $this->toc->createElement('span');
                         $fragment = $this->toc->createDocumentFragment();
                         $fragment->appendXML($title);
@@ -1071,7 +1076,8 @@ class LibraryImport extends Import {
                             $this->ariadne[] = [
                                 'id'    => $part['id'],
                                 'link'  => $part['link'],
-                                'title' => $title
+                                'title' => $title,
+                                'flat'  => $flat
                             ];
                         }
                     }
@@ -1333,11 +1339,13 @@ class LibraryImport extends Import {
             $flat = '';
             foreach ($div->childNodes as $child) {
                 if ($child->localName == 'head') {
+                    $title .= empty($title) ? '' : ' ';
+                    $flat .= empty($flat) ? '' : ' ';
                     foreach ($child->childNodes as $grandChild) {
                         $isTextNode  = $grandChild->nodeType == XML_TEXT_NODE;
                         $isValidTag  = in_array($grandChild->localName, ['hi','emph']);
                         $isSeparator = in_array($grandChild->localName, ['lb']);
-                        if ($isSeparator || $isTextNode || $isValidTag) {
+                        if ($isSeparator) {
                             $title .= empty($title) ? '' : ' ';
                             $flat .= empty($flat) ? '' : ' ';
                         }
@@ -1552,9 +1560,13 @@ class LibraryImport extends Import {
             case 'emph':
             case 'hi': {
                 $rend = $node->getAttribute('rend');
-                if ($rend) {
+                if (in_array($rend, ['i','strong','sup','sub'])) {
                     $begin = '<'.$rend.'>';
-                    $end = '</'.$rend.'>';
+                    $end   = '</'.$rend.'>';
+                }
+                if ($rend == 'sc') {
+                    $begin = '<span style="font-variant:small-caps;">';
+                    $end   = '</span>';
                 }
                 break;
             }

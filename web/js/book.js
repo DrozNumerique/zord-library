@@ -315,7 +315,7 @@ function displayTEI(selectorIndex) {
 						previous.style.visibility = "visible";
 						previous.setAttribute('data-part', ARIADNE[index - 1].link);
 						previous.setAttribute('data-id', ARIADNE[index - 1].id);
-						previous.setAttribute('title', LOCALE.ariadne.chapter.previous + ' : ' + ARIADNE[index - 1].title);
+						previous.setAttribute('title', LOCALE.ariadne.chapter.previous + ' : ' + (ARIADNE[index - 1].flat || ARIADNE[index - 1].title));
 					} else {
 						previous.style.visibility = "hidden";
 					}
@@ -325,7 +325,7 @@ function displayTEI(selectorIndex) {
 						next.style.visibility = "visible";
 						next.setAttribute('data-part', ARIADNE[index + 1].link);
 						next.setAttribute('data-id', ARIADNE[index + 1].id);
-						next.setAttribute('title', LOCALE.ariadne.chapter.next + ' : ' + ARIADNE[index + 1].title);
+						next.setAttribute('title', LOCALE.ariadne.chapter.next + ' : ' + (ARIADNE[index + 1].flat ?? ARIADNE[index + 1].title));
 					} else {
 						next.style.visibility = "hidden";
 					}
