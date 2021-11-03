@@ -593,7 +593,7 @@ class LibraryImport extends Import {
             $titlePage = $this->adjXPath->query('//'.$this->prefix.':front/'.$this->prefix.':titlePage')[0];
             $titlePage->setAttribute('id', PART_ID_PREFIX.$this->idCount);
             $title = isset($this->metadata['title']) && !empty($this->metadata['title']) ? $this->metadata['title'] : $this->locale->titlePage;
-            $this->addPart('home', 'title', $title, 'front', 'front', 1, $titlePage);            
+            $this->addPart('home', 'title', $title, $title, 'front', 'front', 1, $titlePage);            
             foreach (['front','body','back'] as $tag) {
                 $this->scan($tag, $tag, 1);
             }
@@ -891,7 +891,7 @@ class LibraryImport extends Import {
                         }
                         $epub->addFromString('OPF/'.$partFile, (new View('/epub/OPF/part.xhtml', $part))->render());
                         $items[$partFile]['id'] = 'zord-page-'.$id++;
-                        $items[$partFile]['title'] = $part['title'];
+                        $items[$partFile]['title'] = $part['flat'];
                     }
                 }
                 foreach ($parts as &$part) {
@@ -900,7 +900,7 @@ class LibraryImport extends Import {
                             'id'    => $part['id'],
                             'part'  => $part['ref'],
                             'level' => $part['level'],
-                            'text'  => $part['title']
+                            'text'  => $part['flat']
                         ];
                     }
                 }
@@ -1054,8 +1054,11 @@ class LibraryImport extends Import {
                         $li->setAttribute('data-part', $part['link']);
                         $li->setAttribute('data-id', $part['id']);
                         $li->setAttribute('data-level', $part['level']);
-                        $title = htmlspecialchars(implode(' | ', $partTitles));
-                        $span = $this->toc->createElement('span', $title);
+                        $title = implode(' | ', $partTitles);
+                        $span = $this->toc->createElement('span');
+                        $fragment = $this->toc->createDocumentFragment();
+                        $fragment->appendXML($title);
+                        $span->appendChild($fragment);
                         $li->appendChild($span);
                         $pageInAriadne = false;
                         foreach ($this->ariadne as $entry) {
@@ -1253,7 +1256,7 @@ class LibraryImport extends Import {
         return 'no';
     }
     
-    private function addPart($name, $type, $title, $base, $part, $level, $node) {
+    private function addPart($name, $type, $title, $flat, $base, $part, $level, $node) {
         $contentType = 0;
         foreach (Zord::value('import', 'contents') as $index => $types) {
             if (in_array($type, $types)) {
@@ -1266,6 +1269,7 @@ class LibraryImport extends Import {
             'id'          => $node->getAttribute('id'),
             'base'        => $base,
             'title'       => $title,
+            'flat'        => $flat,
             'type'        => $type,
             'contentType' => $contentType,
             'count'       => $this->idCount,
@@ -1326,26 +1330,30 @@ class LibraryImport extends Import {
                 $visavis[$group][] = $name;
             }
             $title = '';
+            $flat = '';
             foreach ($div->childNodes as $child) {
                 if ($child->localName == 'head') {
                     foreach ($child->childNodes as $grandChild) {
                         $isTextNode  = $grandChild->nodeType == XML_TEXT_NODE;
                         $isValidTag  = in_array($grandChild->localName, ['hi','emph']);
                         $isSeparator = in_array($grandChild->localName, ['lb']);
-                        if ($isSeparator) {
-                            $title .= ' ';
+                        if ($isSeparator || $isTextNode || $isValidTag) {
+                            $title .= empty($title) ? '' : ' ';
+                            $flat .= empty($flat) ? '' : ' ';
                         }
                         if ($isTextNode || $isValidTag) {
-                            $title .= ($isTextNode ? ' ' : '').$grandChild->textContent;
+                            $title .= $this->format($grandChild);
+                            $flat .= $grandChild->textContent;
                         }
                     }
                 }
             }
             $title = Library::compact($title);
+            $flat = Library::compact($flat);
             if ($title == '' && $div->hasAttribute('synch')) {
                 $title = $div->getAttribute('synch');
             }
-            $part = $this->addPart($name, $type, $title, $base, $node, $level, $div);
+            $part = $this->addPart($name, $type, $title, $flat, $base, $node, $level, $div);
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
                 $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
             }
@@ -1535,6 +1543,23 @@ class LibraryImport extends Import {
             }
         }
         return $caption;
+    }
+    
+    private function format($node) {
+        $begin = '';
+        $end = '';
+        switch ($node->localName) {
+            case 'emph':
+            case 'hi': {
+                $rend = $node->getAttribute('rend');
+                if ($rend) {
+                    $begin = '<'.$rend.'>';
+                    $end = '</'.$rend.'>';
+                }
+                break;
+            }
+        }
+        return $begin.htmlspecialchars($node->textContent).$end;
     }
 }
 

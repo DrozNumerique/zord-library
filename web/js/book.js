@@ -583,8 +583,12 @@ function displayTEI(selectorIndex) {
 		});
 
 		tocEl.addEventListener('click', function(event){
-			if (event.target && event.target.parentNode.nodeName == "LI") {
-				changeLocation(event,event.target.parentNode);
+			if (event.target) {
+			    if (event.target.parentNode.nodeName == "LI") {
+					changeLocation(event,event.target.parentNode);
+				} else if (event.target.parentNode.parentNode.nodeName == "LI") {
+					changeLocation(event,event.target.parentNode.parentNode);
+				}
 			}
 		});
 
