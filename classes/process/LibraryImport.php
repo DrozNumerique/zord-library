@@ -684,15 +684,17 @@ class LibraryImport extends Import {
             if ($deepzoom->processor == ImageProcessor::$DEFAULT_PROCESSOR) {
                 $this->info(2, $this->locale->messages->image->info->convert.$deepzoom->convert);
             }
+            $this->info(2, $this->locale->messages->image->info->folder.STORE_FOLDER.'medias'.DS.$ean);
             $folder = STORE_FOLDER.'zoom'.DS.$ean.'.tmp';
             Zord::deleteRecursive($folder);
-            $count = 1;
+            $count = 0;
             foreach($zoom as $url) {
                 $file = $medias[$url];
-                $this->info(2, $count.' / '.count($zoom).' : '.$file);
-                $deepzoom->process($file, $folder);
                 $count++;
+                $this->info(3, basename($file).Zord::str_pad($count.' / '.count($zoom), 20, '.', STR_PAD_LEFT), false, false, true);
+                $deepzoom->process($file, $folder);
             }
+            $this->info(2, Zord::substitute($this->locale->messages->image->info->count, ['count' => $count]), true, ' ');
             $folder = STORE_FOLDER.'zoom'.DS.$ean;
             Zord::deleteRecursive($folder);
             rename($folder.'.tmp', $folder);
