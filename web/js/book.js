@@ -483,7 +483,7 @@ function displayTEI(selectorIndex) {
 		// switchTemoin
 		var switchTemoinEl = document.getElementById('switchTemoin');
 		var displayTemoin = getContextProperty("display.temoin", true);
-		var switchTemoinFC = function() {
+		var updateTemoinFC = function() {
 			if (displayTemoin) {
 				[].forEach.call(contentTEI.querySelectorAll(selectorTemoin), function (el) {
 					el.classList.add("__switchTemoin");
@@ -495,12 +495,12 @@ function displayTEI(selectorIndex) {
 				});
 				switchTemoinEl.classList.remove("__disabled");
 			}
+		};
+		updateTemoinFC();
+		switchTemoinEl.addEventListener('click', function(event) {
 			displayTemoin = !displayTemoin;
 			setContextProperty("display.temoin", displayTemoin);
-		};
-		switchTemoinFC();
-		switchTemoinEl.addEventListener('click', function(event) {
-			switchTemoinFC();
+			updateTemoinFC();
 		});
 
 		// footnote ----------------------------------------------------------
