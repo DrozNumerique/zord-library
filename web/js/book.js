@@ -593,7 +593,7 @@ function displayTEI(selectorIndex) {
 		});
 
 		// show citations button & citation page
-		contentTEI.addEventListener("mouseup", function(event) {
+		window.addEventListener("mouseup", function(event) {
 			var selection = window.getSelection();
 			if (!selection.isCollapsed) {
 				var margeB = 60;
@@ -608,15 +608,16 @@ function displayTEI(selectorIndex) {
 					margeB = 20;
 				}
 				var left = (document.getElementById('tei').offsetLeft + teiRectsW) - margeB;
-				citationsEl.classList.remove("__disabled");
-				citationsEl.classList.add("__activated");
-				bugsEl.classList.remove("__disabled");
-				bugsEl.classList.add("__activated");
+				citationsEl.classList.remove("__hidden");
+				citationsEl.classList.add("__shown");
+				bugsEl.classList.remove("__hidden");
+				bugsEl.classList.add("__shown");
+				citationsEl.parentNode.style.top = (top + boundary.top) + 'px';
 			} else {
-				citationsEl.classList.remove("__activated");
-				citationsEl.classList.add("__disabled");
-				bugsEl.classList.remove("__activated");
-				bugsEl.classList.add("__disabled");
+				citationsEl.classList.remove("__shown");
+				citationsEl.classList.add("__hidden");
+				bugsEl.classList.remove("__shown");
+				bugsEl.classList.add("__hidden");
 				var nodeName = event.target.nodeName.toLowerCase();
 				if (nodeName == 'div' && event.target.getAttribute('class') == ELS['pb']['elm']) {
 					var attrN = event.target.getAttribute('data-' + ELS['pb']['n']);
