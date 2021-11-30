@@ -331,16 +331,17 @@ var dressResults = function(results) {
 	[].forEach.call(results.querySelectorAll('.keyword'), function(instance) {
 		instance.addEventListener("click", function(event) {
 			var snip = this.parentNode;
-			var isbn = snip.getAttribute('data-book');
-			var part = snip.getAttribute('data-part');
-			var match = snip.getAttribute('data-match');
-			var index = snip.getAttribute('data-index');
+			var isbn = snip.dataset.book;
+			var part = snip.dataset.part;
+			var match = snip.dataset.match;
+			var index = snip.dataset.index;
+			var search = results.dataset.search;
 			invokeZord({
 				module:"Book",
 				action:"show",
 				isbn:isbn,
 				part:part,
-				search:SEARCH,
+				search:search,
 				match:match,
 				index:index
 			});
@@ -389,6 +390,9 @@ var dressResults = function(results) {
 			}
 		}
 	});
+	if (results.dataset.search.length > 0 && results.dataset.alert.length > 0) {
+		alert(results.dataset.alert);
+	}
 }
 
 var popupResults = function() {
@@ -667,12 +671,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 window.addEventListener("load", function(event) {
 	
-	if (SEARCH !== 'none' && POPUP) {
+	if (POPUP) {
 		popupResults();
-	}
-	
-	if (typeof ALERT !== 'undefined' && ALERT !== null && ALERT.length > 0) {
-		alert(ALERT);
 	}
 	
 });

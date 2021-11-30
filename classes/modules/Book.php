@@ -127,7 +127,7 @@ class Book extends Module {
                 if (isset($this->params['part'])) {
                     $path = $path.'/'.$this->params['part'];
                 }
-                if (isset($this->params['search']) && $this->params['search'] != 'none') {
+                if (isset($this->params['search']) && !empty($this->params['search'])) {
                     $path = $path.'?search='.$this->params['search'];
                     if (isset($this->params['match']) && isset($this->params['index'])) {
                         $path = $path.'&match='.$this->params['match'].'&index='.$this->params['index']."#search";
@@ -843,7 +843,7 @@ class Book extends Module {
                 }
             }
         }
-        return !empty($books) ? $search : [];
+        return $search;
     }
     
     public function classify($search = false) {

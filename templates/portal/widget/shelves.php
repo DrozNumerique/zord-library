@@ -1,4 +1,4 @@
-		<div id="shelves" data-start="<?php echo $models['search']['criteria']['start'] ?? 0 ?>" data-rows="<?php echo $models['search']['criteria']['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE; ?>" data-found="<?php echo $models['search']['found'] ?? 0; ?>" class="<?php echo count($models['shelves']) == 1 && isset($models['shelves']['search']) ? 'results'.(POPUP_SEARCH_RESULTS ? ' popup' : '') : '' ?>">
+		<div id="shelves" data-alert="<?php echo empty($models['search']['books']) ? Zord::getLocale('search',$lang)->empty : ''; ?>" data-search="<?php echo $models['search']['id'] ?? ''; ?>" data-start="<?php echo $models['search']['criteria']['start'] ?? 0 ?>" data-rows="<?php echo $models['search']['criteria']['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE; ?>" data-found="<?php echo $models['search']['found'] ?? 0; ?>" class="<?php echo count($models['shelves']) == 1 && isset($models['shelves']['search']) ? 'results'.(POPUP_SEARCH_RESULTS ? ' popup' : '') : '' ?>">
 <?php if (isset($models['search']['matches'])) { ?>
     		<div class="fetch">
     			<span class="first fa fa-backward fa-fw"></span>

@@ -88,6 +88,20 @@
 	outline:0;
 }
 
+#marker_styles_list {
+	display:block;
+	margin-top: 35px;
+}
+
+#marker_styles_list:before {
+	position: absolute;
+	top: 4px;
+	z-index: 1000;
+	left: 271px;
+	color: white;
+	content: '▼';
+}
+
 .marker {
 	margin: 35px auto;
 	width: 48em;

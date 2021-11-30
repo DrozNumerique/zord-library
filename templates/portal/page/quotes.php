@@ -6,8 +6,7 @@
 		<div style="width:290px;float:left">
 			<button id="markers_clear" data-tooltip="<?php echo $locale->clear_tooltip; ?>"><?php echo $locale->clear; ?></button>
 			<button id="markers_export" data-tooltip="<?php echo $locale->export_tooltip; ?>"><?php echo $locale->export; ?></button>
-			<br><br>
-			<span data-tooltip="<?php echo $locale->styles_tooltip; ?>">
+			<span id="marker_styles_list" data-tooltip="<?php echo $locale->styles_tooltip; ?>">
 				<select id="marker_styles_select">
 					<?php foreach (Zord::getConfig('csl') as $key => $name) { ?>
 					<option value="<?php echo $key; ?>"><?php echo $name; ?></option>
