@@ -30,7 +30,8 @@ var toScroll = function() {
 };
 
 var search = function(criteria, callback) {
-	fetch = (callback === undefined || typeof callback !== 'function') ? 'false' : 'true';
+	var fetch = (callback === undefined || typeof callback !== 'function') ? 'false' : 'true';
+	var results = null;
 	parameters = {
 		module:"Book",
 		action:"search",
@@ -40,12 +41,16 @@ var search = function(criteria, callback) {
 			$dialog.wait();
 		},
 		after:function() {
-			$dialog.hide();
+			$dialog.hide(function() {
+				if (fetch == 'true' && results !== undefined && results !== null && results.dataset.search.length > 0 && results.dataset.alert.length > 0) {
+					alert(results.dataset.alert);
+				}
+			});
 		}
 	};
 	if (fetch == 'true') {
 		parameters['success'] = function(html) {
-			callback(html);
+			results = callback(html);
 		}
 	}
 	invokeZord(parameters);

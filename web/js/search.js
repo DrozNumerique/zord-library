@@ -308,6 +308,7 @@ function updateResults(start, rows) {
 					dressResults(results);
 				}
 			}
+			return results;
 		}
 	});
 }
@@ -390,9 +391,6 @@ var dressResults = function(results) {
 			}
 		}
 	});
-	if (results.dataset.search.length > 0 && results.dataset.alert.length > 0) {
-		alert(results.dataset.alert);
-	}
 }
 
 var popupResults = function() {
