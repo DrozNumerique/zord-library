@@ -38,6 +38,7 @@
 .tools i > i,
 .tools a > i {
 	font-size: 0.4em ! important;
+	top: 1px;
 	left: -2px;
 	color: orange;
 }
