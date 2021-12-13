@@ -31,6 +31,8 @@ function getPublishData() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	
+	activateStates(document);
+
 	var submitPublish = document.getElementById('submit-publish');
 	if (submitPublish != undefined) {
 		submitPublish.addEventListener("click", function(event) {
