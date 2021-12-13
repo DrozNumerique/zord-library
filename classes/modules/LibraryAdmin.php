@@ -36,30 +36,52 @@ class LibraryAdmin extends StoreAdmin {
     
     public function publish() {
         if (isset($this->params['name']) &&
-            isset($this->params['books'])) {
+            isset($this->params['book']) &&
+            isset($this->params['status'])) {
             $name = $this->params['name'];
-            $books = Zord::objectToArray(json_decode($this->params['books']));
-            (new BookHasContextEntity())->delete([
-                'many' => true,
-                'where' => ['context' => $name]
-            ]);
-            foreach ($books as $book) {
-                if ($book['status'] !== 'del') {
-                    (new BookHasContextEntity())->create([
-                        'book'    => $book['isbn'],
-                        'context' => $name,
-                        'status'  => $book['status']
-                    ]);
-                } else if ($this->user->isManager()) {
-                    (new BookEntity())->delete($book['isbn'], true);
-                    foreach($this->deletePaths($book['isbn']) as $path) {
-                        Zord::deleteRecursive(STORE_FOLDER.$path);
+            $book = $this->params['book'];
+            $status = $this->params['status'];
+            $data = [
+                'context' => $name,
+                'book'    => $book
+            ];
+            $entity = (new BookHasContextEntity())->retrieve(['where' => $data]);
+            $change = false;
+            switch ($status) {
+                case 'yes': 
+                case 'new': {
+                    if ($entity == false) {
+                        (new BookHasContextEntity())->create(array_merge($data,['status' => $status]));
+                        $change = true;
+                    } else if ($entity->status !== $status) {
+                        (new BookHasContextEntity())->update(["many" => true, "where" => $data], ['status' => $status]);
+                        $change = true;
                     }
-                    Store::deindex($book['isbn']);
+                    break;
+                }
+                case 'no': {
+                    if ($entity !== false) {
+                        (new BookHasContextEntity())->delete(["many" => true, "where" => $data]);
+                        $change = true;
+                    }
+                    break;
+                }
+                case 'del': {
+                    if ($this->user->isManager()) {
+                        unset($data['context']);
+                        (new BookHasContextEntity())->delete(["many" => true, "where" => $data]);
+                        (new BookEntity())->delete($book, true);
+                        foreach($this->deletePaths($book) as $path) {
+                            Zord::deleteRecursive(STORE_FOLDER.$path);
+                        }
+                        Store::deindex($book);
+                        $change = true;
+                    }
+                    break;
                 }
             }
         }
-        return $this->index('publish');
+        return ['change' => $change];
     }
     
     protected function deletePaths($isbn) {

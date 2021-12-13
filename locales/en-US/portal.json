@@ -17,5 +17,12 @@
 			"previous" : "Previous Chapter",
 			"next" : "Next Chapter"
 		}
+	},
+	"admin": {
+		"book": {
+			"delete": {
+				"confirm": "Confirm book deletion"
+			}
+		}
 	}
 }

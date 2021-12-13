@@ -23,6 +23,11 @@
                					<th style="width: 30px;">
                						<i id="expand-list" class="fa fa-compress fa-fw" title="<?php echo $locale->tab->publish->select; ?>"></i>
                					</th>
+<?php if ($user->isManager()) { ?>
+                        		<th style="width: 30px;">
+          							<i class="display fa fa-times fa-fw"></i>
+                        		</th>
+<?php } ?>
                				</tr>
                			</thead>
                			<tbody>
@@ -36,17 +41,17 @@
                         			<input name="title" data-isbn="<?php echo $book['isbn']; ?>" type="hidden" value="<?php echo $book['isbn']; ?>"/>
                         			<span class="content" title="<?php echo $locale->tab->publish->epub; ?>"><?php echo $book['title']; ?></span>
                         		</td>
-                        		<td class="state" data-type="publish<?php echo $user->isManager() ? '|delete' : ''; ?>">
+                        		<td class="state" data-type="publish" data-context="<?php echo $context; ?>" data-book="<?php echo $book['isbn']; ?>">
           							<input name="check" data-empty="no" type="hidden" value="<?php echo $book['status']; ?>"/>
           							<i class="display fa <?php echo Zord::value('portal', ['states','publish',$book['status']]); ?> fa-fw"></i>
                         		</td>
+<?php if ($user->isManager()) { ?>
+                        		<td class="delete" data-context="<?php echo $context; ?>" data-book="<?php echo $book['isbn']; ?>" style="color: red;">
+          							<i class="display fa fa-times fa-fw"></i>
+                        		</td>
+<?php } ?>
                         	</tr>
 <?php } ?>
                			</tbody>
                		</table>
-      				<br/>
-     				<br/>
-    		        <input id="submit-publish" type="button" class="admin-button" value="<?php echo $locale->tab->publish->submit; ?>"/>
-     				<br/>
-     				<br/>
 				</div>

@@ -17,5 +17,12 @@
 			"previous" : "Chapitre précédent",
 			"next" : "Chapitre suivant"
 		}
+	},
+	"admin": {
+		"book": {
+			"delete": {
+				"confirm": "Confirmer la suppression de l'ouvrage"
+			}
+		}
 	}
 }

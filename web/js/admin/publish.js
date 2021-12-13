@@ -31,26 +31,34 @@ function getPublishData() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	
-	activateStates(document);
-
-	var submitPublish = document.getElementById('submit-publish');
-	if (submitPublish != undefined) {
-		submitPublish.addEventListener("click", function(event) {
-			var data = getPublishData();
-			invokeZord({
-				module:'Admin',
-				action:'publish',
-				name:data.context,
-				books:data.books,
-				before:function() {
-					$dialog.wait();
-				},
-				after:function() {
-					$dialog.hide();
-				}
-			});
+	var changeStatus = function(entry, next) {
+		var change = false;
+		invokeZord({
+			module:'Admin',
+			action:'publish',
+			async:false,
+			name:entry.dataset.context,
+			book:entry.dataset.book,
+			status:next,
+			success: function(result) {
+				change = result.change;
+			}
 		});
-	}
+		return change;
+	};
+	
+	activateStates(document, function(entry, next) {
+		return changeStatus(entry, next);
+	});
+	
+	[].forEach.call(document.querySelectorAll('tr.data td.delete'), function(entry) {
+		entry.addEventListener("click", function(event) {
+			if (confirm(LOCALE.admin.book.delete.confirm) && changeStatus(entry, 'del')) {
+				var row = entry.parentNode;
+				row.parentNode.removeChild(row);
+			}
+		});
+	});
 	
 	[].forEach.call(document.querySelectorAll('tr.data td input[data-isbn]'), function(entry) {
 		span = entry.nextElementSibling;

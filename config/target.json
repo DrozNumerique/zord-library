@@ -8,9 +8,10 @@
 	},
 	"Admin": {
 		"publish": {
+			"response": "DATA",
 			"parameters": {
 				"context": "FILTER_SANITIZE_STRING",
-				"books": "FILTER_SANITIZE_STRING"
+				"book": "FILTER_SANITIZE_STRING"
 			}
 		}
 	},
