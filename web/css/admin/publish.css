@@ -1,0 +1,17 @@
+.admin-table th.isbn {
+	width: 10em;
+}
+
+.admin-table th.title {
+	width: 60em;
+}
+
+.admin-table th.action {
+	width: 2em;
+}
+
+.admin-table td.show,
+.admin-table td.epub,
+.admin-table td.delete {
+	cursor: pointer;
+}

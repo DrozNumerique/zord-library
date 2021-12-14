@@ -1,0 +1,23 @@
+{
+	"menu": {
+		"publish": "Publication"
+	},
+	"tab": {
+		"import": {
+			"publish": "À publier dans..."
+		},
+		"publish": {
+			"title": "Publication des ouvrages",
+			"list": "Publications...",
+			"submit": "Valider",
+			"books": "Ouvrages",
+			"book": {
+				"id": "ISBN",
+				"title": "Titre"
+			},
+			"select": "Sélectionné",
+			"show": "Consulter en ligne",
+			"epub": "Télécharger l'ePub"
+		}
+	}
+}

@@ -8,38 +8,38 @@
                		<table id="books" class="admin-table">
                			<thead>
                				<tr>
-               					<th style="width: 145px;">
+               					<th class="isbn">
                						<span class="sort" data-column="0">
                							<?php echo $locale->tab->publish->book->id; ?>
                							<i class="fa fa-sort fa-fw"></i>
                						</span>
                					</th>
-               					<th style="width: 615px;">
+               					<th class="title">
                						<span class="sort" data-column="1">
                							<?php echo $locale->tab->publish->book->title; ?>
                							<i class="fa fa-sort fa-fw"></i>
                						</span>
                					</th>
-               					<th style="width: 30px;">
-               						<i id="expand-list" class="fa fa-compress fa-fw" title="<?php echo $locale->tab->publish->select; ?>"></i>
-               					</th>
+               					<th class="action"></th>
+               					<th class="action"></th>
 <?php if ($user->isManager()) { ?>
-                        		<th style="width: 30px;">
-          							<i class="display fa fa-times fa-fw"></i>
-                        		</th>
+                        		<th class="action"></th>
 <?php } ?>
                				</tr>
                			</thead>
                			<tbody>
 <?php foreach (Library::books($context) as $book) { ?>
                         	<tr class="data sort" data-included="<?php echo $book['status'] !== 'no' ? 'yes' : 'no'; ?>">
-                        		<td>
-                        			<input name="book" data-isbn="<?php echo $book['isbn']; ?>" type="hidden" value="<?php echo $book['isbn']; ?>"/>
+                        		<td class="show" data-open="<?php echo $context; ?>" data-action="show" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
+                        			<input name="book" type="hidden" value="<?php echo $book['isbn']; ?>"/>
                         			<span class="content" title="<?php echo $locale->tab->publish->show; ?>"><?php echo $book['isbn']; ?></span>
                         		</td>
-                        		<td>
+                        		<td class="show" data-open="<?php echo $context; ?>" data-action="show" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
                         			<input name="title" data-isbn="<?php echo $book['isbn']; ?>" type="hidden" value="<?php echo $book['isbn']; ?>"/>
-                        			<span class="content" title="<?php echo $locale->tab->publish->epub; ?>"><?php echo $book['title']; ?></span>
+                        			<span class="content" title="<?php echo $locale->tab->publish->show; ?>"><?php echo $book['title']; ?></span>
+                        		</td>
+                        		<td class="epub" data-action="epub" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
+          							<i class="display fa fa-book fa-fw" title="<?php echo $locale->tab->publish->epub; ?>"></i>
                         		</td>
                         		<td class="state" data-type="publish" data-context="<?php echo $context; ?>" data-book="<?php echo $book['isbn']; ?>">
           							<input name="check" data-empty="no" type="hidden" value="<?php echo $book['status']; ?>"/>

@@ -1,10 +1,25 @@
 {
+	"import": {
+		"scripts": [
+			{
+				"src": "/library/js/admin/import.js",
+				"type": "text/javascript"
+			}
+		]
+	},
 	"publish":  {
 		"scope": "context",
 		"scripts": [
-		{
+			{
 				"src": "/library/js/admin/publish.js",
 				"type": "text/javascript"
+			}
+		],
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/admin/publish.css"
 			}
 		]
 	}

@@ -1,0 +1,24 @@
+{
+	"menu": {
+		"publish": "Publish"
+	},
+	"tab": {
+		"import": {
+			"publish": "To publish in..."
+		},
+		"publish": {
+			"title": "Books management",
+			"list": "Publish...",
+			"context": "Context",
+			"submit": "OK",
+			"books": "Books",
+			"book": {
+				"id": "ISBN",
+				"title": "Title"
+			},
+			"select": "Selected",
+			"show": "Read online",
+			"epub": "Download ePub"
+		}
+	}
+}
