@@ -9,10 +9,11 @@
 		"publish": {
 			"title": "Publication des ouvrages",
 			"list": "Publications...",
+			"context": "Contexte",
 			"submit": "Valider",
 			"books": "Ouvrages",
 			"book": {
-				"id": "ISBN",
+				"isbn": "ISBN",
 				"title": "Titre"
 			},
 			"select": "Sélectionné",

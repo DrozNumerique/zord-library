@@ -22,7 +22,7 @@ class Library {
         return Store::data(STORE_FOLDER.'library'.DS.$ean.DS.(isset($path) ? $path : ''), $format);
     }
     
-    public static function books($context) {
+    public static function books($context, $order = ['asc' => 'ean']) {
         $books = [];
         $entity = (new BookHasContextEntity())->retrieve([
             'many'  => true,
@@ -32,12 +32,15 @@ class Library {
         foreach ($entity as $entry) {
             $status[$entry->book] = $entry->status;
         }
-        $entity = (new BookEntity())->retrieve();
+        $entity = (new BookEntity())->retrieve([
+            "many"  => true,
+            "order" => $order
+        ]);
         foreach($entity as $book) {
             $books[] = [
-                'isbn'     => $book->ean,
-                'status'   => isset($status[$book->ean]) ? $status[$book->ean] : 'no',
-                'title'    => self::title($book->title, $book->subtitle)
+                'isbn'   => $book->ean,
+                'status' => isset($status[$book->ean]) ? $status[$book->ean] : 'no',
+                'title'  => self::title($book->title, $book->subtitle)
             ];
         }
         return $books;

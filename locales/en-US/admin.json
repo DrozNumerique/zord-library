@@ -13,7 +13,7 @@
 			"submit": "OK",
 			"books": "Books",
 			"book": {
-				"id": "ISBN",
+				"isbn": "ISBN",
 				"title": "Title"
 			},
 			"select": "Selected",

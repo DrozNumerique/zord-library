@@ -9,6 +9,9 @@
 	},
 	"publish":  {
 		"scope": "context",
+		"list": {
+			"limit": 20
+		},
 		"scripts": [
 			{
 				"src": "/library/js/admin/publish.js",

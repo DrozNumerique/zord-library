@@ -2,6 +2,14 @@
 
 class LibraryAdmin extends StoreAdmin {
     
+    protected function prepareIndex($current, $models) {
+        $models = parent::prepareIndex($current, $models);
+        if ($current == 'publish') {
+            $models = Zord::array_merge($models, $this->dataPublish());
+        }
+        return $models;
+    }
+    
     protected function prepareImport($folder) {
         $dirs = glob($folder.'*', GLOB_ONLYDIR);
         foreach ($dirs as $dir) {
@@ -32,6 +40,43 @@ class LibraryAdmin extends StoreAdmin {
         if (!empty($publish)) {
             file_put_contents($folder.'publish.json', Zord::json_encode($publish));
         }
+    }
+    
+    protected function books() {
+        return $this->view('/portal/page/admin/publish/books', $this->cursor($this->dataPublish()), 'text/html;charset=UTF-8', false, false, 'admin');
+    }
+    
+    protected function dataPublish() {
+        $limit = Zord::value('admin', ['publish','list','limit']);
+        $context = $this->params['ctx'] ?? $this->context;
+        $offset = $this->params['offset'] ?? 0;
+        $order = $this->params['order'] ?? 'ean';
+        $direction = $this->params['direction'] ?? 'asc';
+        $books = Library::books($context, [$direction => $order]);
+        if ($order == 'title') {
+            Zord::sort($books, true, function($comparable) {
+                return Zord::collapse($comparable['title']);
+            });
+            if ($direction == 'desc') {
+                $books = array_reverse($books);    
+            }
+        }
+        $count = count($books);
+        $index = [];
+        foreach ($books as $book) {
+            $index[] = $book[$order == 'ean' ? 'isbn' : $order];
+        }
+        $books = array_slice($books, $offset, $limit);
+        return [
+            'list'      => 'books',
+            'count'     => $count,
+            'order'     => $order,
+            'direction' => $direction,
+            'limit'     => $limit,
+            'offset'    => $offset,
+            'index'     => $index,
+            'data'      => $books
+        ];
     }
     
     public function publish() {
