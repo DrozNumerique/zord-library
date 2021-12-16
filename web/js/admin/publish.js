@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 	
+	$("input[type='checkbox']").checkboxradio();
+
 	var books = document.getElementById('books');
 	var lookup = document.getElementById('lookup_books');
 	var cursor = document.getElementById('cursor_books');
@@ -53,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			module    : 'Admin',
 			action    : 'books',
 			ctx       : lookup.querySelector('select').value,
+			only      : lookup.querySelector('#only').checked ? 'true' : 'false',
+			new       : lookup.querySelector('#new').checked ? 'true' : 'false',
 			order     : lookup.querySelector('input[name="order"]').value,
 			direction : lookup.querySelector('input[name="direction"]').value,
 			success   : function() {

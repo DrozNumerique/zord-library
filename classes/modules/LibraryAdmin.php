@@ -49,10 +49,18 @@ class LibraryAdmin extends StoreAdmin {
     protected function dataPublish() {
         $limit = Zord::value('admin', ['publish','list','limit']);
         $context = $this->params['ctx'] ?? $this->context;
+        $only = $this->params['only'] ?? 'false';
+        $new = $this->params['new'] ?? 'false';
         $offset = $this->params['offset'] ?? 0;
         $order = $this->params['order'] ?? 'ean';
         $direction = $this->params['direction'] ?? 'asc';
         $books = Library::books($context, [$direction => $order]);
+        if ($only == 'true') {
+            $books = array_filter($books, function($book) {return $book['status'] !== 'no';});
+        }
+        if ($new == 'true') {
+            $books = array_filter($books, function($book) {return $book['status'] !== 'yes';});
+        }
         if ($order == 'title') {
             Zord::sort($books, true, function($comparable) {
                 return Zord::collapse($comparable['title']);

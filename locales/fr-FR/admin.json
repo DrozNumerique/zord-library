@@ -10,6 +10,8 @@
 			"title": "Publication des ouvrages",
 			"list": "Publications...",
 			"context": "Contexte",
+			"only":"Ce contexte uniquement",
+			"new":"Nouveautés uniquement",
 			"submit": "Valider",
 			"books": "Ouvrages",
 			"book": {

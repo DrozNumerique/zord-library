@@ -10,6 +10,8 @@
 			"title": "Books management",
 			"list": "Publish...",
 			"context": "Context",
+			"only":"This context only",
+			"new":"New publish only",
 			"submit": "OK",
 			"books": "Books",
 			"book": {
