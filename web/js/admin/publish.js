@@ -62,6 +62,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			success   : function() {
 				var books = document.getElementById('books');
 				var lookup = document.getElementById('lookup_books');
+				activateStates(document, function(entry, next) {
+					return changeStatus(entry, next);
+				});
 				activateListSort(books, lookup);
 				dressList();
 			}
