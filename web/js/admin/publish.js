@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 	
 	$("input[type='checkbox']").checkboxradio();
-
-	var books = document.getElementById('books');
-	var lookup = document.getElementById('lookup_books');
-	var cursor = document.getElementById('cursor_books');
 	
 	var dressList = function() {
+		activateStates(document, function(entry, next) {
+			return changeStatus(entry, next);
+		});
+		activateListSort(document.getElementById('books'), document.getElementById('lookup_books'));
 		[].forEach.call(document.querySelectorAll('tr.data td.delete'), function(entry) {
 			entry.addEventListener("click", function(event) {
 				if (confirm(LOCALE.admin.book.delete.confirm) && changeStatus(entry, 'del')) {
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				}
 			});
 		});
-		
 		[].forEach.call(document.querySelectorAll('tr.data td[data-isbn]'), function(entry) {
 			entry.addEventListener("click", function(event) {
 				invokeZord({
@@ -45,10 +44,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 		return change;
 	};
-	
-	activateStates(document, function(entry, next) {
-		return changeStatus(entry, next);
-	});
+
+	var books  = document.getElementById('books');
+	var cursor = document.getElementById('cursor_books');
+	var lookup = document.getElementById('lookup_books');
 	
 	attachListUpdate(books, function() {
 		return {
@@ -60,23 +59,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			order     : lookup.querySelector('input[name="order"]').value,
 			direction : lookup.querySelector('input[name="direction"]').value,
 			success   : function() {
-				var books = document.getElementById('books');
-				var lookup = document.getElementById('lookup_books');
-				activateStates(document, function(entry, next) {
-					return changeStatus(entry, next);
-				});
-				activateListSort(books, lookup);
 				dressList();
 			}
 		};
 	});
-
-	activateListSort(books, lookup);
-	dressList();
-	dressCursor(cursor);
 	
 	document.getElementById('context').addEventListener('change', function(event) {
 		books.update();
 	});
+
+	dressList();
+	dressCursor(cursor);
 
 });
