@@ -682,10 +682,6 @@ function displayTEI(selectorIndex) {
 					});
 				}
 			}
-			citationsEl.classList.add("__disabled");
-			citationsEl.classList.remove("__activated");
-			bugsEl.classList.add("__disabled");
-			bugsEl.classList.remove("__activated");
 			selection.removeAllRanges();
 		};
 		
