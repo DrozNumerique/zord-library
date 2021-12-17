@@ -41,6 +41,7 @@ class LibraryMenu extends Menu {
                     $entry['action'] = $connected ? 'disconnect' : 'connect';
                     $label = $connected ? 'logout' : 'login';
                     $entry['label'] = Zord::getLocale('portal', $this->lang)->menu->$label;
+                    $entry['params'] = ['success' => $_SERVER['REQUEST_URI']];
                 }
                 break;
             }
