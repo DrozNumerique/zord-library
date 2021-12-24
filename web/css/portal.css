@@ -52,15 +52,6 @@ input.account[type="submit"] {
 	cursor: pointer;
 }
 
-.message {
-	padding: 5px 0;
-	text-align: center;
-	position: relative;
-	font-size: .8em;
-	bottom: 20px;
-	text-transform: uppercase;
-}
-
 .warning {
 	background: white;
 	color: #C03938;
@@ -407,6 +398,13 @@ form.account  {
 
 form.account div.advert {
 	margin-bottom: 20px;
+}
+
+
+form.account div.message {
+	text-transform: uppercase;
+	color: #C03938;
+	background: #D6E8FF;
 }
 
 form.account label {
