@@ -150,7 +150,7 @@ class LibraryImport extends Import {
             }
             if (!empty($context)) {
                 foreach($context as $name) {
-                    $this->logError('grant', Zord::substitute($this->locale->noadmin, [
+                    $this->logError('grant', Zord::substitute($this->locale->messages->grant->error->noadmin, [
                         'context' => $name,
                         'name'    => Zord::getLocaleValue('title', Zord::value('context', $name), $this->lang)
                     ]));

@@ -131,23 +131,25 @@ function formatCitation(citation) {
 	return div.innerHTML.replace(/<\/?[^>]+>/g, '').replace(/¡§¡/g, '<').replace(/¡¿¡/g, '>');
 }
 
+function isType(element, name) {
+	return element.classList.contains(ELS[name]['elm']);
+}
+
+function hasAttr(element, type, name, value) {
+	return value == undefined ? element.dataset[ELS[type][name]] !== undefined : element.dataset[ELS[type][name]] == value;
+}
+
 function getMinMarginTop(element) {
 	if (element && element.tagName == 'DIV') {
-		if (element.getAttribute('class') == ELS['pb']['elm']) {
-			var parent = element.parentNode;
-			if (parent.getAttribute('class') == ELS['div']['elm'] && parent.getAttribute('data-' + ELS['div']['type']) == 'section' && parent.firstElementChild == element) {
+		var parent = element.parentNode;
+		if (isType(element,'pb')) {
+			if (isType(parent,'div') && hasAttr(parent,'div','type','section') && parent.firstElementChild == element) {
 				return 25;
 			}
 			return 20;
-		} else if (element.getAttribute('class') == ELS['l']['elm']) {
-			var parent = element.parentNode;
-			if (parent.getAttribute('class') == ELS['lg']['elm'] && parent.firstElementChild == element) {
-				return 15;
-			}
-			return 0;
-		} else if (element.getAttribute('class') == ELS['div']['elm']) {
-			return 25;
-		} else if (element.getAttribute('class') == 'footnotes') {
+		} else if (isType(element,'l') && isType(parent,'lg') && parent.firstElementChild == element) {
+			return 15;
+		} else if (isType(element,'div') || element.classList.contains('footnotes')) {
 			return 25;
 		}
 	}
@@ -260,12 +262,13 @@ function displayTEI(selectorIndex) {
 				for (i = 0 ; i < nbDisplayed ; i++) {
 					if (pageDisplayed[i][j]) {
 						pageMaxTop = pageTop[i][j] > pageMaxTop ? pageTop[i][j] : pageMaxTop;
-					}
+					}minMarginTop
 				}
 				for (i = 0 ; i < nbDisplayed ; i++) {
 					if (pageDisplayed[i][j]) {
 						if (pageTop[i][j] < pageMaxTop) {
-							var marginTop = (pageMaxTop - pageTop[i][j] + getMinMarginTop(pageDisplayed[i][j]));
+							var minMarginTop = getMinMarginTop(pageDisplayed[i][j]);
+							var marginTop = pageMaxTop - pageTop[i][j] + minMarginTop;
 							pageDisplayed[i][j].style.marginTop = marginTop + 'px';
 							for (k = j + 1 ; k < pageMaxNumber ; k++) {
 								if (pageDisplayed[i][k]) {
