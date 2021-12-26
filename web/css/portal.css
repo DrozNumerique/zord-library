@@ -52,8 +52,12 @@ input.account[type="submit"] {
 	cursor: pointer;
 }
 
-.warning {
+#message {
+	text-align: center;
 	background: white;
+}
+
+.warning {
 	color: #C03938;
 }
 
