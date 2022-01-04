@@ -121,13 +121,7 @@ class LibraryAdmin extends StoreAdmin {
                 }
                 case 'del': {
                     if ($this->user->isManager()) {
-                        unset($data['context']);
-                        (new BookHasContextEntity())->delete(["many" => true, "where" => $data]);
-                        (new BookEntity())->delete($book, true);
-                        foreach($this->deletePaths($book) as $path) {
-                            Zord::deleteRecursive(STORE_FOLDER.$path);
-                        }
-                        Store::deindex($book);
+                        Library::delete($book, $this->deletePaths($book));
                         $change = true;
                     }
                     break;

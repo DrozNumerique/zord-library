@@ -256,4 +256,13 @@ class Library {
 	        ]
 	    ]);
 	}
+	
+	public static function delete($book, $paths) {
+	    (new BookHasContextEntity())->delete(["many" => true, "where" => ['book' => $book]]);
+	    (new BookEntity())->delete($book, true);
+	    foreach($paths as $path) {
+	        Zord::deleteRecursive(STORE_FOLDER.$path);
+	    }
+	    Store::deindex($book);
+	}
 }
