@@ -121,7 +121,7 @@ class LibraryAdmin extends StoreAdmin {
                 }
                 case 'del': {
                     if ($this->user->isManager()) {
-                        Library::delete($book);
+                        Library::delete($book, $this->deletePaths($book));
                         $change = true;
                     }
                     break;
@@ -131,16 +131,8 @@ class LibraryAdmin extends StoreAdmin {
         return ['change' => $change];
     }
     
-    public function deletePaths($isbn) {
-        $metadata = Library::data($isbn, 'metadata.json', 'array');
-        $epub = isset($metadata['epub']) ? $metadata['epub'] : $isbn;
-        return [
-            'books'.DS.$isbn.'.xml',
-            'epub'.DS.$epub.'.epub',
-            'medias'.DS.$isbn,
-            'zoom'.DS.$isbn,
-            'library'.DS.$isbn,
-        ];
+    protected function deletePaths($book) {
+        return Library::deletePaths($book);
     }
     
 }
