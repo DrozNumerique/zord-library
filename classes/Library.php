@@ -257,12 +257,24 @@ class Library {
 	    ]);
 	}
 	
-	public static function delete($book, $paths) {
+	public static function delete($book, $paths = null) {
 	    (new BookHasContextEntity())->delete(["many" => true, "where" => ['book' => $book]]);
 	    (new BookEntity())->delete($book, true);
-	    foreach($paths as $path) {
+	    foreach($paths ?? self::deletePaths($book) as $path) {
 	        Zord::deleteRecursive(STORE_FOLDER.$path);
 	    }
 	    Store::deindex($book);
+	}
+	
+	public static function deletePaths($book) {
+	    $metadata = Library::data($book, 'metadata.json', 'array');
+	    $epub = isset($metadata['epub']) ? $metadata['epub'] : $book;
+	    return [
+	        'books'.DS.$book.'.xml',
+	        'epub'.DS.$epub.'.epub',
+	        'medias'.DS.$book,
+	        'zoom'.DS.$book,
+	        'library'.DS.$book,
+	    ];
 	}
 }
