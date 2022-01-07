@@ -2,15 +2,18 @@ div.tei div.text div:not(.openseadragon-container), div.footnote-note div {
 	display:inline;
 }
 
-div.tei *[data-rendition="#right"] {
+div.tei *[data-rendition="#right"],
+div.tei *[data-rend="#right"] {
 	text-align: right;
 }
 
-div.tei *[data-rendition="#left"] {
+div.tei *[data-rendition="#left"],
+div.tei *[data-rend="#left"] {
 	text-align: left;
 }
 
-div.tei *[data-rendition="#center"] {
+div.tei *[data-rendition="#center"],
+div.tei *[data-rend="#center"] {
 	text-align: center;
 }
 
@@ -623,15 +626,18 @@ div.p {
 	text-align: justify;
 }
 
-div.p[data-rendition="#center"] {
+div.p[data-rendition="#center"],
+div.p[data-rend="#center"] {
 	text-align: center;
 }
 
-div.p[data-rendition="#right"] {
+div.p[data-rendition="#right"],
+div.p[data-rend="#right"] {
 	text-align: right;
 }
 
-div.p[data-rendition="#left"] {
+div.p[data-rendition="#left"],
+div.p[data-rend="#left"] {
 	text-align: left;
 }
 
