@@ -10,6 +10,7 @@ class LibraryImport extends Import {
     protected $xmlns      = ' xmlns:'.NS_PREFIX.'="'.NS_URL.'"';
     protected $publish    = null;
     protected $base       = [];
+    protected $deep       = [];
     
     protected $size     = 0;
     protected $total    = 0;
@@ -75,6 +76,9 @@ class LibraryImport extends Import {
         }
         if (isset($parameters['check'])) {
             $this->check = $parameters['check'];
+        }
+        if (isset($parameters['zoom'])) {
+            $this->deep = $parameters['zoom'];
         }
         if (!isset($this->publish) && file_exists($this->folder.'publish.json')) {
             $this->publish = Zord::arrayFromJSONFile($this->folder.'publish.json');
@@ -692,7 +696,9 @@ class LibraryImport extends Import {
                 $file = $medias[$url];
                 $count++;
                 $this->info(3, basename($file).Zord::str_pad($count.' / '.count($zoom), 20, '.', STR_PAD_LEFT), false, false, true);
-                $deepzoom->process($file, $folder);
+                if (empty($this->deep) || (isset($this->deep[$ean]) && in_array($url, $this->deep[$ean]))) {
+                    $deepzoom->process($file, $folder);
+                }
             }
             $this->info(2, Zord::substitute($this->locale->messages->image->info->count, ['count' => $count]), true, ' ');
             $folder = STORE_FOLDER.'zoom'.DS.$ean;
