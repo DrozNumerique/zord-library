@@ -702,8 +702,15 @@ class LibraryImport extends Import {
             }
             $this->info(2, Zord::substitute($this->locale->messages->image->info->count, ['count' => $count]), true, ' ');
             $folder = STORE_FOLDER.'zoom'.DS.$ean;
-            Zord::deleteRecursive($folder);
-            rename($folder.'.tmp', $folder);
+            if (empty($this->deep)) {
+                Zord::deleteRecursive($folder);
+                rename($folder.'.tmp', $folder);
+            } else {
+                foreach (glob($folder.'.tmp'.DS.'*') as $file) {
+                    copy($file, $folder.DS.basename($file));
+                }
+                Zord::deleteRecursive($folder.'.tmp');
+            }
         } else {
             $this->info(2, $this->locale->messages->zoom->info->none);
         }
