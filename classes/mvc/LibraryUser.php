@@ -10,7 +10,7 @@ class LibraryUser extends User {
             $context = (new BookHasContextEntity())->retrieve();
             if ($context) {
                 foreach ($context as $entry) {
-                    foreach (Zord::getConfig('role') as $role) {
+                    foreach (array_keys(Zord::getConfig('role')) as $role) {
                         if ($this->hasRole($role, $entry->context)) {
                             $this->access[$entry->book][$role] = true;
                         }
