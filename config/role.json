@@ -1,4 +1,5 @@
 {
-	"reader": [],
-	"counter": []
+	"reader": ["read"],
+	"counter": ["read"],
+	"admin": ["read"]
 }

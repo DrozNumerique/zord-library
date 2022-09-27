@@ -63,7 +63,7 @@ class Book extends Module {
                         }
                     }
                     foreach ($context as $key) {
-                        if ($this->user->hasRole('reader', $key) && null !== Zord::value('context', [$key,'url'])) {
+                        if ($this->user->isAuthorized('read', $key) && null !== Zord::value('context', [$key,'url'])) {
                             $name = $key;
                             break;
                         }
