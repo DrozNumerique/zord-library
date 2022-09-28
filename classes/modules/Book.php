@@ -138,7 +138,7 @@ class Book extends Module {
             if (file_exists(Library::data($isbn))) {
                 $metadata = Library::data($isbn, 'metadata.json', 'array');
                 $defined = isset($this->params['part']) && !empty($this->params['part']);
-                $readable = $this->user->hasAccess($isbn, 'reader') && $this->access($isbn);
+                $readable = $this->user->hasAccess($isbn, 'read') && $this->access($isbn);
                 $part = ($defined && $readable) ? $this->params['part'] : 'home';
                 $message = null;
                 if ($readable) {
@@ -151,7 +151,7 @@ class Book extends Module {
                     ]);
                 } else {
                     $message = ['class' => 'warning'];
-                    if (!$this->user->hasAccess($isbn, 'reader')) {
+                    if (!$this->user->hasAccess($isbn, 'read')) {
                         $message['content'] = $this->locale->message->noreader->anyContext;
                     } else if (!$this->access($isbn, $this->context)) {
                         $message['content'] = $this->locale->message->noreader->thisContext;
@@ -195,7 +195,7 @@ class Book extends Module {
                         }
                     }
                 }
-                $obfuscate = !$this->user->hasAccess($isbn, 'admin') && OBFUSCATE_BOOK;
+                $obfuscate = !$this->user->hasAccess($isbn, 'inspect') && OBFUSCATE_BOOK;
                 $obfuscator = $obfuscate ? new Obfuscator() : null;
                 $texts = [];
                 foreach($parts as $item) {
@@ -892,7 +892,7 @@ class Book extends Module {
                 'date'     => $book->date,
                 'category' => Zord::objectToArray($book->category),
                 'number'   => $book->number,
-                'readable' => $this->user->hasAccess($isbn, 'reader')
+                'readable' => $this->user->hasAccess($isbn, 'read')
             ];
         }
         $liner = ($search !== false) ? 'SearchLiner' : Zord::value('plugin', ['liner',$this->context]);
