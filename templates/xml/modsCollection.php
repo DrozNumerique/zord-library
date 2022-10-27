@@ -52,6 +52,7 @@
 		        if (isset($metadata['date'])) {
 ?>
 			<copyrightDate><?php echo explode('-', $metadata['date'])[0]; ?></copyrightDate>
+			<dateIssued><?php echo explode('-', $metadata['date'])[0]; ?></dateIssued>
 <?php
 		        }
 ?>
@@ -59,9 +60,9 @@
 		</originInfo>
 <?php
 		    }
-		    if (isset($metadata['isbn'])) {
+		    if (isset($metadata['ean'])) {
 ?>
-		<identifier type="isbn"><?php echo Library::xmlspecialchars($metadata['isbn']); ?></identifier>
+		<identifier type="isbn"><?php echo Library::xmlspecialchars($metadata['ean']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['uri'])) {
