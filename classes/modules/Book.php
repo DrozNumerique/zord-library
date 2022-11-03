@@ -77,7 +77,7 @@ class Book extends Module {
             }
         }
         if (isset($this->params['cover'])) {
-            $cover = Store::resource('medias', $this->params['cover'], 'frontcover');
+            $cover = Store::resource('medias', $this->params['cover'], ['epub_cover','titlepage','frontcover']);
             if ($cover) {
                 return $this->redirect(OPENURL.$cover);
             }
@@ -610,6 +610,28 @@ class Book extends Module {
             ]);
         }
         return ['send' => $send];
+    }
+    
+    public function word() {
+        $isbn = $this->params['book'] ?? null;
+        if (!isset($isbn)) {
+            return $this->page('home');
+        }
+        $styles = [];
+        foreach (['screen','print'] as $media) {
+            foreach ($this->styles($media) as $href) {
+                $styles[] = file_get_contents($this->baseURL.$href);
+            }
+        }
+        $parts = [];
+        foreach (Library::data($isbn, 'parts.json', 'array') as $item) {
+            if ($item['epub']) {
+                $parts[] = Library::data($isbn, $item['name'].'.xhtml', 'content');
+            }
+        }
+        $content = new View('/word', ['parts'  => $parts, 'styles' => $styles], $this->controler);
+        $content->setMark(false);
+        return $this->download($isbn.'.doc', 'admin', $content->render());
     }
     
     private function inContextFilterQuery() {

@@ -115,6 +115,13 @@
 			"parameters": {
 				"term": "FILTER_SANITIZE_STRING"
 			}
+		},
+		"word": {
+			"response": "DOWNLOAD",
+			"shortcut": "word",
+			"parameters": {
+				"book": "FILTER_SANITIZE_STRING"
+			}
 		}
 	}
 }
