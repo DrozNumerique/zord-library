@@ -79,7 +79,7 @@ class Book extends Module {
         if (isset($this->params['cover'])) {
             $cover = Store::resource('medias', $this->params['cover'], ['epub_cover','titlepage','frontcover']);
             if ($cover) {
-                return $this->redirect(OPENURL.$cover);
+                return $this->send(STORE_FOLDER.$cover);
             }
         }
         return $this->error(404);
