@@ -45,6 +45,10 @@ class LibraryMenu extends Menu {
                 }
                 break;
             }
+            case 'quick': {
+                $entry['render'] = 'quick';
+                break;
+            }
         }
         return $entry;
     }

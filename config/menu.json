@@ -32,5 +32,8 @@
 		"type": "shortcut",
 		"module": "Account",
 		"class": ["bright"]
+	},
+	"quick": {
+		"type": "template"
 	}
 }

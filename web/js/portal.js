@@ -124,4 +124,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	}
 	
+	bindSearch({
+		input:    '#menu_quick input',
+		source:   BASEURL['zord'] + '/match',
+		location: function(ui) {
+			return BASEURL['zord'] + '/book/' + ui.item.value;
+		},
+		position: {
+			my:'right top+8',
+			at:'right bottom'
+		}
+	});
+	
 });

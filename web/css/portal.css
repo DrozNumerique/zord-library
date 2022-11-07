@@ -339,6 +339,23 @@ input.account[type="submit"] {
 	color: white;
 }
 
+#navbar li#menu_quick {
+	color: white;
+}
+
+#navbar li#menu_quick input {
+	border: 0;
+}
+
+#navbar li#menu_quick i {
+	margin-left: 3px;
+}
+
+#navbar li#menu_quick > * {
+	top: -1px;
+	position: relative;
+}
+
 #navbar div.sub {
 	color: white;
 	cursor: pointer;

@@ -1,0 +1,10 @@
+{
+	"styles": {
+		"default": {
+			"name": "Times new roman",
+			"size": 16,
+			"color": "1B2232",
+			"bold": true
+		}
+	}
+}

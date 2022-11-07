@@ -1,5 +1,8 @@
 <?php
 
+use \PhpOffice\PhpWord\PhpWord;
+use \PhpOffice\PhpWord\IOFactory;
+
 class Book extends Module {
         
     private static $SOLR_ORDERS = [
@@ -617,21 +620,23 @@ class Book extends Module {
         if (!isset($isbn)) {
             return $this->page('home');
         }
-        $styles = [];
-        foreach (['screen','print'] as $media) {
-            foreach ($this->styles($media) as $href) {
-                $styles[] = file_get_contents($this->baseURL.$href);
-            }
-        }
         $parts = [];
         foreach (Library::data($isbn, 'parts.json', 'array') as $item) {
             if ($item['epub']) {
-                $parts[] = Library::data($isbn, $item['name'].'.xhtml', 'content');
+                $parts[] = Library::data($isbn, $item['name'].'.xhtml', 'document');
             }
         }
-        $content = new View('/word', ['parts'  => $parts, 'styles' => $styles], $this->controler);
-        $content->setMark(false);
-        return $this->download($isbn.'.doc', 'admin', $content->render());
+        $document = new PhpWord();
+        foreach (Zord::value('word', 'styles') as $name => $style) {
+            $document->addFontStyle($name, $style);
+        }
+        foreach ($parts as $part) {
+            $section = $document->addSection();
+            $section->addText($part->textContent, 'default');
+        }
+        $writer = IOFactory::createWriter($document, 'Word2007');
+        $writer->save('/tmp/'.$isbn.'.docx');
+        return $this->send('/tmp/'.$isbn.'.docx', 'admin');
     }
     
     private function inContextFilterQuery() {
