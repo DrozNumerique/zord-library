@@ -9,8 +9,10 @@
 		"publish": {
 			"title": "Books management",
 			"list": "Publish...",
+			"keyword": "Title",
 			"context": "Context",
 			"only":"This context only",
+			"status": "Status",
 			"new":"New publish only",
 			"submit": "OK",
 			"books": "Books",

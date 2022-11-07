@@ -53,7 +53,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		return {
 			module    : 'Admin',
 			action    : 'books',
-			ctx       : lookup.querySelector('select').value,
+			title     : lookup.querySelector('input[name="title"]').value,
+			ctx       : lookup.querySelector('#context').value,
 			only      : lookup.querySelector('#only').checked ? 'true' : 'false',
 			new       : lookup.querySelector('#new').checked ? 'true' : 'false',
 			order     : lookup.querySelector('input[name="order"]').value,

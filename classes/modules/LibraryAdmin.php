@@ -48,6 +48,7 @@ class LibraryAdmin extends StoreAdmin {
     
     protected function dataPublish() {
         $limit = Zord::value('admin', ['publish','list','limit']);
+        $title = $this->params['title'] ?? null;
         $context = $this->params['ctx'] ?? $this->context;
         $only = $this->params['only'] ?? 'false';
         $new = $this->params['new'] ?? 'false';
@@ -55,6 +56,9 @@ class LibraryAdmin extends StoreAdmin {
         $order = $this->params['order'] ?? 'ean';
         $direction = $this->params['direction'] ?? 'asc';
         $books = Library::books($context, [$direction => $order]);
+        if (!empty($title)) {
+            $books = array_filter($books, function($book) use ($title) {return strpos(strtolower($book['title']), strtolower($title)) !== false;});
+        }
         if ($only == 'true') {
             $books = array_filter($books, function($book) {return $book['status'] !== 'no';});
         }

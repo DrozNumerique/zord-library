@@ -9,8 +9,10 @@
 		"publish": {
 			"title": "Publication des ouvrages",
 			"list": "Publications...",
+			"keyword": "Titre",
 			"context": "Contexte",
 			"only":"Ce contexte uniquement",
+			"status": "Statut",
 			"new":"Nouveautés uniquement",
 			"submit": "Valider",
 			"books": "Ouvrages",
