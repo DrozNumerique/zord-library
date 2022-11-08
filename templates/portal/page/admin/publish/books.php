@@ -10,7 +10,7 @@
 <?php   } ?>
                					</th>
 <?php } ?>
-<?php for ($index = 0 ; $index < ($user->isManager() ? 3 : 2) ; $index++) { ?>
+<?php for ($index = 0 ; $index < ($user->isManager() ? 4 : 3) ; $index++) { ?>
                					<th class="action"></th>
 <?php } ?>
                				</tr>
@@ -26,6 +26,9 @@
                         		</td>
                         		<td class="epub" data-action="epub" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
           							<i class="display fa fa-book fa-fw" title="<?php echo $locale->tab->publish->epub; ?>"></i>
+                        		</td>
+                        		<td class="word">
+          							<a href="<?php echo $baseURL.'/word/'.$book['isbn']; ?>"><i class="display fa fa-file-word-o fa-fw" title="<?php echo $locale->tab->publish->word; ?>"></i></a>
                         		</td>
                         		<td class="state" data-type="publish" data-context="<?php echo $context; ?>" data-book="<?php echo $book['isbn']; ?>">
           							<input name="check" data-empty="no" type="hidden" value="<?php echo $book['status']; ?>"/>

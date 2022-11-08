@@ -1,8 +1,5 @@
 <?php
 
-use \PhpOffice\PhpWord\PhpWord;
-use \PhpOffice\PhpWord\IOFactory;
-
 class Book extends Module {
         
     private static $SOLR_ORDERS = [
@@ -616,27 +613,13 @@ class Book extends Module {
     }
     
     public function word() {
-        $isbn = $this->params['book'] ?? null;
-        if (!isset($isbn)) {
+        $book = $this->params['book'] ?? null;
+        $size = $this->params['size'] ?? "default";
+        $format = $this->params['format'] ?? WORD_WRITER_FORMAT;
+        if (empty($book) || empty($size) || empty($format)) {
             return $this->page('home');
         }
-        $parts = [];
-        foreach (Library::data($isbn, 'parts.json', 'array') as $item) {
-            if ($item['epub']) {
-                $parts[] = Library::data($isbn, $item['name'].'.xhtml', 'document');
-            }
-        }
-        $document = new PhpWord();
-        foreach (Zord::value('word', 'styles') as $name => $style) {
-            $document->addFontStyle($name, $style);
-        }
-        foreach ($parts as $part) {
-            $section = $document->addSection();
-            $section->addText($part->textContent, 'default');
-        }
-        $writer = IOFactory::createWriter($document, 'Word2007');
-        $writer->save('/tmp/'.$isbn.'.docx');
-        return $this->send('/tmp/'.$isbn.'.docx', 'admin');
+        return $this->send(Zord::getInstance('WordBuilder', $book, $size, $format)->process(), 'admin');
     }
     
     private function inContextFilterQuery() {

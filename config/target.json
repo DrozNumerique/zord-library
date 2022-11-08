@@ -119,7 +119,9 @@
 		"word": {
 			"shortcut": "word",
 			"parameters": {
-				"book": "FILTER_SANITIZE_STRING"
+				"book": "FILTER_SANITIZE_STRING",
+				"size": "FILTER_SANITIZE_STRING",
+				"format": "FILTER_SANITIZE_STRING"
 			}
 		}
 	}

@@ -22,7 +22,8 @@
 			},
 			"select": "Selected",
 			"show": "Read online",
-			"epub": "Download ePub"
+			"epub": "Download ePub",
+			"word": "Download Word file"
 		}
 	}
 }

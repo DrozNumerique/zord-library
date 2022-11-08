@@ -12,6 +12,7 @@
 
 .admin-table td.show,
 .admin-table td.epub,
+.admin-table td.word,
 .admin-table td.delete {
 	cursor: pointer;
 }

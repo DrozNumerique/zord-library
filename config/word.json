@@ -1,10 +1,113 @@
 {
-	"styles": {
+	"extensions": {
+		"Word2007": "docx",
+		"ODText": "odt",
+		"RTF": "rtf",
+		"HTML": "html",
+		"PDF": "pdf"
+	},
+	"sizes": {
 		"default": {
-			"name": "Times new roman",
-			"size": 16,
-			"color": "1B2232",
-			"bold": true
+			"height": "21cm",
+			"width": "15cm",
+			"margin": {
+				"top": "2cm",
+				"bottom": "2cm",
+				"left": "2cm",
+				"right": "2cm"
+			}
 		}
-	}
+	},
+	"styles": {
+		"font": {
+			"default": {
+				"name": "Times new roman",
+				"size": 10
+			},
+			"note": {
+				"name": "Times new roman",
+				"size": 8
+			},
+			"header": {
+				"name": "Times new roman",
+				"size": 9
+			},
+			"footer": {
+				"name": "Times new roman",
+				"size": 9
+			},
+			"emph": {
+				"name": "Times new roman",
+				"size": 10,
+				"italic": true
+			},
+			"hi.sup": {
+				"name": "Times new roman",
+				"size": 10,
+				"superScript": true
+			},
+			"hi.sub": {
+				"name": "Times new roman",
+				"size": 10,
+				"subScript": true
+			},
+			"hi.sc": {
+				"name": "Times new roman",
+				"size": 10,
+				"smallCaps": true
+			},
+			"hi.i": {
+				"name": "Times new roman",
+				"size": 10,
+				"italic": true
+			},
+			"stage": {
+				"name": "Times new roman",
+				"size": 10,
+				"italic": true
+			}
+		},
+		"paragraph": {
+			"left": {
+				"alignment": "start"
+			},
+			"right": {
+				"alignment": "end"
+			},
+			"center": {
+				"alignment": "center"
+			},
+			"justify": {
+				"alignment": "both"
+			},
+			"default": {
+				"basedOn": "justify"
+			},
+			"p": {
+				"basedOn": "justify",
+				"indentation": {
+					"firstLine": "1cm"
+				}
+			},
+			"l": {
+				"basedOn": "justify",
+				"indentation": {
+					"firstLine": "1cm"
+				}
+			},
+			"speaker": {
+				"basedOn": "center"
+			}
+		}
+	},
+	"textrun": [
+		"p",
+		"l",
+		"bibl",
+		"speaker",
+		"stage",
+		"item",
+		"emph",
+		"label"
+	]
 }
