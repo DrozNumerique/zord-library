@@ -53,9 +53,6 @@
 			}
 		},
 		"paragraph": {
-			"*": {
-				"alignment": "both"
-			},
 			"*@header": {
 				"alignment": "center"
 			},
@@ -71,24 +68,17 @@
 			"*.#right": {
 				"alignment": "right"
 			},
-			"titlePart": {
-				"alignment": "center"
-			},
-			"docAuthor": {
-				"alignment": "center"
-			},
-			"addrLine": {
-				"alignment": "center"
-			},
-			"date": {
+			"titlePage": {
 				"alignment": "center"
 			},
 			"p": {
+				"alignment": "both",
 				"indentation": {
 					"firstLine": "1cm"
 				}
 			},
 			"p.#center": {
+				"alignment": "center",
 				"indentation": {
 					"firstLine": 0
 				}
