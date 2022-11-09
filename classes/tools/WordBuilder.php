@@ -14,10 +14,13 @@ class WordBuilder {
     protected $metadata;
     protected $parts;
     protected $document;
+    protected $styles = [];
     
     protected static $WIDTH = 'width';
     protected static $HEIGHT = 'height';
     protected static $MARGIN = 'margin';
+    protected static $FONT = 'font';
+    protected static $PARAGRAPH = 'paragraph';
     
     public function __construct($book, $size, $format) {
         $this->book = $book;
@@ -28,8 +31,7 @@ class WordBuilder {
     public function process() {
         $this->document = new PhpWord();
         $this->loadData();
-        $this->setSettings();
-        $this->addStyles();
+        $this->loadSettings();
         foreach ($this->parts as $part) {
             if ($this->isSection($part)) {
                 $section = $this->document->addSection($this->getSectionStyle($part));
@@ -43,7 +45,7 @@ class WordBuilder {
                         $footnotes[$child->getAttribute('id')] = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
                     }
                 }
-                $this->handleNode($section, null, $part, $text, $footnotes);
+                $this->handleNode($section, null, $part, $text, $footnotes, 'text');
             }
         }
         $writer = IOFactory::createWriter($this->document, $this->format);
@@ -62,27 +64,9 @@ class WordBuilder {
         }
     }
     
-    protected function setSettings() {
+    protected function loadSettings() {
         $this->document->getSettings()->setThemeFontLang(new Language($this->metadata['language'] ?? 'fr'));
         $this->document->getSettings()->setEvenAndOddHeaders(true);
-    }
-    
-    protected function addStyles() {
-        foreach (Zord::value('word', 'styles') as $type => $styles) {
-            foreach ($styles as $name => $style) {
-                $style = $this->convert($style);
-                switch ($type) {
-                    case 'font': {
-                        $this->document->addFontStyle($name, $style);
-                        break;
-                    }
-                    case 'paragraph': {
-                        $this->document->addParagraphStyle($name, $style);
-                        break;
-                    }
-                }
-            }
-        }
     }
     
     protected function getSectionStyle($part) {
@@ -149,26 +133,30 @@ class WordBuilder {
     }
     
     protected function dressHeader(&$section, $part) {
+        $fontStyle = $this->getFontStyle($part, null, 'header');
+        $paragraphStyle = $this->getParagraphStyle($part, null, 'header');
         $header = $section->addHeader();
-        $header->addText($part['title'], 'header', 'center');
+        $header->addText($part['title'], $fontStyle, $paragraphStyle);
         $evenHeader = $section->addHeader(Header::EVEN);
-        $evenHeader->addText($this->metadata['title'], 'header','center');
+        $evenHeader->addText($this->metadata['title'], $fontStyle, $paragraphStyle);
         $firstHeader = $section->addHeader(Header::FIRST);
         $firstHeader->addText('');
     }
     
     protected function dressFooter(&$section, $part) {
+        $fontStyle = $this->getFontStyle($part, null, 'footer');
+        $paragraphStyle = $this->getParagraphStyle($part, null, 'footer');
         $footer = $section->addFooter();
-        $footer->addPreserveText('{PAGE}', 'footer', 'center');
+        $footer->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
         $evenfooter = $section->addFooter(Header::EVEN);
-        $evenfooter->addPreserveText('{PAGE}', 'footer', 'center');
+        $evenfooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
         $firstFooter = $section->addFooter(Header::FIRST);
-        $firstFooter->addPreserveText('{PAGE}', 'footer', 'center');
+        $firstFooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
     }
     
-    protected function handleNode(&$section, $textrun, $part, $node, $footnotes) {
-        $fontStyle = $this->getFontStyle($part, $node);
-        $paragraphStyle = $this->getParagraphStyle($part, $node);
+    protected function handleNode(&$section, $textrun, $part, $node, $footnotes, $context) {
+        $fontStyle = $this->getFontStyle($part, $node, $context);
+        $paragraphStyle = $this->getParagraphStyle($part, $node, $context);
         $textrun = $textrun ?? ($this->isTextRun($part, $node) ? $section->addTextRun($paragraphStyle) : null);
         $container = $textrun ?? $section;
         foreach ($node->childNodes as $child) {
@@ -190,10 +178,10 @@ class WordBuilder {
                     }
                 }
                 if ($note && $id && isset($footnotes[$id])) {
-                    $this->handleNode($section, $note, $part, $footnotes[$id], $footnotes);
+                    $this->handleNode($section, $note, $part, $footnotes[$id], $footnotes, 'note');
                 }
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
-                $this->handleNode($section, $textrun, $part, $child, $footnotes);
+                $this->handleNode($section, $textrun, $part, $child, $footnotes, $context);
             }
         }
     }
@@ -203,16 +191,17 @@ class WordBuilder {
         return $trim ? trim($content) : $content;
     }
     
-    protected function getFontStyle($part, $node) {
-        return $this->getStyle($part, $node, 'font');
+    protected function getFontStyle($part, $node, $context) {
+        return $this->getStyle($part, $node, $context, self::$FONT);
     }
     
-    protected function getParagraphStyle($part, $node) {
-        return $this->getStyle($part, $node, 'paragraph');
+    protected function getParagraphStyle($part, $node, $context) {
+        return $this->getStyle($part, $node, $context, self::$PARAGRAPH);
     }
     
     protected function isStyled($part, $node, $class = null) {
-        return $node->nodeType === XML_ELEMENT_NODE &&
+        return isset($node) &&
+               $node->nodeType === XML_ELEMENT_NODE &&
                $node->localName === 'div' &&
                $node->hasAttribute('class') &&
                (!isset($class)
@@ -220,24 +209,34 @@ class WordBuilder {
                    || (is_array($class) && in_array($node->getAttribute('class'), $class)));
     }
     
-    protected function getStyle($part, $node, $type) {
-        if ($this->isStyled($part, $node)) {
-            $class = $node->getAttribute('class');
-            $rend = null;
+    protected function getStyle($part, $node, $context, $type) {
+        $styled = $this->isStyled($part, $node);
+        $class = $styled ? $node->getAttribute('class') : '*';
+        $rend = null;
+        if ($styled) {
             if ($node->hasAttribute('data-rendition')) {
                 $rend = $node->getAttribute('data-rendition');
             }
             if ($node->hasAttribute('data-rend')) {
                 $rend = $node->getAttribute('data-rend');
             }
-            if (isset($rend) && Zord::value('word', ['styles',$type,$class.'.'.$rend])) {
-                return $class.'.'.$rend;
-            }
-            if (Zord::value('word', ['styles',$type,$class])) {
-                return $class;
-            }
         }
-        return "default";
+        $name = $type.'$'.$class.($rend ? '.'.$rend : '').'@'.$context;
+        if (!isset($this->styles[$name])) {
+            $style = $this->convert($this->mergeStyles($type, $class, $rend, $context));
+            switch ($type) {
+                case self::$FONT: {
+                    $this->document->addFontStyle($name, $style);
+                    break;
+                }
+                case self::$PARAGRAPH: {
+                    $this->document->addParagraphStyle($name, $style);
+                    break;
+                }
+            }
+            $this->styles[$name] = $style;
+        }
+        return $name;
     }
         
     protected function isTextRun($part, $node) {
@@ -295,6 +294,18 @@ class WordBuilder {
         return $this->convert(Zord::value('word', $key) ?? 0);
     }
     
+    private function mergeStyles($type, $class, $rend, $context) {
+        $style = [];
+        foreach ($class ? ['*', $class] : ['*'] as $_class) {
+            foreach ($rend ? ['', '.'.$rend] : [''] as $_rend) {
+                foreach ($context ? ['', '@'.$context] : [''] as $_context) {
+                    $name = $_class.$_rend.$_context;
+                    $style = Zord::array_merge($style, Zord::value('word', ['styles',$type,$name]) ?? []);
+                }
+            }
+        }
+        return $style;
+    }
 }
 
 ?>

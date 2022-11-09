@@ -20,83 +20,86 @@
 	},
 	"styles": {
 		"font": {
-			"default": {
+			"*": {
 				"name": "Times new roman",
 				"size": 10
 			},
-			"note": {
-				"name": "Times new roman",
+			"*@note": {
 				"size": 8
 			},
-			"header": {
-				"name": "Times new roman",
+			"*@header": {
 				"size": 9
 			},
-			"footer": {
-				"name": "Times new roman",
+			"*@footer": {
 				"size": 9
 			},
 			"emph": {
-				"name": "Times new roman",
-				"size": 10,
 				"italic": true
 			},
 			"hi.sup": {
-				"name": "Times new roman",
-				"size": 10,
 				"superScript": true
 			},
 			"hi.sub": {
-				"name": "Times new roman",
-				"size": 10,
 				"subScript": true
 			},
 			"hi.sc": {
-				"name": "Times new roman",
-				"size": 10,
 				"smallCaps": true
 			},
 			"hi.i": {
-				"name": "Times new roman",
-				"size": 10,
 				"italic": true
 			},
 			"stage": {
-				"name": "Times new roman",
-				"size": 10,
 				"italic": true
 			}
 		},
 		"paragraph": {
-			"left": {
-				"alignment": "start"
-			},
-			"right": {
-				"alignment": "end"
-			},
-			"center": {
-				"alignment": "center"
-			},
-			"justify": {
+			"*": {
 				"alignment": "both"
 			},
-			"default": {
-				"basedOn": "justify"
+			"*@header": {
+				"alignment": "center"
+			},
+			"*@footer": {
+				"alignment": "center"
+			},
+			"*.#center": {
+				"alignment": "center"
+			},
+			"*.#left": {
+				"alignment": "left"
+			},
+			"*.#right": {
+				"alignment": "right"
+			},
+			"titlePart": {
+				"alignment": "center"
+			},
+			"docAuthor": {
+				"alignment": "center"
+			},
+			"addrLine": {
+				"alignment": "center"
+			},
+			"date": {
+				"alignment": "center"
 			},
 			"p": {
-				"basedOn": "justify",
 				"indentation": {
 					"firstLine": "1cm"
 				}
 			},
+			"p.#center": {
+				"indentation": {
+					"firstLine": 0
+				}
+			},
 			"l": {
-				"basedOn": "justify",
 				"indentation": {
 					"firstLine": "1cm"
 				}
 			},
 			"speaker": {
-				"basedOn": "center"
+				"alignment": "center"
 			}
 		}
 	},
