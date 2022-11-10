@@ -53,6 +53,9 @@
 			}
 		},
 		"paragraph": {
+			"*@text": {
+				"alignment": "both"
+			},
 			"*@header": {
 				"alignment": "center"
 			},
@@ -71,14 +74,15 @@
 			"titlePage": {
 				"alignment": "center"
 			},
+			"head": {
+				"alignment": "center"
+			},
 			"p": {
-				"alignment": "both",
 				"indentation": {
 					"firstLine": "1cm"
 				}
 			},
 			"p.#center": {
-				"alignment": "center",
 				"indentation": {
 					"firstLine": 0
 				}
@@ -90,6 +94,9 @@
 			},
 			"speaker": {
 				"alignment": "center"
+			},
+			"epigraph": {
+				"alignment": "right"
 			}
 		}
 	},
@@ -101,6 +108,7 @@
 		"stage",
 		"item",
 		"emph",
-		"label"
+		"label",
+		"epigraph"
 	]
 }
