@@ -62,11 +62,20 @@
 			"*@footer": {
 				"alignment": "center"
 			},
+			"*.center": {
+				"alignment": "center"
+			},
 			"*.#center": {
 				"alignment": "center"
 			},
+			"*.left": {
+				"alignment": "left"
+			},
 			"*.#left": {
 				"alignment": "left"
+			},
+			"*.right": {
+				"alignment": "right"
 			},
 			"*.#right": {
 				"alignment": "right"
