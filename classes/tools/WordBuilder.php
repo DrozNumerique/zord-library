@@ -183,6 +183,48 @@ class WordBuilder {
                     if ($note && $id && isset($footnotes[$id])) {
                         $this->handleNode($section, $note, $footnotes[$id], $footnotes, 'note', [], []);
                     }
+                } else if ($this->isTeiElement($child, 'graphic') && $child->hasAttribute('data-url')) {
+                    $url = $child->getAttribute('data-url');
+                    if (substr($url, 0, 1) == '/') {
+                        $url = substr($url, 1);
+                    } else {
+                        $url = $this->book.DS.$url;
+                    }
+                    $dimension = 'height';
+                    $size = 150;
+                    /*
+                    $loading = Zord::firstElementChild($child);
+                    if ($loading->hasAttribute('style')) {
+                        $matches = [];
+                        if (preg_match('/^(height|width):([0-9]+)?px;$/i', $loading->getAttribute('style'), $matches)) {
+                            $dimension = $matches[1];
+                            $size = Converter::pixelToPoint($matches[2]);
+                        }
+                    }
+                    */
+                    $file = STORE_FOLDER.'medias'.DS.$url;
+                    if (file_exists($file)) {
+                        $container->addImage(STORE_FOLDER.'medias'.DS.$url, [
+                            'alignment' => 'center',
+                            $dimension  => $size
+                        ]);
+                    }
+                } else if ($child->localName === 'br') {
+                    $container->addTextBreak();
+                } else if ($child->localName === 'table') {
+                    $table = $container->addTable();
+                    $row = Zord::firstElementChild($child);
+                    while ($row) {
+                        $table->addRow();
+                        $cell = Zord::firstElementChild($row);
+                        while ($cell) {
+                            $this->handleNode($section, $table->addCell(), $cell, $footnotes, $context, $styles, $done);
+                            $cell = Zord::nextElementSibling($cell);
+                        }
+                        $row = Zord::nextElementSibling($row);
+                    }
+                } else if ($this->isTeiElement($child, 'pb') && $this->hasAttribute($child, 'data-n')) {
+                    $container->addText('{'.$child->getAttribute('data-n').'}', $fontStyle, $paragraphStyle);
                 } else {
                     $this->handleNode($section, $paragraph, $child, $footnotes, $context, [
                         self::$FONT      => $fontStyle,

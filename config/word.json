@@ -33,6 +33,9 @@
 			"*@footer": {
 				"size": 9
 			},
+			"pb": {
+				"size": 8
+			},
 			"emph": {
 				"italic": true
 			},
@@ -80,15 +83,36 @@
 			"*.#right": {
 				"alignment": "right"
 			},
+			"graphic": {
+				"alignment": "center"
+			},
 			"titlePage": {
 				"alignment": "center"
 			},
+			"titlePart": {
+				"space": {
+					"after": "0.5cm"
+				}
+			},
+			"argument.rights": {
+				"space": {
+					"before": "0.5cm"
+				}
+			},
 			"head": {
-				"alignment": "center"
+				"alignment": "center",
+				"space": {
+					"after": "0.5cm"
+				}
 			},
 			"p": {
 				"indentation": {
 					"firstLine": "1cm"
+				}
+			},
+			"p.center": {
+				"indentation": {
+					"firstLine": 0
 				}
 			},
 			"p.#center": {
@@ -104,8 +128,14 @@
 			"speaker": {
 				"alignment": "center"
 			},
+			"caption": {
+				"alignment": "center"
+			},
 			"epigraph": {
-				"alignment": "right"
+				"alignment": "right",
+				"indentation": {
+					"left": "3cm"
+				}
 			}
 		}
 	},
@@ -118,6 +148,8 @@
 		"item",
 		"emph",
 		"label",
-		"epigraph"
+		"titlePart",
+		"caption",
+		"table"
 	]
 }
