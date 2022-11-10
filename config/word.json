@@ -6,7 +6,7 @@
 		"HTML": "html",
 		"PDF": "pdf"
 	},
-	"sizes": {
+	"layouts": {
 		"default": {
 			"height": "21cm",
 			"width": "15cm",
@@ -93,7 +93,7 @@
 			}
 		}
 	},
-	"textrun": [
+	"paragraph": [
 		"p",
 		"l",
 		"bibl",

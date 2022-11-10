@@ -614,12 +614,12 @@ class Book extends Module {
     
     public function word() {
         $book = $this->params['book'] ?? null;
-        $size = $this->params['size'] ?? "default";
+        $layout = $this->params['layout'] ?? "default";
         $format = $this->params['format'] ?? WORD_WRITER_FORMAT;
-        if (empty($book) || empty($size) || empty($format)) {
+        if (empty($book) || empty($layout) || empty($format)) {
             return $this->page('home');
         }
-        return $this->send(Zord::getInstance('WordBuilder', $book, $size, $format)->process(), 'admin');
+        return $this->send(Zord::getInstance('WordBuilder', $book, $layout, $format)->process(), 'admin');
     }
     
     private function inContextFilterQuery() {
