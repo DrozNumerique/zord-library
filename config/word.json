@@ -18,6 +18,16 @@
 			}
 		}
 	},
+	"images": {
+		"default": {
+			"alignment": "center",
+			"height": "10cm"
+		},
+		"#(/){0,1}logo_publisher\\.(\\w)+#i": {
+			"alignment": "center",
+			"width": "5cm"
+		}
+	},
 	"styles": {
 		"font": {
 			"*": {

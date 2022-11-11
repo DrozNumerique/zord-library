@@ -20,14 +20,19 @@ class WordBuilder {
     protected static $WIDTH = 'width';
     protected static $HEIGHT = 'height';
     protected static $MARGIN = 'margin';
+    protected static $MARGIN_TOP = 'margin.top';
+    protected static $MARGIN_BOTTOM = 'margin.bottom';
+    protected static $MARGIN_LEFT = 'margin.left';
+    protected static $MARGIN_RIGHT = 'margin.right';
     protected static $FONT = 'font';
     protected static $PARAGRAPH = 'paragraph';
+    protected static $NONE = 'none';
     
-    public function __construct($book, $layout = 'default', $format = 'Word2007', $config = 'word') {
+    public function __construct($book, $layout = 'default', $format = 'Word2007') {
         $this->book = $book;
         $this->layout = $layout;
         $this->format = $format;
-        $this->config = Zord::array_merge(Zord::getConfig('word'), Zord::getConfig($config));
+        $this->config = Zord::array_merge(Zord::getConfig('word'), Zord::getConfig('word'.DS.$book));
     }
     
     public function process() {
@@ -89,8 +94,8 @@ class WordBuilder {
                !in_array($this->book.'/'.$part['name'], $excludes);
     }
     
-    protected function isRotated($part) {
-        return in_array($part['name'], $this->config['layouts'][$this->layout]['rotated'] ?? []);
+    protected function getRotation($part) {
+        return $this->config['layouts'][$this->layout]['rotation'][$part['name']] ?? self::$NONE;
     }
     
     protected function getPageHeight($part) {
@@ -102,19 +107,19 @@ class WordBuilder {
     }
     
     protected function getMarginTop($part) {
-        return $this->getSize($part, self::$MARGIN.'.top');
+        return $this->getSize($part, self::$MARGIN_TOP);
     }
     
     protected function getMarginBottom($part) {
-        return $this->getSize($part, self::$MARGIN.'.bottom');
+        return $this->getSize($part, self::$MARGIN_BOTTOM);
     }
     
     protected function getMarginLeft($part) {
-        return $this->getSize($part, self::$MARGIN.'.left');
+        return $this->getSize($part, self::$MARGIN_LEFT);
     }
     
     protected function getMarginRight($part) {
-        return $this->getSize($part, self::$MARGIN.'.right');
+        return $this->getSize($part, self::$MARGIN_RIGHT);
     }
     
     protected function dressSection(&$section, $part) {
@@ -185,29 +190,10 @@ class WordBuilder {
                     }
                 } else if ($this->isTeiElement($child, 'graphic') && $child->hasAttribute('data-url')) {
                     $url = $child->getAttribute('data-url');
-                    if (substr($url, 0, 1) == '/') {
-                        $url = substr($url, 1);
-                    } else {
-                        $url = $this->book.DS.$url;
-                    }
-                    $dimension = 'height';
-                    $size = 150;
-                    /*
-                    $loading = Zord::firstElementChild($child);
-                    if ($loading->hasAttribute('style')) {
-                        $matches = [];
-                        if (preg_match('/^(height|width):([0-9]+)?px;$/i', $loading->getAttribute('style'), $matches)) {
-                            $dimension = $matches[1];
-                            $size = Converter::pixelToPoint($matches[2]);
-                        }
-                    }
-                    */
-                    $file = STORE_FOLDER.'medias'.DS.$url;
+                    $file = $this->getImageFile($url);
+                    $style = $this->getImageStyle($url);
                     if (file_exists($file)) {
-                        $container->addImage(STORE_FOLDER.'medias'.DS.$url, [
-                            'alignment' => 'center',
-                            $dimension  => $size
-                        ]);
+                        $container->addImage($file, $style);
                     }
                 } else if ($child->localName === 'br') {
                     $container->addTextBreak();
@@ -223,8 +209,11 @@ class WordBuilder {
                         }
                         $row = Zord::nextElementSibling($row);
                     }
-                } else if ($this->isTeiElement($child, 'pb') && $this->hasAttribute($child, 'data-n')) {
-                    $container->addText('{'.$child->getAttribute('data-n').'}', $fontStyle, $paragraphStyle);
+                } else if ($this->isTeiElement($child, 'pb') &&  $this->hasAttribute($child, 'data-n')) {
+                    list($fontStyle, $done) = $this->getFontStyle($child, $context, $styles, $done);
+                    list($paragraphStyle, $done) = $this->getParagraphStyle($child, $context, $styles, $done);
+                    $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
+                    $container->addText($content, $fontStyle, $paragraphStyle);
                 } else {
                     $this->handleNode($section, $paragraph, $child, $footnotes, $context, [
                         self::$FONT      => $fontStyle,
@@ -246,6 +235,27 @@ class WordBuilder {
     
     protected function getParagraphStyle($node, $context, $styles, $done) {
         return $this->getStyle($node, $context, self::$PARAGRAPH, $styles, $done);
+    }
+    
+    protected function getImageStyle($url) {
+        $style = $this->config['images'][$url] ?? null;
+        if (!isset($style)) {
+            foreach ($this->config['images'] as $pattern => $_style) {
+                if (preg_match($pattern, $url)) {
+                    $style = $_style;
+                }
+            }
+        }
+        return $this->convert($style ?? $this->config['images']['default'], true);
+    }
+    
+    protected function getImageFile($url) {
+        if (substr($url, 0, 1) == '/') {
+            $url = substr($url, 1);
+        } else {
+            $url = $this->book.DS.$url;
+        }
+        return STORE_FOLDER.'medias'.DS.$url;
     }
     
     protected function isTeiElement($node, $values = null) {
@@ -295,10 +305,10 @@ class WordBuilder {
         return '/tmp/'.$this->book.'.'.$this->config['extensions'][$this->format];
     }
     
-    private function convert($value) {
+    private function convert($value, $point = false) {
         if (is_array($value)) {
             foreach ($value as &$item) {
-                $item = $this->convert($item);
+                $item = $this->convert($item, $point);
             }
         } else if (is_string($value)) {
             $matches = [];
@@ -321,13 +331,15 @@ class WordBuilder {
                         break;
                     }
                 }
+                $value = $value / ($point ? 20 : 1);
             }
         }
         return $value;
     }
     
     private function getSize($part, $property) {
-        if (in_array($property, [self::$HEIGHT,self::$WIDTH]) && $this->isRotated($part)) {
+        $rotation = $this->getRotation($part);
+        if (in_array($property, [self::$HEIGHT,self::$WIDTH]) && $rotation !== self::$NONE) {
             if ($property === self::$HEIGHT) {
                 $property = self::$WIDTH;
             } else if ($property === self::$WIDTH) {
@@ -357,7 +369,7 @@ class WordBuilder {
                 }
             }
         }
-        $parent = $this->styles[$styles[$type] ?? 'none'] ?? [];
+        $parent = $this->styles[$styles[$type] ?? self::$NONE] ?? [];
         $style = $this->convert(Zord::array_merge($parent, $style));
         return [$style, $done];
     }
