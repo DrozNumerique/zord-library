@@ -1,12 +1,12 @@
 {
-	"extensions": {
+	"extension": {
 		"Word2007": "docx",
 		"ODText": "odt",
 		"RTF": "rtf",
 		"HTML": "html",
 		"PDF": "pdf"
 	},
-	"layouts": {
+	"layout": {
 		"default": {
 			"height": "21cm",
 			"width": "15cm",
@@ -18,145 +18,163 @@
 			}
 		}
 	},
-	"images": {
+	"image": {
 		"default": {
 			"alignment": "center",
 			"margin": "0.5cm",
 			"scale": "fit"
 		}
 	},
-	"styles": {
-		"font": {
-			"*": {
-				"name": "Times new roman",
-				"size": 10
-			},
-			"*@note": {
-				"size": 8
-			},
-			"*@header": {
-				"size": 9
-			},
-			"*@footer": {
-				"size": 9
-			},
-			"pb": {
-				"size": 8
-			},
-			"emph": {
-				"italic": true
-			},
-			"hi.sup": {
-				"superScript": true
-			},
-			"hi.sub": {
-				"subScript": true
-			},
-			"hi.sc": {
-				"smallCaps": true
-			},
-			"hi.i": {
-				"italic": true
-			},
-			"stage": {
-				"italic": true
-			}
-		},
-		"paragraph": {
-			"*@text": {
-				"alignment": "both"
-			},
-			"*@header": {
-				"alignment": "center"
-			},
-			"*@footer": {
-				"alignment": "center"
-			},
-			"*.center": {
-				"alignment": "center"
-			},
-			"*.#center": {
-				"alignment": "center"
-			},
-			"*.left": {
-				"alignment": "left"
-			},
-			"*.#left": {
-				"alignment": "left"
-			},
-			"*.right": {
-				"alignment": "right"
-			},
-			"*.#right": {
-				"alignment": "right"
-			},
-			"graphic": {
-				"alignment": "center"
-			},
-			"titlePage": {
-				"alignment": "center"
-			},
-			"titlePart": {
-				"space": {
-					"after": "0.5cm"
-				}
-			},
-			"argument.rights": {
-				"space": {
-					"before": "0.5cm"
-				}
-			},
-			"head": {
-				"alignment": "center",
-				"space": {
-					"after": "0.5cm"
-				}
-			},
-			"p": {
-				"indentation": {
-					"firstLine": "1cm"
-				}
-			},
-			"p.center": {
-				"indentation": {
-					"firstLine": 0
-				}
-			},
-			"p.#center": {
-				"indentation": {
-					"firstLine": 0
-				}
-			},
-			"l": {
-				"indentation": {
-					"firstLine": "1cm"
-				}
-			},
-			"speaker": {
-				"alignment": "center"
-			},
-			"caption": {
-				"alignment": "center"
-			},
-			"epigraph": {
-				"alignment": "right",
-				"indentation": {
-					"left": "3cm"
-				}
-			}
+	"table": {
+		"default": {
+			"alignment": "center",
+			"layout": "fixed"
 		}
 	},
-	"paragraph": [
-		"p",
-		"l",
-		"bibl",
-		"speaker",
-		"stage",
-		"item",
-		"emph",
-		"label",
-		"titlePart",
-		"caption",
-		"table"
-	]
+	"row": {
+		"default": {
+			"cantSplit": true
+		}
+	},
+	"cell": {
+		"default": {
+			"valign": "center"
+		}
+	},
+	"font": {
+		"*": {
+			"name": "Times new roman",
+			"size": 10
+		},
+		"*@note": {
+			"size": 8
+		},
+		"*@header": {
+			"size": 9
+		},
+		"*@footer": {
+			"size": 9
+		},
+		"pb": {
+			"size": 8
+		},
+		"emph": {
+			"italic": true
+		},
+		"hi.sup": {
+			"superScript": true
+		},
+		"hi.sub": {
+			"subScript": true
+		},
+		"hi.sc": {
+			"smallCaps": true
+		},
+		"hi.i": {
+			"italic": true
+		},
+		"stage": {
+			"italic": true
+		}
+	},
+	"paragraph": {
+		"names": [
+			"p",
+			"l",
+			"bibl",
+			"speaker",
+			"stage",
+			"item",
+			"emph",
+			"label",
+			"titlePart",
+			"caption",
+			"table",
+			"cell"
+		],
+		"*@text": {
+			"alignment": "both"
+		},
+		"*@header": {
+			"alignment": "center"
+		},
+		"*@footer": {
+			"alignment": "center"
+		},
+		"*.center": {
+			"alignment": "center"
+		},
+		"*.#center": {
+			"alignment": "center"
+		},
+		"*.left": {
+			"alignment": "left"
+		},
+		"*.#left": {
+			"alignment": "left"
+		},
+		"*.right": {
+			"alignment": "right"
+		},
+		"*.#right": {
+			"alignment": "right"
+		},
+		"graphic": {
+			"alignment": "center"
+		},
+		"titlePage": {
+			"alignment": "center"
+		},
+		"titlePart": {
+			"space": {
+				"after": "0.5cm"
+			}
+		},
+		"argument.rights": {
+			"space": {
+				"before": "0.5cm"
+			}
+		},
+		"head": {
+			"alignment": "center",
+			"space": {
+				"after": "0.5cm"
+			}
+		},
+		"p": {
+			"indentation": {
+				"firstLine": "1cm"
+			}
+		},
+		"p.center": {
+			"indentation": {
+				"firstLine": 0
+			}
+		},
+		"p.#center": {
+			"indentation": {
+				"firstLine": 0
+			}
+		},
+		"l": {
+			"indentation": {
+				"firstLine": "1cm"
+			}
+		},
+		"speaker": {
+			"alignment": "center"
+		},
+		"caption": {
+			"alignment": "center"
+		},
+		"epigraph": {
+			"alignment": "right",
+			"indentation": {
+				"left": "3cm"
+			}
+		},
+		"cell": {
+			"alignment": "center"
+		}
+	}
 }

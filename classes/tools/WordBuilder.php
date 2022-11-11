@@ -95,7 +95,7 @@ class WordBuilder {
     }
     
     protected function getRotation($part) {
-        return $this->config['layouts'][$this->layout]['rotation'][$part['name']] ?? self::$NONE;
+        return $this->config['layout'][$this->layout]['rotation'][$part['name']] ?? self::$NONE;
     }
     
     protected function getPageHeight($part) {
@@ -196,16 +196,29 @@ class WordBuilder {
                 } else if ($child->localName === 'br') {
                     $container->addTextBreak();
                 } else if ($child->localName === 'table') {
-                    $table = $container->addTable();
+                    $table = $container->addTable($this->getTableStyle($part, $node, 'table'));
                     $row = Zord::firstElementChild($child);
+                    $rowIndex = 0;
                     while ($row) {
-                        $table->addRow();
+                        $rowHeight = $this->getRowHeight($part, $node, $rowIndex);
+                        $rowStyle =$this->getTableStyle($part, $node, 'row', $rowIndex);
+                        $table->addRow($rowHeight, $rowStyle);
                         $cell = Zord::firstElementChild($row);
+                        $cellIndex = 0;
                         while ($cell) {
-                            $this->handleNode($part, $section, $table->addCell(), $cell, $footnotes, $context, $styles, $done);
+                            $cellWidth = $this->getCellWidth($part, $node, $cellIndex);
+                            $cellStyle =$this->getTableStyle($part, $node, 'cell', $rowIndex, $cellIndex);
+                            list($fontStyle, $done) = $this->getFontStyle($cell, $context, $styles, $done);
+                            list($paragraphStyle, $done) = $this->getParagraphStyle($cell, $context, $styles, $done);
+                            $this->handleNode($part, $section, $table->addCell($cellWidth, $cellStyle), $cell, $footnotes, $context, [
+                                self::$FONT      => $fontStyle,
+                                self::$PARAGRAPH => $paragraphStyle
+                            ], $done);
                             $cell = Zord::nextElementSibling($cell);
+                            $cellIndex++;
                         }
                         $row = Zord::nextElementSibling($row);
+                        $rowIndex++;
                     }
                 } else if ($this->isTeiElement($child, 'pb') &&  $this->hasAttribute($child, 'data-n')) {
                     list($fontStyle, $done) = $this->getFontStyle($child, $context, $styles, $done);
@@ -235,17 +248,33 @@ class WordBuilder {
         return $this->getStyle($node, $context, self::$PARAGRAPH, $styles, $done);
     }
     
+    protected function getTableStyle($part, $node, $element, $rowIndex = null, $cellIndex = null) {
+        return $this->config[$element][$this->getTableStyleName($part, $node, $element, $rowIndex, $cellIndex)] ?? [];
+    }
+    
+    protected function getTableStyleName($part, $node, $element, $rowIndex, $cellIndex) {
+        return 'default';
+    }
+    
+    protected function getRowHeight($part, $node, $rowIndex) {
+        return $this->config['row']['default']['height'] ?? null;
+    }
+    
+    protected function getCellWidth($part, $node, $cellIndex) {
+        return $this->config['cell']['default']['width'] ?? null;
+    }
+    
     protected function getImageFileAndStyle($part, $node) {
         $url = $node->getAttribute('data-url');
-        $style = $this->config['images'][$url] ?? null;
+        $style = $this->config['image'][$url] ?? null;
         if (!isset($style)) {
-            foreach ($this->config['images'] as $pattern => $_style) {
+            foreach ($this->config['image'] as $pattern => $_style) {
                 if (substr($pattern, 0, 1) === '#' && preg_match($pattern, $url)) {
                     $style = $_style;
                 }
             }
         }
-        $style = $this->convert($style ?? $this->config['images']['default'], true);
+        $style = $this->convert($style ?? $this->config['image']['default'], true);
         if (substr($url, 0, 1) == '/') {
             $url = substr($url, 1);
         } else {
@@ -322,11 +351,11 @@ class WordBuilder {
     }
         
     protected function isParagraph($node) {
-        return $this->isTeiElement($node, $this->config[self::$PARAGRAPH] ?? []);
+        return $this->isTeiElement($node, $this->config[self::$PARAGRAPH]['names'] ?? []);
     }
     
     protected function filename() {
-        return '/tmp/'.$this->book.'.'.$this->config['extensions'][$this->format];
+        return '/tmp/'.$this->book.'.'.$this->config['extension'][$this->format];
     }
     
     private function convert($value, $point = false) {
@@ -370,7 +399,7 @@ class WordBuilder {
                 $property = self::$HEIGHT;
             }
         }
-        $value = $this->config['layouts'][$this->layout] ?? [];
+        $value = $this->config['layout'][$this->layout] ?? [];
         foreach (explode('.', $property) as $token) {
             $value = $value[$token] ?? null;
             if (!isset($value)) {
@@ -388,7 +417,7 @@ class WordBuilder {
                     $selector = $_class.$_rend.$_context;
                     if ((!in_array($selector, $done[$type] ?? []))) {
                         $done[$type][] = $selector;
-                        $style = Zord::array_merge($style, $this->config['styles'][$type][$selector] ?? []);
+                        $style = Zord::array_merge($style, $this->config[$type][$selector] ?? []);
                     }
                 }
             }
