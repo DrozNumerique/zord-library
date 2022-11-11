@@ -241,7 +241,7 @@ class WordBuilder {
         $style = $this->config['images'][$url] ?? null;
         if (!isset($style)) {
             foreach ($this->config['images'] as $pattern => $_style) {
-                if (preg_match($pattern, $url)) {
+                if (substr($pattern, 0, 1) === '#' && preg_match($pattern, $url)) {
                     $style = $_style;
                 }
             }
