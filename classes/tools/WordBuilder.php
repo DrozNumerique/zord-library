@@ -52,7 +52,7 @@ class WordBuilder {
                         $footnotes[$child->getAttribute('id')] = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
                     }
                 }
-                $this->handleNode($section, null, $text, $footnotes, 'text', [], []);
+                $this->handleNode($part, $section, null, $text, $footnotes, 'text', [], []);
             }
         }
         $writer = IOFactory::createWriter($this->document, $this->format);
@@ -161,7 +161,7 @@ class WordBuilder {
         $firstFooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
     }
     
-    protected function handleNode(&$section, $paragraph, $node, $footnotes, $context, $styles, $done) {
+    protected function handleNode($part, &$section, $paragraph, $node, $footnotes, $context, $styles, $done) {
         list($fontStyle, $done) = $this->getFontStyle($node, $context, $styles, $done);
         list($paragraphStyle, $done) = $this->getParagraphStyle($node, $context, $styles, $done);
         $paragraph = $paragraph ?? ($this->isParagraph($node) ? $section->addTextRun($paragraphStyle) : null);
@@ -186,12 +186,10 @@ class WordBuilder {
                         }
                     }
                     if ($note && $id && isset($footnotes[$id])) {
-                        $this->handleNode($section, $note, $footnotes[$id], $footnotes, 'note', [], []);
+                        $this->handleNode($part, $section, $note, $footnotes[$id], $footnotes, 'note', [], []);
                     }
                 } else if ($this->isTeiElement($child, 'graphic') && $child->hasAttribute('data-url')) {
-                    $url = $child->getAttribute('data-url');
-                    $file = $this->getImageFile($url);
-                    $style = $this->getImageStyle($url);
+                    list($file, $style) = $this->getImageFileAndStyle($part, $child);
                     if (file_exists($file)) {
                         $container->addImage($file, $style);
                     }
@@ -204,7 +202,7 @@ class WordBuilder {
                         $table->addRow();
                         $cell = Zord::firstElementChild($row);
                         while ($cell) {
-                            $this->handleNode($section, $table->addCell(), $cell, $footnotes, $context, $styles, $done);
+                            $this->handleNode($part, $section, $table->addCell(), $cell, $footnotes, $context, $styles, $done);
                             $cell = Zord::nextElementSibling($cell);
                         }
                         $row = Zord::nextElementSibling($row);
@@ -215,7 +213,7 @@ class WordBuilder {
                     $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
                     $container->addText($content, $fontStyle, $paragraphStyle);
                 } else {
-                    $this->handleNode($section, $paragraph, $child, $footnotes, $context, [
+                    $this->handleNode($part, $section, $paragraph, $child, $footnotes, $context, [
                         self::$FONT      => $fontStyle,
                         self::$PARAGRAPH => $paragraphStyle
                     ], $done);
@@ -237,7 +235,8 @@ class WordBuilder {
         return $this->getStyle($node, $context, self::$PARAGRAPH, $styles, $done);
     }
     
-    protected function getImageStyle($url) {
+    protected function getImageFileAndStyle($part, $node) {
+        $url = $node->getAttribute('data-url');
         $style = $this->config['images'][$url] ?? null;
         if (!isset($style)) {
             foreach ($this->config['images'] as $pattern => $_style) {
@@ -246,16 +245,41 @@ class WordBuilder {
                 }
             }
         }
-        return $this->convert($style ?? $this->config['images']['default'], true);
-    }
-    
-    protected function getImageFile($url) {
+        $style = $this->convert($style ?? $this->config['images']['default'], true);
         if (substr($url, 0, 1) == '/') {
             $url = substr($url, 1);
         } else {
             $url = $this->book.DS.$url;
         }
-        return STORE_FOLDER.'medias'.DS.$url;
+        $file = STORE_FOLDER.'medias'.DS.$url;
+        if (file_exists($file)) {
+            list($width, $height) = getimagesize($file);
+            $scale = $style['scale'] ?? false;
+            $strech = $style['strech'] ?? false;
+            $margin = ($style['margin'] ?? 0) * 20;
+            if ($scale) {
+                $matches = [];
+                $ratio = 1;
+                if ($scale === 'fit') {
+                    $frameHeight = $this->getPageHeight($part) - $this->getMarginTop($part) - $this->getMarginBottom($part) - 2 * $margin;
+                    $frameWidth = $this->getPageWidth($part) - $this->getMarginLeft($part) - $this->getMarginRight($part) - 2 * $margin;
+                    $ratio = min([
+                        $frameHeight / $this->convert($height."px"),
+                        $frameWidth / $this->convert($width."px")
+                    ]);
+                } else if (preg_match('/^([0-9]+\.?[0-9]*)%$/', $scale, $matches)) {
+                    $ratio = floatval($matches[1]) / 100;
+                }
+                if ($ratio !== 1) {
+                    $style['width'] = $this->convert(($width * $ratio)."px", true);
+                    $style['height'] = $this->convert(($height * $ratio)."px", true);
+                }
+            }
+            if (!$strech && isset($style['width']) && isset($style['height'])) {
+                unset($style[($width * $this->convert($style['height']) / ($height * $this->convert($style['width']))) > 1 ? 'width' : 'height']);
+            }
+        }
+        return [$file, $style];
     }
     
     protected function isTeiElement($node, $values = null) {

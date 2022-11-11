@@ -21,7 +21,8 @@
 	"images": {
 		"default": {
 			"alignment": "center",
-			"height": "10cm"
+			"margin": "0.5cm",
+			"scale": "fit"
 		}
 	},
 	"styles": {
