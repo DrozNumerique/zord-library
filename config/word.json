@@ -58,6 +58,9 @@
 		"pb": {
 			"size": 8
 		},
+		"head": {
+			"size": 13
+		},
 		"emph": {
 			"italic": true
 		},
