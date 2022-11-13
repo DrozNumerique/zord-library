@@ -1,6 +1,8 @@
 <?php
 
 use \PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Element\Endnote;
+use PhpOffice\PhpWord\Element\Footnote;
 use \PhpOffice\PhpWord\Element\Header;
 use \PhpOffice\PhpWord\Shared\Converter;
 use \PhpOffice\PhpWord\Style\Language;
@@ -197,11 +199,18 @@ class WordBuilder {
                 if ($this->isTeiElement($child, 'note')) {
                     $note = null;
                     $id = null;
-                    if ($child->hasAttribute('id')) {
+                    if ($child->hasAttribute('id') && $child->hasAttribute('data-n')) {
                         if (!$child->hasAttribute('data-place') || $child->getAttribute('data-place') === 'foot') {
+                            Zord::log($part['name'].' '.$child->getAttribute('id'));
+                            while ($container instanceof Footnote && $container->getParent() !== null) {
+                                $container = $container->getParent();
+                            }
                             $note = $container->addFootNote();
                             $id = 'footref_'.$child->getAttribute('id');
                         } else if ($child->hasAttribute('data-place') && $child->getAttribute('data-place') === 'end') {
+                            while ($container instanceof Endnote && $container->getParent() !== null) {
+                                $container = $container->getParent();
+                            }
                             $note = $container->addEndNote();
                             $id = 'endref_'.$child->getAttribute('id');
                         }
