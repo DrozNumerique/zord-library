@@ -198,25 +198,24 @@ class WordBuilder {
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
                 if ($this->isTeiElement($child, 'note')) {
                     $note = null;
-                    $id = null;
                     if ($child->hasAttribute('id') && $child->hasAttribute('data-n')) {
                         if (!$child->hasAttribute('data-place') || $child->getAttribute('data-place') === 'foot') {
-                            Zord::log($part['name'].' '.$child->getAttribute('id'));
                             while ($container instanceof Footnote && $container->getParent() !== null) {
                                 $container = $container->getParent();
                             }
                             $note = $container->addFootNote();
-                            $id = 'footref_'.$child->getAttribute('id');
                         } else if ($child->hasAttribute('data-place') && $child->getAttribute('data-place') === 'end') {
                             while ($container instanceof Endnote && $container->getParent() !== null) {
                                 $container = $container->getParent();
                             }
                             $note = $container->addEndNote();
-                            $id = 'endref_'.$child->getAttribute('id');
                         }
                     }
-                    if ($note && $id && isset($footnotes[$id])) {
-                        $this->handleNode($part, $section, $note, $footnotes[$id], $footnotes, 'note', [], [], []);
+                    if ($note) {
+                        $id = 'footref_'.$child->getAttribute('id');
+                        if (isset($footnotes[$id])) {
+                            $this->handleNode($part, $section, $note, $footnotes[$id], $footnotes, 'note', [], [], []);
+                        }
                     }
                 } else if ($this->isTeiElement($child, 'graphic') && $child->hasAttribute('data-url')) {
                     list($file, $style) = $this->getImageFileAndStyle($part, $child);
