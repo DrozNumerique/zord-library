@@ -12,6 +12,7 @@ class WordBuilder {
     protected $layout;
     protected $format;
     protected $config;
+    protected $rules = [];
     protected $metadata;
     protected $parts;
     protected $document;
@@ -33,6 +34,14 @@ class WordBuilder {
         $this->layout = $layout;
         $this->format = $format;
         $this->config = Zord::array_merge(Zord::getConfig('word'), Zord::getConfig('word'.DS.$book));
+        foreach (['font','paragraph'] as $type) {
+            $styles = $this->config[$type] ?? [];
+            foreach ($styles as $selectors => $style) {
+                foreach(explode(',', $selectors) as $selector) {
+                    $this->rules[$type][trim($selector)] = $style;
+                }
+            }
+        }
     }
     
     public function process() {
@@ -448,7 +457,7 @@ class WordBuilder {
             $_selector = $parent.$separator.$selector;
             if ((!in_array($_selector, $done[$type] ?? []))) {
                 $done[$type][] = $_selector;
-                $style = Zord::array_merge($style, $this->config[$type][$_selector] ?? []);
+                $style = Zord::array_merge($style, $this->rules[$type][$_selector] ?? []);
             }
         }
         return [$style, $done];

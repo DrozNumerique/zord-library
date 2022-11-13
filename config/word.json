@@ -90,40 +90,23 @@
 			"titlePart",
 			"caption",
 			"table",
-			"cell"
+			"cell",
+			"quote"
 		],
+		"*": {
+			"contextualSpacing": true
+		},
 		"*@text": {
 			"alignment": "both"
 		},
-		"*@header": {
+		"*@header, *@footer, *.center, *.#center, graphic, titlePage, speaker, caption, cell": {
 			"alignment": "center"
 		},
-		"*@footer": {
-			"alignment": "center"
-		},
-		"*.center": {
-			"alignment": "center"
-		},
-		"*.#center": {
-			"alignment": "center"
-		},
-		"*.left": {
+		"*.left, *.#left": {
 			"alignment": "left"
 		},
-		"*.#left": {
-			"alignment": "left"
-		},
-		"*.right": {
+		"*.right, *.#right": {
 			"alignment": "right"
-		},
-		"*.#right": {
-			"alignment": "right"
-		},
-		"graphic": {
-			"alignment": "center"
-		},
-		"titlePage": {
-			"alignment": "center"
 		},
 		"titlePart": {
 			"space": {
@@ -141,40 +124,34 @@
 				"after": "0.5cm"
 			}
 		},
-		"div > p": {
+		"div > p, quote > p, l": {
 			"indentation": {
 				"firstLine": "1cm"
 			}
 		},
-		"div > p.center": {
+		"div > p.center, div > p.#center": {
 			"indentation": {
 				"firstLine": 0
 			}
-		},
-		"div > p.#center": {
-			"indentation": {
-				"firstLine": 0
-			}
-		},
-		"l": {
-			"indentation": {
-				"firstLine": "1cm"
-			}
-		},
-		"speaker": {
-			"alignment": "center"
-		},
-		"caption": {
-			"alignment": "center"
 		},
 		"epigraph": {
 			"alignment": "right",
 			"indentation": {
 				"left": "3cm"
+			},
+			"space": {
+				"before": "0.25cm",
+				"after": "0.5cm"
 			}
 		},
-		"cell": {
-			"alignment": "center"
+		"quote": {
+			"indentation": {
+				"left": "1cm"
+			},
+			"space": {
+				"before": "0.25cm",
+				"after": "0.25cm"
+			}
 		}
 	}
 }
