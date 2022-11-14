@@ -183,7 +183,7 @@ class WordBuilder {
     protected function handleNode($part, &$section, $paragraph, $node, $footnotes, $context, $styles, $done, $parents) {
         list($fontStyle, $done) = $this->getFontStyle($node, $context, $styles, $done, $parents);
         list($paragraphStyle, $done) = $this->getParagraphStyle($node, $context, $styles, $done, $parents);
-        $paragraph = $paragraph ?? ($this->isParagraph($node) ? $section->addTextRun($paragraphStyle) : null);
+        $paragraph = (isset($paragraph) && !$this->isTeiElement($node, 'list')) ? $paragraph : ($this->isParagraph($node) ? $section->addTextRun($paragraphStyle) : null);
         $container = $paragraph ?? $section;
         if ($this->isTeiElement($node)) {
             $class = $node->getAttribute('class');

@@ -46,6 +46,12 @@
 			"name": "Times new roman",
 			"size": 10
 		},
+		"titlePart.collection-num": {
+			"size": 12
+		},
+		"docTitle, docAuthor": {
+			"size": 18
+		},
 		"*@note, pb": {
 			"size": 8
 		},
@@ -143,6 +149,11 @@
 			"space": {
 				"before": "0.25cm",
 				"after": "0.25cm"
+			}
+		},
+		"item item": {
+			"indentation": {
+				"left": "1cm"
 			}
 		}
 	}
