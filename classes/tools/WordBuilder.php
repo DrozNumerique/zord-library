@@ -204,7 +204,8 @@ class WordBuilder {
                     $container->addText($content, $fontStyle, $paragraphStyle);
                 }
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
-                if ($this->isTeiElement($child, 'note')) {
+                /*if ($this->isTeiElement($child) && $this->hasAttribute($child, 'data-type', Zord::value('import', ['types','fragment']))) {
+                } else*/ if ($this->isTeiElement($child, 'note')) {
                     $note = null;
                     if ($child->hasAttribute('id') && $child->hasAttribute('data-n')) {
                         if (!$child->hasAttribute('data-place') || $child->getAttribute('data-place') === 'foot') {
@@ -240,7 +241,13 @@ class WordBuilder {
                     } else {
                         $row = $first;
                     }
-                    $table = $container->addTable($this->getTableStyle($part, $child, 'table'));
+                    if (!$this->isHtmlElement(Zord::previousElementSibling($child), 'table')) {
+                        $container->addTextBreak();
+                    }
+                    $table = $container->addTable($this->convert($this->getTableStyle($part, $child)));
+                    if (!$this->isHtmlElement(Zord::nextElementSibling($child), 'table')) {
+                        $container->addTextBreak();
+                    }
                     $rowIndex = 0;
                     while ($row) {
                         if ($this->isHtmlElement($row, 'caption')) {
@@ -248,16 +255,16 @@ class WordBuilder {
                             break;
                         }
                         $rowHeight = $this->getRowHeight($part, $child, $rowIndex);
-                        $rowStyle =$this->getTableStyle($part, $child, 'row', $rowIndex);
+                        $rowStyle = $this->getRowStyle($part, $child, $rowIndex);
                         $table->addRow($rowHeight, $rowStyle);
                         $cell = Zord::firstElementChild($row);
                         $cellIndex = 0;
                         while ($cell) {
                             $cellWidth = $this->getCellWidth($part, $child, $cellIndex);
-                            $cellStyle =$this->getTableStyle($part, $child, 'cell', $rowIndex, $cellIndex);
+                            $cellStyle = $this->getCellStyle($part, $child, $rowIndex, $cellIndex);
                             list($cellFontStyle, $done) = $this->getFontStyle($cell, $context, $styles, $done, $parents);
                             list($cellParagraphStyle, $done) = $this->getParagraphStyle($cell, $context, $styles, $done, $parents);
-                            $this->handleNode($part, $section, $table->addCell($cellWidth, $cellStyle), $cell, $footnotes, $context, [
+                            $this->handleNode($part, $section, $table->addCell($cellWidth, $cellStyle)->addTextRun($cellParagraphStyle), $cell, $footnotes, $context, [
                                 self::$FONT      => $cellFontStyle,
                                 self::$PARAGRAPH => $cellParagraphStyle
                             ], $done, $parents);
@@ -295,8 +302,16 @@ class WordBuilder {
         return $this->getStyle($node, $context, self::$PARAGRAPH, $styles, $done, $parents);
     }
     
-    protected function getTableStyle($part, $node, $element, $rowIndex = null, $cellIndex = null) {
-        return $this->config[$element][$this->getTableStyleName($part, $node, $element, $rowIndex, $cellIndex)] ?? [];
+    protected function getTableStyle($part, $node) {
+        return $this->_getTableStyle($part, $node, 'table');
+    }
+    
+    protected function getRowStyle($part, $node, $rowIndex) {
+        return $this->_getTableStyle($part, $node, 'row', $rowIndex);
+    }
+    
+    protected function getCellStyle($part, $node, $rowIndex, $cellIndex) {
+        return $this->_getTableStyle($part, $node, 'cell', $rowIndex, $cellIndex);
     }
     
     protected function getTableStyleName($part, $node, $element, $rowIndex, $cellIndex) {
@@ -502,6 +517,10 @@ class WordBuilder {
     
     private function hasAttribute($node, $name, $values = null) {
         return $node->hasAttribute($name) && (!isset($values) || in_array($node->getAttribute($name), is_array($values) ? $values : [$values]));
+    }
+    
+    private function _getTableStyle($part, $node, $element, $rowIndex = null, $cellIndex = null) {
+        return $this->config[$element][$this->getTableStyleName($part, $node, $element, $rowIndex, $cellIndex)] ?? [];
     }
 }
 

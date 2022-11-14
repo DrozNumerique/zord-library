@@ -28,7 +28,10 @@
 	"table": {
 		"default": {
 			"alignment": "center",
-			"layout": "fixed"
+			"layout": "fixed",
+			"width": "10cm",
+			"unit": "dxa",
+			"borderSize": "0.4pt"
 		}
 	},
 	"row": {
@@ -99,7 +102,7 @@
 		"*@header, *@footer, *.center, *.#center, graphic, titlePage, speaker, caption, cell": {
 			"alignment": "center"
 		},
-		"*.left, *.#left": {
+		"*.left, *.#left, cell": {
 			"alignment": "left"
 		},
 		"*.right, *.#right": {
@@ -160,8 +163,8 @@
 	"html": [
 		"br",
 		"table",
-		"caption",
-		"row",
-		"cell"
+		"tr",
+		"td",
+		"caption"
 	]
 }
