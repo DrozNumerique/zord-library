@@ -46,23 +46,14 @@
 			"name": "Times new roman",
 			"size": 10
 		},
-		"*@note": {
+		"*@note, pb": {
 			"size": 8
 		},
-		"*@header": {
+		"*@header, *@footer": {
 			"size": 9
-		},
-		"*@footer": {
-			"size": 9
-		},
-		"pb": {
-			"size": 8
 		},
 		"head": {
 			"size": 13
-		},
-		"emph": {
-			"italic": true
 		},
 		"hi.sup": {
 			"superScript": true
@@ -73,10 +64,7 @@
 		"hi.sc": {
 			"smallCaps": true
 		},
-		"hi.i": {
-			"italic": true
-		},
-		"stage": {
+		"hi.i, stage, emph": {
 			"italic": true
 		}
 	},
@@ -124,6 +112,7 @@
 		"head": {
 			"alignment": "center",
 			"space": {
+				"before": "0.5cm",
 				"after": "0.5cm"
 			}
 		},

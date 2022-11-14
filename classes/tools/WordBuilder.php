@@ -60,7 +60,15 @@ class WordBuilder {
                     if ($child->nodeType === XML_ELEMENT_NODE
                         && $child->localName === 'div'
                         && $child->hasAttribute('id')) {
-                        $footnotes[$child->getAttribute('id')] = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
+                        $note = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
+                        $number = $part['dom']->createTextNode('{'.$note->getAttribute('data-n').'} ');
+                        $first = Zord::firstElementChild($note);
+                        if ($note->hasChildNodes()) {
+                            $note->insertBefore($number, $first);
+                        } else {
+                            $note->appendChild($number);
+                        }
+                        $footnotes[$child->getAttribute('id')] = $note;
                     }
                 }
                 $this->handleNode($part, $section, null, Zord::firstElementChild($text), $footnotes, 'text', [], [], []);
