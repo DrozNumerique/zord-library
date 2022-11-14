@@ -156,5 +156,12 @@
 				"left": "1cm"
 			}
 		}
-	}
+	},
+	"html": [
+		"br",
+		"table",
+		"caption",
+		"row",
+		"cell"
+	]
 }

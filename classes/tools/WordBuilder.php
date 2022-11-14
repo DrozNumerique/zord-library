@@ -230,21 +230,31 @@ class WordBuilder {
                     if (file_exists($file)) {
                         $container->addImage($file, $style);
                     }
-                } else if ($child->localName === 'br') {
+                } else if ($this->isHtmlElement($child, 'br')) {
                     $container->addTextBreak();
-                } else if ($child->localName === 'table') {
-                    $table = $container->addTable($this->getTableStyle($part, $node, 'table'));
-                    $row = Zord::firstElementChild($child);
+                } else if ($this->isHtmlElement($child, 'table')) {
+                    $first = Zord::firstElementChild($child);
+                    if ($this->isHtmlElement($first, 'caption')) {
+                        $this->handleNode($part, $section, $paragraph, $first, $footnotes, $context, $styles, $done, $parents);
+                        $row = Zord::nextElementSibling($first);
+                    } else {
+                        $row = $first;
+                    }
+                    $table = $container->addTable($this->getTableStyle($part, $child, 'table'));
                     $rowIndex = 0;
                     while ($row) {
-                        $rowHeight = $this->getRowHeight($part, $node, $rowIndex);
-                        $rowStyle =$this->getTableStyle($part, $node, 'row', $rowIndex);
+                        if ($this->isHtmlElement($row, 'caption')) {
+                            $this->handleNode($part, $section, $paragraph, $row, $footnotes, $context, $styles, $done, $parents);
+                            break;
+                        }
+                        $rowHeight = $this->getRowHeight($part, $child, $rowIndex);
+                        $rowStyle =$this->getTableStyle($part, $child, 'row', $rowIndex);
                         $table->addRow($rowHeight, $rowStyle);
                         $cell = Zord::firstElementChild($row);
                         $cellIndex = 0;
                         while ($cell) {
-                            $cellWidth = $this->getCellWidth($part, $node, $cellIndex);
-                            $cellStyle =$this->getTableStyle($part, $node, 'cell', $rowIndex, $cellIndex);
+                            $cellWidth = $this->getCellWidth($part, $child, $cellIndex);
+                            $cellStyle =$this->getTableStyle($part, $child, 'cell', $rowIndex, $cellIndex);
                             list($cellFontStyle, $done) = $this->getFontStyle($cell, $context, $styles, $done, $parents);
                             list($cellParagraphStyle, $done) = $this->getParagraphStyle($cell, $context, $styles, $done, $parents);
                             $this->handleNode($part, $section, $table->addCell($cellWidth, $cellStyle), $cell, $footnotes, $context, [
@@ -260,8 +270,8 @@ class WordBuilder {
                 } else if ($this->isTeiElement($child, 'pb') &&  $this->hasAttribute($child, 'data-n')) {
                     list($pbFontStyle, $done) = $this->getFontStyle($child, $context, $styles, $done, $parents);
                     list($pbParagraphStyle, $done) = $this->getParagraphStyle($child, $context, $styles, $done, $parents);
-                    $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
-                    $container->addText($content, $pbFontStyle, $pbParagraphStyle);
+                     $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
+                     $container->addText($content, $pbFontStyle, $pbParagraphStyle);
                 } else {
                     $this->handleNode($part, $section, $paragraph, $child, $footnotes, $context, [
                         self::$FONT      => $fontStyle,
@@ -357,11 +367,22 @@ class WordBuilder {
                );
     }
     
+    protected function isHtmlElement($node, $values = null) {
+        $values = $values ?? ($this->config['html'] ?? []);
+        if (!is_array($values)) {
+            $values = [$values];
+        }
+        return isset($node) && 
+               $node->nodeType === XML_ELEMENT_NODE && 
+               in_array($node->localName, $values);
+    }
+    
     protected function getStyle($node, $context, $type, $styles, $done, $parents) {
         $isTEI = $this->isTeiElement($node);
-        $class = $isTEI ? $node->getAttribute('class') : '*';
+        $isHTML = $this->isHtmlElement($node);
+        $class = $isTEI ? $node->getAttribute('class') : ($isHTML ? $node->localName : '*');
         $rend = null;
-        if ($isTEI) {
+        if ($isTEI || $isHTML) {
             if ($node->hasAttribute('data-rendition')) {
                 $rend = $node->getAttribute('data-rendition');
             }
