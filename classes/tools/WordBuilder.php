@@ -180,27 +180,42 @@ class WordBuilder {
         $firstFooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
     }
     
+    protected function addParents(&$parents, $node) {
+        $class = $node->hasAttribute('data-type') ? $node->getAttribute('data-type') : $node->getAttribute('class');
+        $_parents = [$class];
+        if ($node->localName === 'div' && $node->hasAttribute('data-type')) {
+            $_parents[] = $class.'.'.$node->getAttribute('data-type');
+        } else if ($node->hasAttribute('data-rend')) {
+            $_parents[] = $class.'.'.$node->getAttribute('data-rend');
+        } else if ($node->hasAttribute('data-rendition')) {
+            $_parents[] = $class.'.'.$node->getAttribute('data-rendition');
+        }
+        $parents[] = $_parents;
+        return $parents;
+    }
+    
     protected function handleNode($part, &$section, $paragraph, $node, $footnotes, $context, $styles, $done, $parents) {
         list($fontStyle, $done) = $this->getFontStyle($node, $context, $styles, $done, $parents);
         list($paragraphStyle, $done) = $this->getParagraphStyle($node, $context, $styles, $done, $parents);
         $paragraph = (isset($paragraph) && !$this->isTeiElement($node, 'list')) ? $paragraph : ($this->isParagraph($node) ? $section->addTextRun($paragraphStyle) : null);
         $container = $paragraph ?? $section;
         if ($this->isTeiElement($node)) {
-            $class = $node->getAttribute('class');
-            $_parents = [$class];
-            if ($node->localName === 'div' && $node->hasAttribute('data-type')) {
-                $_parents[] = $class.'.'.$node->getAttribute('data-type');
-            } else if ($node->hasAttribute('data-rend')) {
-                $_parents[] = $class.'.'.$node->getAttribute('data-rend');
-            } else if ($node->hasAttribute('data-rendition')) {
-                $_parents[] = $class.'.'.$node->getAttribute('data-rendition');
-            }
-            $parents[] = $_parents;
+            $parents = $this->addParents($parents, $node);
         }
         foreach ($node->childNodes as $child) {
             if ($child->nodeType === XML_TEXT_NODE) {
                 $content = $this->textContent($child, !isset($paragraph));
-                if (!empty($content)) {
+                if (!empty($content) && !empty(trim($content))) {
+                    /*
+                    foreach ($parents ?? [] as $_parents) {
+                        if (in_array('head', $_parents)) {
+                            Zord::log($part['name'].' '.$content);
+                            Zord::log($this->styles[$styles['font']]);
+                            Zord::log($this->styles[$fontStyle]);
+                            Zord::log($_parents);
+                        }
+                    }
+                    */
                     $container->addText($content, $fontStyle, $paragraphStyle);
                 }
             } else if ($child->nodeType === XML_ELEMENT_NODE) {

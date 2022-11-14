@@ -73,6 +73,9 @@
 		"hi.sc": {
 			"smallCaps": true
 		},
+		"hi.b": {
+			"bold": true
+		},
 		"hi.i, stage, emph": {
 			"italic": true
 		}
@@ -91,7 +94,8 @@
 			"caption",
 			"table",
 			"cell",
-			"quote"
+			"quote",
+			"head"
 		],
 		"*": {
 			"contextualSpacing": true
