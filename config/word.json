@@ -49,7 +49,10 @@
 			"name": "Times new roman",
 			"size": 10
 		},
-		"titlePart.collection-num": {
+		"titlePart[collection-num]": {
+			"size": 12
+		},
+		"titlePart[sub]": {
 			"size": 12
 		},
 		"docTitle, docAuthor": {
