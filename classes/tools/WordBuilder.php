@@ -40,7 +40,7 @@ class WordBuilder {
             $styles = $this->config[$type] ?? [];
             foreach ($styles as $selectors => $style) {
                 foreach(explode(',', $selectors) as $selector) {
-                    $this->rules[$type][trim($selector)] = $style;
+                    $this->rules[$type][trim($selector)] = Zord::array_merge($this->rules[$type][trim($selector)] ?? [], $style);
                 }
             }
         }
@@ -118,27 +118,27 @@ class WordBuilder {
     }
     
     protected function getPageHeight($part) {
-        return $this->getSize($part, self::$HEIGHT);
+        return $this->getLayoutProperty($part, self::$HEIGHT);
     }
     
     protected function getPageWidth($part) {
-        return $this->getSize($part, self::$WIDTH);
+        return $this->getLayoutProperty($part, self::$WIDTH);
     }
     
     protected function getMarginTop($part) {
-        return $this->getSize($part, self::$MARGIN_TOP);
+        return $this->getLayoutProperty($part, self::$MARGIN_TOP);
     }
     
     protected function getMarginBottom($part) {
-        return $this->getSize($part, self::$MARGIN_BOTTOM);
+        return $this->getLayoutProperty($part, self::$MARGIN_BOTTOM);
     }
     
     protected function getMarginLeft($part) {
-        return $this->getSize($part, self::$MARGIN_LEFT);
+        return $this->getLayoutProperty($part, self::$MARGIN_LEFT);
     }
     
     protected function getMarginRight($part) {
-        return $this->getSize($part, self::$MARGIN_RIGHT);
+        return $this->getLayoutProperty($part, self::$MARGIN_RIGHT);
     }
     
     protected function dressSection(&$section, $part) {
@@ -180,18 +180,32 @@ class WordBuilder {
         $firstFooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
     }
     
-    protected function addParents(&$parents, $node) {
-        $class = $node->hasAttribute('data-type') ? $node->getAttribute('data-type') : $node->getAttribute('class');
+    protected function addParents($parents, $node) {
+        list($class, $rend, $div) = $this->getTokens($node);
         $_parents = [$class];
-        if ($node->localName === 'div' && $node->hasAttribute('data-type')) {
-            $_parents[] = $class.'.'.$node->getAttribute('data-type');
-        } else if ($node->hasAttribute('data-rend')) {
-            $_parents[] = $class.'.'.$node->getAttribute('data-rend');
-        } else if ($node->hasAttribute('data-rendition')) {
-            $_parents[] = $class.'.'.$node->getAttribute('data-rendition');
+        if ($rend) {
+            $_parents[] = $class.'.'.$rend;
+        }
+        if ($div) {
+            $_parents[] = $class.'['.$div.']';
+        }
+        if ($rend && $div) {
+            $_parents[] = $class.'['.$div.']'.'.'.$rend;
         }
         $parents[] = $_parents;
         return $parents;
+    }
+    
+    protected function addBeforeText($part, $node, $container, $fontStyle, $paragraphStyle) {
+        if ($this->isTeiElement($node, 'l') && $this->hasAttribute($node, 'data-n') && $this->hasAttribute($node, 'data-rend', 'margin')) {
+            $fontStyle = Zord::array_merge($this->styles[$fontStyle], $this->rules[self::$FONT]['l.margin:before'] ?? []);
+            $paragraphStyle = Zord::array_merge($this->styles[$paragraphStyle], $this->rules[self::$PARAGRAPH]['l.margin:before'] ?? []);
+            $container->addText('{v.'.$node->getAttribute('data-n').'}', $fontStyle, $paragraphStyle);
+        }
+    }
+    
+    protected function addAfterText($part, $node, $container, $fontStyle, $paragraphStyle) {
+        
     }
     
     protected function handleNode($part, &$section, $paragraph, $node, $footnotes, $context, $styles, $done, $parents) {
@@ -199,28 +213,17 @@ class WordBuilder {
         list($paragraphStyle, $done) = $this->getParagraphStyle($node, $context, $styles, $done, $parents);
         $paragraph = (isset($paragraph) && !$this->isTeiElement($node, 'list')) ? $paragraph : ($this->isParagraph($node) ? $section->addTextRun($paragraphStyle) : null);
         $container = $paragraph ?? $section;
-        if ($this->isTeiElement($node)) {
-            $parents = $this->addParents($parents, $node);
-        }
+        $parents = $this->addParents($parents, $node);
         foreach ($node->childNodes as $child) {
             if ($child->nodeType === XML_TEXT_NODE) {
+                $this->addBeforeText($part, $node, $container, $fontStyle, $paragraphStyle);
                 $content = $this->textContent($child, !isset($paragraph));
                 if (!empty($content) && !empty(trim($content))) {
-                    /*
-                    foreach ($parents ?? [] as $_parents) {
-                        if (in_array('head', $_parents)) {
-                            Zord::log($part['name'].' '.$content);
-                            Zord::log($this->styles[$styles['font']]);
-                            Zord::log($this->styles[$fontStyle]);
-                            Zord::log($_parents);
-                        }
-                    }
-                    */
                     $container->addText($content, $fontStyle, $paragraphStyle);
                 }
+                $this->addAfterText($part, $node, $container, $fontStyle, $paragraphStyle);
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
-                /*if ($this->isTeiElement($child) && $this->hasAttribute($child, 'data-type', Zord::value('import', ['types','fragment']))) {
-                } else*/ if ($this->isTeiElement($child, 'note')) {
+                if ($this->isTeiElement($child, 'note')) {
                     $note = null;
                     if ($child->hasAttribute('id') && $child->hasAttribute('data-n')) {
                         if (!$child->hasAttribute('data-place') || $child->getAttribute('data-place') === 'foot') {
@@ -292,8 +295,8 @@ class WordBuilder {
                 } else if ($this->isTeiElement($child, 'pb') &&  $this->hasAttribute($child, 'data-n')) {
                     list($pbFontStyle, $done) = $this->getFontStyle($child, $context, $styles, $done, $parents);
                     list($pbParagraphStyle, $done) = $this->getParagraphStyle($child, $context, $styles, $done, $parents);
-                     $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
-                     $container->addText($content, $pbFontStyle, $pbParagraphStyle);
+                    $content =  $this->hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
+                    $container->addText($content, $pbFontStyle, $pbParagraphStyle);
                 } else {
                     $this->handleNode($part, $section, $paragraph, $child, $footnotes, $context, [
                         self::$FONT      => $fontStyle,
@@ -329,7 +332,7 @@ class WordBuilder {
         return $this->_getTableStyle($part, $node, 'cell', $rowIndex, $cellIndex);
     }
     
-    protected function getTableStyleName($part, $node, $element, $rowIndex, $cellIndex) {
+    protected function getTableStyleName($part, $node, $element, $rowIndex = null, $cellIndex = null) {
         return 'default';
     }
     
@@ -393,7 +396,7 @@ class WordBuilder {
                $node->nodeType === XML_ELEMENT_NODE &&
                $node->localName === 'div' && (
                    $this->hasAttribute($node, 'class', $values) ||
-                   $this->hasAttribute($node, 'data-type', $values)
+                   ($this->hasAttribute($node, 'class', 'div') && $this->hasAttribute($node, 'data-type', $values))
                );
     }
     
@@ -407,10 +410,14 @@ class WordBuilder {
                in_array($node->localName, $values);
     }
     
-    protected function getStyle($node, $context, $type, $styles, $done, $parents) {
+    protected function getTokens($node) {
         $isTEI = $this->isTeiElement($node);
         $isHTML = $this->isHtmlElement($node);
         $class = $isTEI ? $node->getAttribute('class') : ($isHTML ? $node->localName : '*');
+        $div = null;
+        if ($isTEI && $node->hasAttribute('data-type')) {
+            $div = $node->getAttribute('data-type');
+        }
         $rend = null;
         if ($isTEI || $isHTML) {
             if ($node->hasAttribute('data-rendition')) {
@@ -420,9 +427,14 @@ class WordBuilder {
                 $rend = $node->getAttribute('data-rend');
             }
         }
-        $name = $type.'$'.md5(($styles[$type] ?? 'root').'+'.$class.($rend ? '.'.$rend : '').'@'.$context);
+        return [$class, $rend, $div];
+    }
+    
+    protected function getStyle($node, $context, $type, $styles, $done, $parents) {
+        list($class, $rend, $div) = $this->getTokens($node);
+        $name = $type.'$'.md5(($styles[$type] ?? 'root').'+'.$class.($div ? '['.$div.']' : '').($rend ? '.'.$rend : '').'@'.$context);
         if (!isset($this->styles[$name])) {
-            list($style, $done) = $this->mergeStyles($type, $class, $rend, $context, $styles, $done, $parents);
+            list($style, $done) = $this->mergeStyles($type, $class, $rend, $div, $context, $styles, $done, $parents);
             switch ($type) {
                 case self::$FONT: {
                     $this->document->addFontStyle($name, $style);
@@ -478,7 +490,7 @@ class WordBuilder {
         return $value;
     }
     
-    private function getSize($part, $property) {
+    private function getLayoutProperty($part, $property) {
         $rotation = $this->getRotation($part);
         if (in_array($property, [self::$HEIGHT,self::$WIDTH]) && $rotation !== self::$NONE) {
             if ($property === self::$HEIGHT) {
@@ -497,18 +509,20 @@ class WordBuilder {
         return $this->convert($value ?? 0);
     }
     
-    private function mergeStyles($type, $class, $rend, $context, $styles, $done, $parents) {
+    private function mergeStyles($type, $class, $rend, $div, $context, $styles, $done, $parents) {
         $style = [];
         foreach ($class ? ['*', $class] : ['*'] as $_class) {
-            foreach ($rend ? ['', '.'.$rend] : [''] as $_rend) {
-                foreach ($context ? ['', '@'.$context] : [''] as $_context) {
-                    $_selector = $_class.$_rend.$_context;
-                    list($style, $done) = $this->_mergeStyle($type, $style, $done, [], $_selector);
-                    foreach ($parents as $_parents) {
-                        list($style, $done) = $this->_mergeStyle($type, $style, $done, $_parents, $_selector);
-                    }
-                    if (count($parents) > 0) {
-                        list($style, $done) = $this->_mergeStyle($type, $style, $done, $parents[count($parents) - 1], $_selector, true);
+            foreach ($div ? ['', '['.$div.']'] : [''] as $_div) {
+                foreach ($rend ? ['', '.'.$rend] : [''] as $_rend) {
+                    foreach ($context ? ['', '@'.$context] : [''] as $_context) {
+                        $_selector = $_class.$_div.$_rend.$_context;
+                        list($style, $done) = $this->_mergeStyle($type, $style, $done, [], $_selector);
+                        foreach ($parents as $_parents) {
+                            list($style, $done) = $this->_mergeStyle($type, $style, $done, $_parents, $_selector);
+                        }
+                        if (count($parents) > 0) {
+                            list($style, $done) = $this->_mergeStyle($type, $style, $done, $parents[count($parents) - 1], $_selector, true);
+                        }
                     }
                 }
             }
