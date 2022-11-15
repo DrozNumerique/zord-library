@@ -262,7 +262,7 @@ class WordBuilder {
                     if (!$this->isHtmlElement(Zord::previousElementSibling($child), 'table')) {
                         $container->addTextBreak();
                     }
-                    $table = $container->addTable($this->convert($this->getTableStyle($part, $child)));
+                    $table = $section->addTable($this->convert($this->getTableStyle($part, $child)));
                     if (!$this->isHtmlElement(Zord::nextElementSibling($child), 'table')) {
                         $container->addTextBreak();
                     }
