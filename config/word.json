@@ -93,23 +93,6 @@
 		}
 	},
 	"paragraph": {
-		"names": [
-			"p",
-			"l",
-			"bibl",
-			"speaker",
-			"stage",
-			"item",
-			"emph",
-			"label",
-			"titlePart",
-			"caption",
-			"table",
-			"td",
-			"quote",
-			"head",
-			"ab"
-		],
 		"*": {
 			"contextualSpacing": true
 		},
@@ -142,15 +125,20 @@
 				"after": "0.5cm"
 			}
 		},
-		"div > p, quote > p, l": {
+		"div > p, sp > p, l": {
 			"indentation": {
 				"firstLine": "1cm"
 			}
 		},
-		"div > p.center, div > p.#center": {
+		"div > p.center, div > p.#center, l.margin": {
 			"indentation": {
 				"firstLine": 0
 			}
+		},
+		"l.margin": {
+			"tabs": [
+				["left", "1cm"]
+			]
 		},
 		"epigraph": {
 			"alignment": "right",
@@ -194,11 +182,39 @@
 			}
 		}
 	},
-	"html": [
-		"br",
-		"table",
-		"tr",
-		"td",
-		"caption"
-	]
+	"tab": [
+		"clear",
+		"left",
+		"center",
+		"right",
+		"decimal",
+		"bar",
+		"num"
+	],
+	"fragment": {
+		"paragraph": [
+			"p",
+			"l",
+			"bibl",
+			"speaker",
+			"stage",
+			"item",
+			"emph",
+			"label",
+			"titlePart",
+			"caption",
+			"table",
+			"td",
+			"quote",
+			"head",
+			"ab"
+		],
+		"html": [
+			"br",
+			"table",
+			"tr",
+			"td",
+			"caption"
+		]
+	}
 }
