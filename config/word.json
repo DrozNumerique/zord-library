@@ -58,7 +58,7 @@
 		"docTitle, docAuthor": {
 			"size": 18
 		},
-		"*@note, pb": {
+		"*@note, pb:before, note:before": {
 			"size": 8
 		},
 		"*@header, *@footer": {
@@ -140,6 +140,9 @@
 				["left", "1cm"]
 			]
 		},
+		"l.margin:before": {
+			"content": "{v.attr(data-n)}\t"
+		},
 		"epigraph": {
 			"alignment": "right",
 			"indentation": {
@@ -180,6 +183,15 @@
 				"before": "0.25cm",
 				"after": "0.25cm"
 			}
+		},
+		"note:before": {
+			"content": "{attr(data-n)}"
+		},
+		"pb:before": {
+			"content": "{p.attr(data-n)}"
+		},
+		"pb.temoin:before": {
+			"content": "[p.attr(data-n)]"
 		}
 	},
 	"tab": [

@@ -48,6 +48,38 @@ class WordBuilder {
         }
     }
     
+    public static function isTeiElement($node, $values = null) {
+        return isset($node) &&
+        $node->nodeType === XML_ELEMENT_NODE &&
+        $node->localName === 'div' && (
+            self::hasAttribute($node, 'class', $values) ||
+            (self::hasAttribute($node, 'class', 'div') && self::hasAttribute($node, 'data-type', $values))
+            );
+    }
+    
+    public static function isHtmlElement($node, $values = null) {
+        $values = $values ?? (Zord::value('word', ['fragment','html']) ?? []);
+        if (!is_array($values)) {
+            $values = [$values];
+        }
+        return isset($node) &&
+        $node->nodeType === XML_ELEMENT_NODE &&
+        in_array($node->localName, $values);
+    }
+    
+    public static function isParagraph($node) {
+        return self::isTeiElement($node, Zord::value('word', ['fragment','paragraph']) ?? []);
+    }
+    
+    public static function hasAttribute($node, $name, $values = null) {
+        return $node->hasAttribute($name) && (!isset($values) || in_array($node->getAttribute($name), is_array($values) ? $values : [$values]));
+    }
+    
+    public static function textContent($node, $trim = false) {
+        $content = preg_replace('#\s+#s', ' ', htmlspecialchars($node->textContent));
+        return $trim ? trim($content) : $content;
+    }
+    
     public function process() {
         $this->document = new PhpWord();
         $this->loadData();
@@ -62,18 +94,10 @@ class WordBuilder {
                     if ($child->nodeType === XML_ELEMENT_NODE
                         && $child->localName === 'div'
                         && $child->hasAttribute('id')) {
-                        $note = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
-                        $number = $part['dom']->createTextNode('{'.$note->getAttribute('data-n').'} ');
-                        $first = Zord::firstElementChild($note);
-                        if ($note->hasChildNodes()) {
-                            $note->insertBefore($number, $first);
-                        } else {
-                            $note->appendChild($number);
-                        }
-                        $this->footnotes[$child->getAttribute('id')] = $note;
+                        $this->footnotes[$child->getAttribute('id')] = Zord::firstElementChild(Zord::nextElementSibling(Zord::firstElementChild($child)));
                     }
                 }
-                $fragment = Zord::getInstance('WordFragment', $part, 'text', $text, $section);
+                $fragment = Zord::getInstance('WordFragment', $this, $part, 'text', $text, $section);
                 $this->handleNode($fragment);
             }
         }
@@ -83,17 +107,23 @@ class WordBuilder {
         return $file;
     }
     
+    public function getFontStyle(&$fragment) {
+        return $this->getStyle($fragment, self::$FONT);
+    }
+    
+    public function getParagraphStyle(&$fragment) {
+        return $this->getStyle($fragment, self::$PARAGRAPH);
+    }
+    
     protected function handleNode(&$fragment) {
-        $fontStyle = $this->getFontStyle($fragment);
-        $paragraphStyle = $this->getParagraphStyle($fragment);
-        $paragraph = (isset($fragment->paragraph) && !self::isTeiElement($fragment->node, 'list')) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($paragraphStyle) : null);
+        $paragraph = (isset($fragment->paragraph) && !self::isTeiElement($fragment->node, 'list')) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($fragment->getParagraphStyle()) : null);
         $container = $paragraph ?? $fragment->section;
-        $this->addBeforeText($fragment, $container, $fontStyle, $paragraphStyle);
+        $this->addBeforeText($fragment, $container);
         foreach ($fragment->node->childNodes as $child) {
             if ($child->nodeType === XML_TEXT_NODE) {
                 $content = self::textContent($child, !isset($paragraph));
                 if (!empty($content) && !empty(trim($content))) {
-                    $container->addText($content, $fontStyle, $paragraphStyle);
+                    $container->addText($content, $fragment->getFontStyle(), $fragment->getParagraphStyle());
                 }
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
                 if (self::isTeiElement($child, 'note')) {
@@ -163,12 +193,10 @@ class WordBuilder {
                             $cellFragment = $fragment->attach(['node' => $cell]);
                             $cellWidth = $this->getCellWidth($cellFragment, $cellIndex);
                             $cellStyle = $this->getCellStyle($cellFragment, $rowIndex, $cellIndex);
-                            $cellFontStyle = $this->getFontStyle($cellFragment);
-                            $cellParagraphStyle = $this->getParagraphStyle($cellFragment);
-                            $cellFragment->paragraph = $table->addCell($cellWidth, $cellStyle)->addTextRun($cellParagraphStyle);
+                            $cellFragment->paragraph = $table->addCell($cellWidth, $cellStyle)->addTextRun($cellFragment->getParagraphStyle());
                             $cellFragment->inherits = [
-                                self::$FONT      => $cellFontStyle,
-                                self::$PARAGRAPH => $cellParagraphStyle
+                                self::$FONT      => $cellFragment->getFontStyle(),
+                                self::$PARAGRAPH => $cellFragment->getParagraphStyle()
                             ];
                             $this->handleNode($cellFragment);
                             $cell = Zord::nextElementSibling($cell);
@@ -177,28 +205,20 @@ class WordBuilder {
                         $row = Zord::nextElementSibling($row);
                         $rowIndex++;
                     }
-                } else if (self::isTeiElement($child, 'pb') &&  self::hasAttribute($child, 'data-n')) {
-                    $pbFragment = $fragment->attach([
-                        'node' => $child
-                    ]);
-                    $pbFontStyle = $this->getFontStyle($pbFragment);
-                    $pbParagraphStyle = $this->getParagraphStyle($pbFragment);
-                    $content =  self::hasAttribute($child, 'data-rend', 'temoin') ? '['.$child->getAttribute('data-n').']' : '{p.'.$child->getAttribute('data-n').'}';
-                    $container->addText($content, $pbFontStyle, $pbParagraphStyle);
                 } else {
                     $childFragment = $fragment->attach([
                         'node'      => $child,
                         'paragraph' => $paragraph,
                         'inherits'  => [
-                            self::$FONT      => $fontStyle,
-                            self::$PARAGRAPH => $paragraphStyle
+                            self::$FONT      => $fragment->getFontStyle(),
+                            self::$PARAGRAPH => $fragment->getParagraphStyle()
                         ]
                     ]);
                     $this->handleNode($childFragment);
                 }
             }
         }
-        $this->addAfterText($fragment, $container, $fontStyle, $paragraphStyle);
+        $this->addAfterText($fragment, $container);
     }
     
     protected function loadData() {
@@ -280,7 +300,7 @@ class WordBuilder {
     }
     
     protected function dressHeader(&$section, $part) {
-        $fragment = Zord::getInstance('WordFragment', $part, 'header', null, $section);
+        $fragment = Zord::getInstance('WordFragment', $this, $part, 'header', null, $section);
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
         $header = $section->addHeader();
@@ -288,11 +308,11 @@ class WordBuilder {
         $evenHeader = $section->addHeader(Header::EVEN);
         $evenHeader->addText($this->metadata['title'], $fontStyle, $paragraphStyle);
         $firstHeader = $section->addHeader(Header::FIRST);
-        $firstHeader->addText('');
+        $firstHeader->addText(''); 
     }
     
     protected function dressFooter(&$section, $part) {
-        $fragment = Zord::getInstance('WordFragment', $part, 'header', null, $section);
+        $fragment = Zord::getInstance('WordFragment', $this, $part, 'header', null, $section);
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
         $footer = $section->addFooter();
@@ -303,24 +323,24 @@ class WordBuilder {
         $firstFooter->addPreserveText('{PAGE}', $fontStyle, $paragraphStyle);
     }
     
-    protected function addBeforeText($fragment, $container, $fontStyle, $paragraphStyle) {
-        if (self::isTeiElement($fragment->node, 'l') && self::hasAttribute($fragment->node, 'data-n') && self::hasAttribute($fragment->node, 'data-rend', 'margin')) {
-            $fontStyle = Zord::array_merge($this->styles[$fontStyle], $this->rules[self::$FONT]['l.margin:before'] ?? []);
-            $paragraphStyle = Zord::array_merge($this->styles[$paragraphStyle], $this->rules[self::$PARAGRAPH]['l.margin:before'] ?? []);
-            $container->addText("{v.".$fragment->node->getAttribute('data-n')."}\t", $fontStyle, $paragraphStyle);
+    protected function addPseudoText($fragment, $container, $position) {
+        $pseudoFragment = $fragment->attach(['position' => $position]);
+        $content = $this->styles[$pseudoFragment->getparagraphStyle()]['content'] ?? null;
+        if ($content) {
+            for ($index = 0; $index < $fragment->node->attributes->length; $index++) {
+                $name = $fragment->node->attributes->item($index)->name;
+                $content = str_replace('attr('.$name.')', $fragment->node->getAttribute($name), $content);
+            }
+            $container->addText($content, $pseudoFragment->getFontStyle(), $pseudoFragment->getParagraphStyle());
         }
     }
     
-    protected function addAfterText($fragment, $container, $fontStyle, $paragraphStyle) {
-        
+    protected function addBeforeText($fragment, $container) {
+        $this->addPseudoText($fragment, $container, 'before');
     }
     
-    protected function getFontStyle(&$fragment) {
-        return $this->getStyle($fragment, self::$FONT);
-    }
-    
-    protected function getParagraphStyle(&$fragment) {
-        return $this->getStyle($fragment, self::$PARAGRAPH);
+    protected function addAfterText($fragment, $container) {
+        $this->addPseudoText($fragment, $container, 'after');
     }
     
     protected function getTableStyle($fragment) {
@@ -399,8 +419,8 @@ class WordBuilder {
     }
     
     protected function getStyle(&$fragment, $type) {
-        $selector = $fragment->class.($fragment->type ? '['.$fragment->type.']' : '').($fragment->rend ? '.'.$fragment->rend : '').'@'.$fragment->context;
-        $name = $type.'$'.md5(($fragment->inherits[$type] ?? '').$selector);
+        $selector = $fragment->class.($fragment->type ? '['.$fragment->type.']' : '').($fragment->rend ? '.'.$fragment->rend : '').($fragment->position ? ':'.$fragment->position : '').'@'.$fragment->context;
+        $name = $type.'$'.md5(($fragment->inherits[$type] ?? self::$NONE).$selector);
         if (!isset($this->styles[$name])) {
             $style = $this->mergeStyles($fragment, $type);
             switch ($type) {
@@ -474,21 +494,26 @@ class WordBuilder {
         foreach ($fragment->class ? ['*', $fragment->class] : ['*'] as $_class) {
             foreach ($fragment->type ? ['', '['.$fragment->type.']'] : [''] as $_type) {
                 foreach ($fragment->rend ? ['', '.'.$fragment->rend] : [''] as $_rend) {
-                    foreach ($fragment->context ? ['', '@'.$fragment->context] : [''] as $_context) {
-                        $_selector = $_class.$_type.$_rend.$_context;
-                        $style = $this->_mergeStyle($style, $fragment, $type, $_selector, []);
-                        foreach ($fragment->variants as $variants) {
-                            $style = $this->_mergeStyle($style, $fragment, $type, $_selector, $variants);
-                        }
-                        if (count($fragment->variants) > 0) {
-                            $style = $this->_mergeStyle($style, $fragment, $type, $_selector, end($fragment->variants), true);
+                    foreach ($fragment->position ? ['', ':'.$fragment->position] : [''] as $_position) {
+                        foreach ($fragment->context ? ['', '@'.$fragment->context] : [''] as $_context) {
+                            $_selector = $_class.$_type.$_rend.$_position.$_context;
+                            $style = $this->_mergeStyle($style, $fragment, $type, $_selector, []);
+                            foreach ($fragment->variants as $variants) {
+                                $style = $this->_mergeStyle($style, $fragment, $type, $_selector, $variants);
+                            }
+                            if (count($fragment->variants) > 0) {
+                                $style = $this->_mergeStyle($style, $fragment, $type, $_selector, end($fragment->variants), true);
+                            }
                         }
                     }
                 }
             }
         }
-        $parent = $this->styles[$fragment->inherits[$type] ?? self::$NONE] ?? [];
-        $style = $this->convert(Zord::array_merge($parent, $style));
+        if ($style['inherits'] ?? true) {
+            $parent = $this->styles[$fragment->inherits[$type] ?? self::$NONE] ?? [];
+            $style = Zord::array_merge($parent, $style);
+        }
+        $style = $this->convert($style);
         if ($type === self::$PARAGRAPH && isset($style['tabs']) && is_array($style['tabs']) && !Zord::is_associative($style['tabs'])) {
             foreach ($style['tabs'] as &$tab) {
                 if (is_array($tab) && count($tab) > 0 && in_array($tab[0], $this->config['tab'] ?? [])) {
@@ -518,42 +543,11 @@ class WordBuilder {
         return $this->config[$element][$this->getTableStyleName($fragment, $rowIndex, $cellIndex)] ?? [];
     }
     
-    public static function isTeiElement($node, $values = null) {
-        return isset($node) &&
-        $node->nodeType === XML_ELEMENT_NODE &&
-        $node->localName === 'div' && (
-            self::hasAttribute($node, 'class', $values) ||
-            (self::hasAttribute($node, 'class', 'div') && self::hasAttribute($node, 'data-type', $values))
-        );
-    }
-    
-    public static function isHtmlElement($node, $values = null) {
-        $values = $values ?? (Zord::value('word', ['fragment','html']) ?? []);
-        if (!is_array($values)) {
-            $values = [$values];
-        }
-        return isset($node) &&
-            $node->nodeType === XML_ELEMENT_NODE &&
-            in_array($node->localName, $values);
-    }
-    
-    public static function isParagraph($node) {
-        return self::isTeiElement($node, Zord::value('word', ['fragment','paragraph']) ?? []);
-    }
-    
-    public static function hasAttribute($node, $name, $values = null) {
-        return $node->hasAttribute($name) && (!isset($values) || in_array($node->getAttribute($name), is_array($values) ? $values : [$values]));
-    }
-    
-    public static function textContent($node, $trim = false) {
-        $content = preg_replace('#\s+#s', ' ', htmlspecialchars($node->textContent));
-        return $trim ? trim($content) : $content;
-    }
-    
 }
 
 class WordFragment {
     
+    public $builder;
     public $part;
     public $context;
     public $node;
@@ -565,8 +559,11 @@ class WordFragment {
     public $class;
     public $rend;
     public $type;
+    public $styles;
+    public $position = null;
     
-    public function __construct($part, $context, $node, $section, $paragraph = null, $inherits = [], $variants = [], $done = [], $attach = false) {
+    public function __construct($builder, $part, $context, $node, $section, $paragraph = null, $inherits = [], $variants = [], $done = []) {
+        $this->builder = $builder;
         $this->part = $part;
         $this->context = $context;
         $this->node = $node;
@@ -579,12 +576,13 @@ class WordFragment {
     }
     
     public function attach($set = []) {
-        $fragment = Zord::getInstance('WordFragment', $this->part, $this->context, $this->node, $this->section, $this->paragraph, $this->inherits, $this->variants, $this->done);
+        $fragment = clone($this);
         foreach ($set as $property => $value) {
             $fragment->$property = $value;
         }
         list($fragment->class, $fragment->rend, $fragment->type) = $fragment->getTokens();
         $fragment->addVariants($this);
+        $fragment->getStyles();
         return $fragment;
     }
     
@@ -621,6 +619,21 @@ class WordFragment {
             }
         }
         return [$class, $rend, $type];
+    }
+    
+    protected function getStyles() {
+        $this->styles = [
+            'font'      => $this->builder->getFontStyle($this),
+            'paragraph' => $this->builder->getParagraphStyle($this)
+        ];
+    }
+    
+    public function getFontStyle() {
+        return $this->styles[WordBuilder::$FONT] ?? 'root';
+    }
+    
+    public function getParagraphStyle() {
+        return $this->styles[WordBuilder::$PARAGRAPH] ?? 'root';
     }
     
 }
