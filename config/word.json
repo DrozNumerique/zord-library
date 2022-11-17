@@ -219,7 +219,10 @@
 			"td",
 			"quote",
 			"head",
-			"ab"
+			"ab",
+			"role",
+			"castItem",
+			"*.inline"
 		],
 		"html": [
 			"br",

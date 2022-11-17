@@ -68,7 +68,11 @@ class WordBuilder {
     }
     
     public static function isParagraph($node) {
-        return self::isTeiElement($node, Zord::value('word', ['fragment','paragraph']) ?? []);
+        $paragraphs = Zord::value('word', ['fragment','paragraph']) ?? [];
+        return self::isTeiElement($node, $paragraphs) ||
+            (self::isTeiElement($node) && in_array('*.'.$node->getAttribute('data-rend'), $paragraphs)) ||
+            (self::isTeiElement($node) && in_array('*.'.$node->getAttribute('data-rendition'), $paragraphs)) ||
+            (self::isTeiElement($node, 'div') && in_array('*.'.$node->getAttribute('data-type'), $paragraphs));
     }
     
     public static function hasAttribute($node, $name, $values = null) {
