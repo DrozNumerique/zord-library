@@ -222,6 +222,7 @@
 			"ab",
 			"role",
 			"castItem",
+			"dateline",
 			"*.inline"
 		],
 		"html": [
