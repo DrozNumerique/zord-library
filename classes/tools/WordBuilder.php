@@ -63,8 +63,8 @@ class WordBuilder {
             $values = [$values];
         }
         return isset($node) &&
-        $node->nodeType === XML_ELEMENT_NODE &&
-        in_array($node->localName, $values);
+            $node->nodeType === XML_ELEMENT_NODE &&
+            in_array($node->localName, $values);
     }
     
     public static function isParagraph($node) {

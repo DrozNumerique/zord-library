@@ -184,6 +184,16 @@
 				"after": "0.25cm"
 			}
 		},
+		"opener": {
+			"space": {
+				"after": "0.5cm"
+			}
+		},
+		"closer": {
+			"space": {
+				"before": "0.5cm"
+			}
+		},
 		"note:before": {
 			"content": "{attr(data-n)}"
 		},
@@ -223,6 +233,8 @@
 			"role",
 			"castItem",
 			"dateline",
+			"opener",
+			"closer",
 			"*.inline"
 		],
 		"html": [
