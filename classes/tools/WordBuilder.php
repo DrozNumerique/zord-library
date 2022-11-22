@@ -126,7 +126,7 @@ class WordBuilder {
         foreach ($fragment->node->childNodes as $child) {
             if ($child->nodeType === XML_TEXT_NODE) {
                 $content = self::textContent($child, !isset($paragraph));
-                if (!empty($content) && !empty(trim($content))) {
+                if (!empty($content)) {
                     $container->addText($content, $fragment->getFontStyle(), $fragment->getParagraphStyle());
                 }
             } else if ($child->nodeType === XML_ELEMENT_NODE) {
@@ -164,6 +164,9 @@ class WordBuilder {
                         $container->addImage($file, $style);
                     }
                 } else if (self::isHtmlElement($child, 'br')) {
+                    if (isset($paragraph) && $this->styles[$fragment->getParagraphStyle()]['alignment'] === 'both') {
+                        $container->addText("\t");
+                    }
                     $container->addTextBreak();
                 } else if (self::isHtmlElement($child, 'table')) {
                     $first = Zord::firstElementChild($child);
