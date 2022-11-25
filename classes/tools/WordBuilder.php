@@ -306,7 +306,6 @@ class WordBuilder {
     }
     
     protected function dressHeader($section, $part) {
-        Zord::log($part['name'].' '.$part['flat']);
         $fragment = Zord::getInstance('WordFragment', $this, $part, 'header', null, $section);
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
