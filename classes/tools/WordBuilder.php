@@ -257,8 +257,7 @@ class WordBuilder {
     protected function isSection($part) {
         $excludes = $this->config['excludes'] ?? [];
         return ($part['epub'] ?? false) && 
-               !in_array($part['name'], $excludes) &&
-               !in_array($this->book.'/'.$part['name'], $excludes);
+               !in_array($part['name'], $excludes);
     }
     
     protected function getRotation($part) {
@@ -289,7 +288,7 @@ class WordBuilder {
         return $this->getLayoutProperty($part, self::$MARGIN_RIGHT);
     }
     
-    protected function dressSection(&$section, $part) {
+    protected function dressSection($section, $part) {
         if ($this->hasHeader($part)) {
             $this->dressHeader($section, $part);
         }
@@ -306,19 +305,20 @@ class WordBuilder {
         return $part['name'] !== 'home';
     }
     
-    protected function dressHeader(&$section, $part) {
+    protected function dressHeader($section, $part) {
+        Zord::log($part['name'].' '.$part['flat']);
         $fragment = Zord::getInstance('WordFragment', $this, $part, 'header', null, $section);
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
         $header = $section->addHeader();
-        $header->addText($part['title'], $fontStyle, $paragraphStyle);
+        $header->addText($part['flat'], $fontStyle, $paragraphStyle);
         $evenHeader = $section->addHeader(Header::EVEN);
         $evenHeader->addText($this->metadata['title'], $fontStyle, $paragraphStyle);
         $firstHeader = $section->addHeader(Header::FIRST);
         $firstHeader->addText(''); 
     }
     
-    protected function dressFooter(&$section, $part) {
+    protected function dressFooter($section, $part) {
         $fragment = Zord::getInstance('WordFragment', $this, $part, 'header', null, $section);
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
@@ -588,7 +588,9 @@ class WordFragment {
             $fragment->$property = $value;
         }
         list($fragment->class, $fragment->rend, $fragment->type) = $fragment->getTokens();
-        $fragment->addVariants($this);
+        if (!isset($fragment->position)) {
+            $fragment->addVariants($this);
+        }
         $fragment->getStyles();
         return $fragment;
     }

@@ -468,6 +468,20 @@ class LibraryImport extends Import {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->type, ['type' => $type]);
                                     $result = false;
                                 }
+                                $fragments = Zord::value('import', ['types','fragment']);
+                                if (in_array($type, $fragments)) {
+                                    $parent = $element->parentNode;
+                                    while (isset($parent)) {
+                                        if ($parent->localName === 'div') {
+                                            $_type = $parent->hasAttribute('type') ? $parent->getAttribute('type') : null;
+                                            if (in_array($_type, $fragments)) {
+                                                $this->xmlError('validate', $element, $this->locale->messages->validate->error->parent, ['type' => $type, 'parent' => $_type]);
+                                                $result = false;
+                                            }
+                                        }
+                                        $parent = $parent->parentNode;
+                                    }
+                                }
                             }
                             break;
                         }

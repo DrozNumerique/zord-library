@@ -40,6 +40,7 @@
 				"nodata": "Missing data",
 				"id": "Wrong format for attribute xml:id [${id}]",
 				"type": "'${type}' is not a valid type",
+				"parent": "'${type}' can't be nested in '${parent}'",
 				"ref": "Empty reference for [${target}]",
 				"missing": "Following resource missing: ",
 				"nested": "Tag <ref target='${nested}'> is nested in tag <ref target='${parent}'>",

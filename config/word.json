@@ -173,7 +173,7 @@
 				"after": "0.25cm"
 			}
 		},
-		"item item": {
+		"item": {
 			"indentation": {
 				"left": "1cm"
 			}
@@ -202,6 +202,14 @@
 		},
 		"pb.temoin:before": {
 			"content": "[p.attr(data-n)]"
+		},
+		"list.numbered > item": {
+			"tabs": [
+				["left", "1.5cm"]
+			]
+		},
+		"list.numbered > item:before": {
+			"content": "attr(data-n).\t"
 		}
 	},
 	"tab": [

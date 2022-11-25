@@ -40,6 +40,7 @@
 				"nodata": "Données incomplètes",
 				"id": "Mauvais format pour l'attribut xml:id [${id}]",
 				"type": "'${type}' n'est pas un type valide",
+				"parent": "'${type}' ne peut pas être inclus dans '${parent}'",
 				"ref": "Référence vide pour [${target}]",
 				"missing": "Il manque la ressource suivante : ",
 				"nested": "La balise <ref target='${nested}'> est incluse dans la balise <ref target='${parent}'>",
