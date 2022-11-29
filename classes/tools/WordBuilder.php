@@ -57,6 +57,10 @@ class WordBuilder {
             );
     }
     
+    public static function isTeiGroup($node) {
+        return self::isTeiElement($node, Zord::value('word', ['fragment','group']) ?? []);
+    }
+        
     public static function isHtmlElement($node, $values = null) {
         $values = $values ?? (Zord::value('word', ['fragment','html']) ?? []);
         if (!is_array($values)) {
@@ -120,7 +124,7 @@ class WordBuilder {
     }
     
     protected function handleNode(&$fragment) {
-        $paragraph = (isset($fragment->paragraph) && !self::isTeiElement($fragment->node, ['list','lg'])) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($fragment->getParagraphStyle()) : null);
+        $paragraph = (isset($fragment->paragraph) && !self::isTeiGroup($fragment->node)) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($fragment->getParagraphStyle()) : null);
         $container = $paragraph ?? $fragment->section;
         $this->addBeforeText($fragment, $container);
         foreach ($fragment->node->childNodes as $child) {

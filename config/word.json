@@ -251,6 +251,10 @@
 			"tr",
 			"td",
 			"caption"
+		],
+		"group": [
+			"list",
+			"lg"
 		]
 	}
 }
