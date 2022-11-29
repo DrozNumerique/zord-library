@@ -90,7 +90,7 @@ function formatCitation(citation) {
 				if (n != undefined) {
 					element.insertAdjacentHTML('beforebegin', '¡§¡sup¡¿¡' + n + '¡§¡/sup¡¿¡');
 				}
-				div.removeChild(element);
+				element.parentNode.removeChild(element);
 				break;
 			}
 			case ELS['ref']['elm']: {
