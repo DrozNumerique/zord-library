@@ -120,7 +120,7 @@ class WordBuilder {
     }
     
     protected function handleNode(&$fragment) {
-        $paragraph = (isset($fragment->paragraph) && !self::isTeiElement($fragment->node, 'list')) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($fragment->getParagraphStyle()) : null);
+        $paragraph = (isset($fragment->paragraph) && !self::isTeiElement($fragment->node, ['list','lg'])) ? $fragment->paragraph : (self::isParagraph($fragment->node) ? $fragment->section->addTextRun($fragment->getParagraphStyle()) : null);
         $container = $paragraph ?? $fragment->section;
         $this->addBeforeText($fragment, $container);
         foreach ($fragment->node->childNodes as $child) {
