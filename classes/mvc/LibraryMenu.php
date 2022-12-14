@@ -49,6 +49,10 @@ class LibraryMenu extends Menu {
                 $entry['render'] = 'quick';
                 break;
             }
+            case 'counter': {
+                $entry['active'] = $this->user->hasRole('admin', $this->context) || $this->user->isConnected();
+                break;
+            }
         }
         return $entry;
     }
