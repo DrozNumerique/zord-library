@@ -386,6 +386,9 @@ class Book extends Module {
         if (isset($this->params['context'])) {
             $context = $this->params['context'];
         }
+        if (!$this->user->isConnected() && !$this->user->isManager() && $this->user->hasRole('admin', $context ?? $this->context)) {
+            return $this->page('home');
+        }
         if ($this->user->isManager()) {
             if (isset($this->params['user'])) {
                 $user = new User($this->params['user']);
@@ -402,8 +405,8 @@ class Book extends Module {
                     $readers[] = $entity->user;
                 }
             }
-        } else if ($this->user->isConnected()) {
-            $user = $this->user;
+        } else if ($this->user->isConnected() || $this->user->hasRole('admin', $context ?? $this->context)) {
+            $user = $this->user;       
         }
         if (!isset($user) && !isset($context) && empty($readers) && !$this->user->isManager()) {
             return $this->page('home');
