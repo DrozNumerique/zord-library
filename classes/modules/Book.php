@@ -386,7 +386,7 @@ class Book extends Module {
         if (isset($this->params['context'])) {
             $context = $this->params['context'];
         }
-        if (!$this->user->isConnected() && !$this->user->isManager() && $this->user->hasRole('admin', $context ?? $this->context)) {
+        if (!$this->user->isConnected() && !$this->user->isManager() && !$this->user->hasRole('admin', $context ?? $this->context)) {
             return $this->page('home');
         }
         if ($this->user->isManager()) {
