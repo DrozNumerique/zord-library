@@ -381,34 +381,35 @@ class Book extends Module {
             }
         }
         $user    = null;
-        $context = null;
+        $context = $this->params['context'] ?? null;
         $readers = [];
-        if (isset($this->params['context'])) {
-            $context = $this->params['context'];
-        }
-        if (!$this->user->isConnected() && !$this->user->isManager() && !$this->user->hasRole('admin', $context ?? $this->context)) {
+        $manager   = $this->user->isManager();
+        $admin     = $this->user->hasRole('admin', $context ?? $this->context);
+        $connected = $this->user->isConnected();
+        $reader    = $this->user->hasRole('reader', $context ?? $this->context);
+        if (!$manager && !$admin && !($connected && $reader)) {
             return $this->error(403);
         }
-        if ($this->user->isManager()) {
-            if (isset($this->params['user'])) {
-                $user = new User($this->params['user']);
-            }
+        if (!$manager && !$admin) {
+            $user = $this->user;
+        } else if (isset($this->params['user'])) {
+            $user = new User($this->params['user']);
+        }
+        if ($manager) {
             if (isset($this->params['readers']) && Zord::value('context', $this->params['readers'])) {
                 $entities = (new UserHasRoleEntity())->retrieve([
                     'many'  => true,
                     'where' => [
-                        'role'    => 'reader',
-                        'context' => $this->params['readers']
+                        'role'    => ['in' => ['*','admin','reader']],
+                        'context' => ['in' => ['*', $this->params['readers']]]
                     ]
                 ]);
                 foreach ($entities as $entity) {
                     $readers[] = $entity->user;
                 }
             }
-        } else if ($this->user->isConnected() || $this->user->hasRole('admin', $context ?? $this->context)) {
-            $user = $this->user;       
         }
-        if (!isset($user) && !isset($context) && empty($readers) && !$this->user->isManager()) {
+        if (!$manager && !isset($user) && !isset($context) && empty($readers)) {
             return $this->error(406);
         }
         if (isset($user)) {
@@ -440,7 +441,7 @@ class Book extends Module {
         }
         if ($context) {
             $prefix .= $context.'_';
-            $result['scope'] .= ' / '.$result['context']['label'];
+            $result['scope'] = (($result['scope'] ?? false) ? $result['scope'].' / ' : '').$result['context']['label'];
         }
         $year = date("Y");
         $start = isset($this->params['start']) ? $this->params['start'] : $year.'-01-01';

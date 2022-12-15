@@ -50,7 +50,7 @@ class LibraryMenu extends Menu {
                 break;
             }
             case 'counter': {
-                $entry['active'] = $this->user->hasRole('admin', $this->context) || $this->user->isConnected();
+                $entry['active'] = $this->user->hasRole('admin', $this->context) || ($this->user->hasRole('reader', $this->context) && $this->user->isConnected());
                 break;
             }
         }
