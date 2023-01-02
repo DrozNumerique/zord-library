@@ -16,13 +16,15 @@
 		]
 	},
 	"types": {
-		"fragment": [
+		"root": [
 	        "part",
+	        "book"
+		],
+		"fragment": [
 	        "title",
 	        "act",
 	        "appendix",
 	        "article",
-	        "book",
 	        "bibliography",
 	        "chapter",
 	        "colophon",
