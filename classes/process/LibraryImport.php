@@ -1236,6 +1236,7 @@ class LibraryImport extends Import {
     protected function is_fragment($part, $allvisavis = true) {
         return 
             $part['name'] == 'home' || 
+            in_array($part['type'], Zord::value('import', ['types','root'])) || 
             in_array($part['type'], Zord::value('import', ['types','fragment'])) ||
             (isset($part['synch']) && ($allvisavis || !isset($part['corresp'])));
     }
@@ -1394,7 +1395,7 @@ class LibraryImport extends Import {
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
                 $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
             }
-            if (in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
+            if (in_array($type, Zord::value('import', ['types','root'])) || in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
                 $this->scan('div[@id="'.$id.'"]', $name, $level + 1);
             }
         }
