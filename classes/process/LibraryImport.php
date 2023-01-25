@@ -852,7 +852,7 @@ class LibraryImport extends Import {
                         $epub->addFromString('OPF/css/'.$css.'.css', file_get_contents($file));
                     }
                 }
-                Zord::addRecursive($epub, Zord::getComponentPath('web'.DS.'css'.DS.'fonts'), 'OPF/fonts');
+                $fonts = Zord::addRecursive($epub, Zord::getComponentPath('web'.DS.'css'.DS.'fonts'), 'OPF/fonts');
                 $id = 1;
                 $items = [];
                 $navbar = [];
@@ -963,7 +963,8 @@ class LibraryImport extends Import {
                         'metadata' => $metadata,
                         'navbar'   => $navbar,
                         'items'    => $items,
-                        'styles'   => $styles
+                        'styles'   => $styles,
+                        'fonts'    => $fonts
                     ]))->render());
                 }
                 if ($epub->close()) {
