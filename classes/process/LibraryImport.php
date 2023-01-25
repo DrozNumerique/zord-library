@@ -852,7 +852,7 @@ class LibraryImport extends Import {
                         $epub->addFromString('OPF/css/'.$css.'.css', file_get_contents($file));
                     }
                 }
-                Zord::addRecursive($epub, Zord::getComponentPath('web'.DS.'css'.DS.'fonts'), 'OPF/css/fonts');
+                Zord::addRecursive($epub, Zord::getComponentPath('web'.DS.'css'.DS.'fonts'), 'OPF/fonts');
                 $id = 1;
                 $items = [];
                 $navbar = [];
