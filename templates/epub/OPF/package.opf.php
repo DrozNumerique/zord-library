@@ -46,8 +46,8 @@
 <?php foreach ($models['styles'] as $css) { ?>
 		<item id="<?php echo $css; ?>-css" href="css/<?php echo $css; ?>.css" media-type="text/css"/>
 <?php } ?>
-<?php foreach ($models['fonts'] as $font) { ?>
-		<item id="<?php echo $font; ?>" href="fonts/<?php echo $font; ?>" media-type="<?php Zord::value('content', pathinfo($font, PATHINFO_EXTENSION)); ?>"/>
+<?php foreach ($models['fonts'] as $index => $font) { ?>
+		<item id="font-<?php echo $index; ?>" href="<?php echo substr($font, strlen('OPF/')); ?>" media-type="<?php Zord::value('content', strtolower(pathinfo($font, PATHINFO_EXTENSION)) ?? 'font/'.pathinfo($font, PATHINFO_EXTENSION)); ?>"/>
 <?php } ?>
 		<item id="cover-page" href="cover.xhtml" media-type="application/xhtml+xml"/>
 		<item id="cover-image" href="medias/cover.jpg" media-type="image/jpeg"/>
