@@ -966,9 +966,7 @@ class LibraryImport extends Import {
                         'styles'   => $styles
                     ]))->render());
                 }
-                if (!$this->completeEpub($epub)) {
-                    $result = false;
-                } else if ($epub->close()) {
+                if ($epub->close()) {
                     $rename = !$this->check;
                     if ($this->check) {
                         $command = Zord::substitute(EPUBCHECK_COMMAND, [
