@@ -376,7 +376,7 @@ div.hi[data-rend="big"] {
 	font-size:1.2em;
 }
 
-div.hi[data-rend="underline"] {
+div.hi[data-rend="u"], div.hi[data-rend="underline"] {
 	text-decoration:underline;
 }
 
@@ -384,7 +384,8 @@ div.hi[data-rend="i"], div.hi[data-rendition="i"], div.hi[data-rend="italic"] {
 	font-style: italic;
 }
 
-div.hi[data-rend="n"] {
+div.hi[data-rend="surlignage"], div.hi[data-rend="highlight"], div.hi[data-rend="h"] {
+	background-color : lightgray;
 }
 
 div.hi[data-rend="lt"] {
