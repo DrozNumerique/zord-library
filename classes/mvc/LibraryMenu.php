@@ -50,28 +50,7 @@ class LibraryMenu extends Menu {
                 break;
             }
             case 'counter': {
-                $counter = false;
-                if ($this->user->isConnected()) {
-                    if ($this->user->hasRole('reader', $this->context)) {
-                        $counter = true;
-                    } else {
-                        $entities = (new UserHasRoleEntity())->retrieve([
-                            'many'  => true,
-                            'where' => [
-                                'user' => $this->user->login,
-                                'role' => ['in' => ['*','reader']]
-                            ]
-                        ]);
-                        foreach ($entities as $entity) {
-                            foreach (Zord::value('context', [$entity->context, 'from'] ?? []) as $context) {
-                                if ($context === $this->context) {
-                                    $counter = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                $entry['active'] = $counter || $this->user->hasRole('admin', $this->context);
+                $entry['active'] = Library::isCounter($this->user, $this->context) || $this->user->hasRole('admin', $this->context);
                 break;
             }
         }

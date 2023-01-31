@@ -385,9 +385,8 @@ class Book extends Module {
         $readers = [];
         $manager   = $this->user->isManager();
         $admin     = $this->user->hasRole('admin', $context ?? $this->context);
-        $connected = $this->user->isConnected();
-        $reader    = $this->user->hasRole('reader', $context ?? $this->context);
-        if (!$manager && !$admin && !($connected && $reader)) {
+        $counter   = Library::isCounter($this->user, $context ?? $this->context);
+        if (!$manager && !$admin && !$counter) {
             return $this->error(403);
         }
         if (!$manager && !$admin) {
