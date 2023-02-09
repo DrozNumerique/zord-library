@@ -143,11 +143,8 @@ class WordBuilder {
                             }
                             $note = $container->addFootNote();
                         } else if ($child->hasAttribute('data-place') && $child->getAttribute('data-place') === 'end') {
-                            while ($container instanceof Endnote && $container->getParent() !== null) {
+                            while (($container instanceof Endnote || $container instanceof Footnote) && $container->getParent() !== null) {
                                 $container = $container->getParent();
-                            }
-                            if ($container instanceof Footnote) {
-                                $container = $fragment->section;
                             }
                             $note = $container->addEndNote();
                         }
