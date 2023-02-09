@@ -146,6 +146,9 @@ class WordBuilder {
                             while ($container instanceof Endnote && $container->getParent() !== null) {
                                 $container = $container->getParent();
                             }
+                            if ($container instanceof Footnote) {
+                                $container = $fragment->section;
+                            }
                             $note = $container->addEndNote();
                         }
                     }
