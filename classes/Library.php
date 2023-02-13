@@ -281,7 +281,7 @@ class Library {
 	public static function isCounter($user, $context) {
 	    $counter = false;
 	    if ($user->isConnected()) {
-	        if ($user->hasRole('reader', $context ?? $context)) {
+	        if ($user->hasRole('reader', $context)) {
 	            $counter = true;
 	        } else {
 	            $entities = (new UserHasRoleEntity())->retrieve([
@@ -292,7 +292,7 @@ class Library {
 	                ]
 	            ]);
 	            foreach ($entities as $entity) {
-	                foreach (Zord::value('context', [$entity->context, 'from'] ?? []) as $_context) {
+	                foreach (Zord::value('context', [$entity->context, 'from']) ?? [] as $_context) {
 	                    if ($_context === $context) {
 	                        $counter = true;
 	                    }
