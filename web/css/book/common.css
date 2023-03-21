@@ -446,7 +446,7 @@ div.l div.gloss {
 	position:absolute;
 	display:block ! important;
 	font-size:0.8em;
-	width:24em;
+	max-width:24em;
 	left:58%;
 	background:#ccd8ea;
 	padding:5px;
