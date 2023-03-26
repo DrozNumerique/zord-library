@@ -6,21 +6,11 @@ class LibraryMenu extends Menu {
         $entry = parent::entry($name);
         switch ($name) {
             case 'context': {
-                foreach (Zord::getConfig('context') as $context => $config) {
-                    if (isset($config['url']) && !empty($config['url'])) {
-                        $title = $context;
-                        if (isset($config['title'][$this->lang])) {
-                            $title = $config['title'][$this->lang];
-                        } else if (isset($config['title'][DEFAULT_LANG])) {
-                            $title = $config['title'][DEFAULT_LANG];
-                        } else if (isset($config['title']) && is_string($config['title'])) {
-                            $title = $config['title'];
-                        }
-                        $entry['menu'][$context] = [
-                            'type'  => 'nolink',
-                            'label' => $title
-                        ];
-                    }
+                foreach (Zord::contextList($this->lang) as $context => $title) {
+                    $entry['menu'][$context] = [
+                        'type'  => 'nolink',
+                        'label' => $title
+                    ];
                 }
                 break;
             }
