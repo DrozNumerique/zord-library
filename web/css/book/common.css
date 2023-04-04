@@ -802,6 +802,10 @@ div.tei table {
 	margin-top:0.8em;
 }
 
+div.tei table[data-rend="noborder"] {
+	border: none;
+}
+
 div.tei table[data-rend="vis-a-vis"],
 div.tei table[data-rendition="vis-à-vis"]  {
 	table-layout: fixed;
