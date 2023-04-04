@@ -802,7 +802,8 @@ div.tei table {
 	margin-top:0.8em;
 }
 
-div.tei table[data-rend="noborder"] {
+div.tei table[data-rend="noborder"],
+div.tei table[data-rend="noborder"] td {
 	border: none;
 }
 
