@@ -1,11 +1,6 @@
 <?php
 
 class Book extends Module {
-        
-    private static $SOLR_ORDERS = [
-        "ASC"  => SolrQuery::ORDER_ASC,
-        "DESC" => SolrQuery::ORDER_DESC
-    ];
     
     public function models($models) {
         $models = parent::models($models);
@@ -542,15 +537,6 @@ class Book extends Module {
         return $this->page('counter', ['counter' => $result]);
     }
     
-    public function field($key) {
-        foreach (Zord::value('index', 'fields') as $field => $type) {
-            if ($key == $field) {
-                return $key.Zord::value('index', ['suffix',$type]);
-            }
-        }
-        return false;
-    }
-    
     public function criteria() {
         $criteria = json_decode($this->params['criteria']);
         $locale = Zord::getLocale('search', $this->lang);
@@ -720,13 +706,9 @@ class Book extends Module {
         $criteria['context'] = $criteria['context'] ?? $this->context;
         if (isset($id) && $criteria['context'] == $this->context) {
             $_SESSION['__ZORD__']['__SEARCH___'][$id] = $criteria;
-            $client = new SolrClient(Zord::value('connection', ['solr','zord']));
-            $query  = new SolrQuery();
+            $query = Store::query($criteria);
             if (!isset($criteria['scope']) || empty($criteria['scope'])) {
                 $criteria['scope'] = Zord::value('portal', ['default','search','scope']);
-            }
-            if (!isset($criteria['operator']) || empty($criteria['operator'])) {
-                $criteria['operator'] = Zord::value('portal', ['default','search','operator']);
             }
             if ($criteria['scope'] == 'corpus' && is_array($criteria['filters']['ean']) && isset($this->user->login)) {
                 foreach ($criteria['filters']['ean'] as $book) {
@@ -741,57 +723,6 @@ class Book extends Module {
                 $query->addFilterQuery($this->inContextFilterQuery());
             }
             if (isset($criteria['query']) && !empty($criteria['query'])) {
-                $query->setQuery($criteria['query']);
-            } else {
-                $query->setQuery('*:*');
-                $criteria['query'] = '';
-                $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
-            }
-            $filters = [];
-            foreach (($criteria['filters'] ?? []) as $key => $value) {
-                $field = Store::field($key);
-                if (!$field) {
-                    $filter = Zord::value('search', ['filters',$key]);
-                    if ($filter) {
-                        $filter = new $filter();
-                        $filter->add($query, $key, $value);
-                    }
-                } else {
-                    $filter = null;
-                    if (!is_array($value)) {
-                        $filter = $field.':"'.$value.'"';
-                    } else if (count($value) > 0) {
-                        $filter = $field.':('.implode(' ', array_map(function($val) use($field) {
-                            return '"'.$val.'"';
-                        }, $value)).')';
-                    }
-                    if ($filter) {
-                        if (in_array($key, Zord::value('search', 'facets'))) {
-                            $filters[] = $filter;
-                        } else {
-                            $query->addFilterQuery($filter);
-                        }
-                    }
-                }
-            }
-            if (!empty($filters)) {
-                $query->addFilterQuery('('.implode(' '.$criteria['operator'].' ', $filters).')');
-            }
-            $query->addField('id');
-            foreach (Zord::value('search', ['fetch']) as $key) {
-                $query->addField($this->field($key));
-            }
-            foreach (Zord::value('search', ['sort']) as $key => $order) {
-                $query->addSortField($this->field($key), self::$SOLR_ORDERS[$order]);
-            }
-            $criteria['rows'] = $criteria['rows'] ?? SEARCH_PAGE_DEFAULT_SIZE;
-            if ($criteria['rows'] > SEARCH_PAGE_MAX_SIZE) {
-                $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
-            }
-            $criteria['start'] = $criteria['start'] ?? 0;
-            $query->setStart($criteria['start']);
-            $query->setRows($criteria['rows']);
-            if (isset($criteria['query']) && !empty($criteria['query'])) {
                 $query->addHighlightField('content');
                 $query->setHighlightSimplePre('<b>');
                 $query->setHighlightSimplePost('</b>');
@@ -801,25 +732,21 @@ class Book extends Module {
                 $query->setHighlightMergeContiguous(false);
                 $query->setHighlight(true);
             }
-            $result = $client->query($query);
-            $result = Zord::objectToArray(json_decode($result->getRawResponse()));
-            $found = $result['response']['numFound'];
-            if (isset($result['response']['docs']) && !empty($result['response']['docs'])) {
-                foreach ($result['response']['docs'] as $doc) {
-                    $ean = $doc['ean_s'];
-                    if (!in_array($ean, $books)) {
-                        $books[] = $ean;
-                    }
-                    $part = substr($doc['id'], strpos($doc['id'], '_') + 1);
-                    if (!isset($parts[$ean][$part])) {
-                        $entity = (new BookHasPartEntity())->retrieve(['book' => $ean, 'part' => $part]);
-                        if ($entity) {
-                            $parts[$ean][$part] = Zord::objectToArray($entity['data']);
-                        }
+            list($found, $documents, $highlighting) = Store::search($query);
+            foreach ($documents as $document) {
+                $ean = $document['ean_s'];
+                if (!in_array($ean, $books)) {
+                    $books[] = $ean;
+                }
+                $part = substr($document['id'], strpos($document['id'], '_') + 1);
+                if (!isset($parts[$ean][$part])) {
+                    $entity = (new BookHasPartEntity())->retrieve(['book' => $ean, 'part' => $part]);
+                    if ($entity) {
+                        $parts[$ean][$part] = Zord::objectToArray($entity['data']);
                     }
                 }
             }
-            $end    = min([$criteria['start'] + $criteria['rows'], $found]);
+            $end = min([$criteria['start'] + $criteria['rows'], $found]);
             $search = [
                 'criteria' => $criteria,
                 'found'    => $found,
@@ -828,30 +755,28 @@ class Book extends Module {
                 'end'      => $end,
                 'id'       => $id
             ];
-            if (isset($result['highlighting']) && !empty($result['highlighting'])) {
-                foreach ($result['highlighting'] as $id => $object) {
-                    $indexes = [];
-                    $tokens = explode('_', $id);
-                    $isbn = $tokens[0];
-                    $part = $tokens[1];
-                    foreach ($object['content'] as $content) {
-                        $first = strpos($content, '<b>');
-                        $last = strrpos($content, '</b>');
-                        if ($first && $last) {
-                            $match = [
-                                'left'    => substr($content, 0, $first),
-                                'keyword' => strip_tags(substr($content, $first, $last -$first + strlen('<b>') + 1)),
-                                'right'   => substr($content, $last + strlen('</b>'))
-                            ];
-                            if (isset($indexes[$match['keyword']])) {
-                                $index = $indexes[$match['keyword']];
-                            } else {
-                                $index = 0;
-                            }
-                            $indexes[$match['keyword']] = $index + 1;
-                            $match['index'] = $indexes[$match['keyword']];
-                            $search['matches'][$isbn][$part][] = $match;
+            foreach ($highlighting as $id => $object) {
+                $indexes = [];
+                $tokens = explode('_', $id);
+                $isbn = $tokens[0];
+                $part = $tokens[1];
+                foreach ($object['content'] as $content) {
+                    $first = strpos($content, '<b>');
+                    $last = strrpos($content, '</b>');
+                    if ($first && $last) {
+                        $match = [
+                            'left'    => substr($content, 0, $first),
+                            'keyword' => strip_tags(substr($content, $first, $last -$first + strlen('<b>') + 1)),
+                            'right'   => substr($content, $last + strlen('</b>'))
+                        ];
+                        if (isset($indexes[$match['keyword']])) {
+                            $index = $indexes[$match['keyword']];
+                        } else {
+                            $index = 0;
                         }
+                        $indexes[$match['keyword']] = $index + 1;
+                        $match['index'] = $indexes[$match['keyword']];
+                        $search['matches'][$isbn][$part][] = $match;
                     }
                 }
             }

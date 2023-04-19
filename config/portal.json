@@ -6,7 +6,6 @@
 		"search": {
 			"scope": "facets",
 			"type": 0,
-			"operator": "AND",
 			"source": {
 				"from": "",
 				"to": ""

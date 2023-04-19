@@ -42,12 +42,7 @@ class LibraryImport extends Import {
         if (isset($parts)) {
             foreach ($parts as $part) {
                 if ($part['index']) {
-                    $part['content'] = explode("\n", wordwrap(trim(preg_replace(
-                        '#\s+#s', ' ', html_entity_decode(strip_tags(str_replace(
-                            '<br/>', ' ',
-                            Library::data($ean, $part['name'].'.xhtml', 'content')
-                        )), ENT_QUOTES | ENT_XML1, 'UTF-8')
-                    )), INDEX_MAX_CONTENT_LENGTH));
+                    $part['content'] = Store::align(Library::data($ean, $part['name'].'.xhtml', 'content'), 'xhtml');
                     foreach ($metadata as $name => $value) {
                         if (!array_key_exists($name, $part)) {
                             $part[$name] = $value;
