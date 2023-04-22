@@ -160,39 +160,11 @@ class LibraryImport extends Import {
         return true;
     }
     
-    protected function resources($ean) {
-        $result = true;
-        $folder = $this->folder.$ean.DS;
-        if (file_exists($folder) && is_dir($folder)) {
-            $target = Store::resource('medias', $ean);
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), RecursiveIteratorIterator::SELF_FIRST);
-            if ($iterator->current()) {
-                $this->info(2, $target);
-                foreach ($iterator as $file) {
-                    if (is_dir($file)) {
-                        continue;
-                    }
-                    $name = substr($file, strlen($folder));
-                    $this->info(3, $name);
-                    $dir = dirname($target.$name);
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    if (!copy($file, $target.$name)) {
-                        $this->logError('resources', Zord::substitute($this->locale->messages->resources->error->copy, [
-                            'source' => $file,
-                            'target' => $target
-                        ]));
-                        $result = false;
-                    }
-                }
-            } else {
-                $this->info(2, $this->locale->messages->resources->info->none);
-            }
-        } else {
-            $this->info(2, $this->locale->messages->resources->info->none);
-        }
-        return $result;
+    protected function folders($ean) {
+        return [
+            'source' => $this->folder.$ean,
+            'target' => Store::resource('medias', $ean)
+        ];
     }
     
     protected function load($ean) {
