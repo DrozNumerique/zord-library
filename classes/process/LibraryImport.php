@@ -35,6 +35,10 @@ class LibraryImport extends Import {
     protected $page     = null;
     protected $check    = true;
     
+    public function parameters($string) {
+        $this->refs = explode(',', $string);
+    }
+    
     protected function contents($ean) {
         $metadata = Library::data($ean, 'metadata.json', 'array');
         $parts = Library::data($ean, 'parts.json', 'array');
@@ -162,8 +166,8 @@ class LibraryImport extends Import {
     
     protected function folders($ean) {
         return [
-            'source' => $this->folder.$ean,
-            'target' => Store::resource('medias', $ean)
+            $this->folder.$ean,
+            Store::resource('medias', $ean)
         ];
     }
     
