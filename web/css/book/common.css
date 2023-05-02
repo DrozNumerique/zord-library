@@ -376,7 +376,7 @@ div.hi[data-rend="big"] {
 	font-size:1.2em;
 }
 
-div.hi[data-rend="u"], div.hi[data-rend="underline"] {
+div.hi[data-rend="u"], div.hi[data-rend="underline"], div.hi[data-rendition="underline"] {
 	text-decoration:underline;
 }
 
