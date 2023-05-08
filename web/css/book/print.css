@@ -16,7 +16,7 @@
     }
 
     /* --------------------------------- Hide --------------------------------- */
-    #header, #navbar, #footer, #dialogs, #toc, #tools, #markerAnchorLeft, #markerAnchorRight {
+    #header, #navbar, #footer, #dialogs, #toc, #ariadne, #tools, #markerAnchorLeft, #markerAnchorRight {
         display:none;
     }
 
@@ -24,7 +24,8 @@
     .print {
         display: block !important;
         border-bottom: 1px solid black;
-        width: 46em;
+        /*width: 46em;*/
+        margin:0 90px;
         page-break-after: always;
     }
     

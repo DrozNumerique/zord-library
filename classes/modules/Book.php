@@ -111,6 +111,16 @@ class Book extends Module {
         return $styles;
     }
     
+    public function include($part, $parts) {
+        $_parts = [$part];
+        foreach ($parts as $_part) {
+            if ($_part['base'] === $part) {
+                $_parts = array_merge($_parts, $this->include($_part['name'], $parts));
+            }
+        }
+        return $_parts;
+    }
+    
     public function show() {
         $isbn = $this->either(null, 'isbn');
         if (isset($isbn)) {
@@ -180,13 +190,18 @@ class Book extends Module {
                         }
                     }
                 }
-                $parts = [$part];
-                $visavis = Library::data($isbn, 'visavis.json', 'array');
-                if (isset($visavis)) {
-                    foreach ($visavis as $group) {
-                        if (in_array($part, $group)) {
-                            $parts = $group;
-                            break;
+                $included = isset($this->params['included']);
+                if ($included) {
+                    $parts = $this->include($part, Library::data($isbn, 'parts.json', 'array'));
+                } else {
+                    $parts = [$part];
+                    $visavis = Library::data($isbn, 'visavis.json', 'array');
+                    if (isset($visavis)) {
+                        foreach ($visavis as $group) {
+                            if (in_array($part, $group)) {
+                                $parts = $group;
+                                break;
+                            }
                         }
                     }
                 }
@@ -215,6 +230,30 @@ class Book extends Module {
                         $text = $obfuscator->getXML($text);
                     }
                     $texts[] = $text;
+                }
+                if ($included) {
+                    $parts = [$part];
+                    $document = new DOMDocument();
+                    $document->loadXML('<div class="tei"><div class="text"></div><div class="footnotes"></div></div>');
+                    $xpath = new DOMXPath($document);
+                    $_text = $xpath->query('//div[@class="text"]')[0];
+                    $_note = $xpath->query('//div[@class="footnotes"]')[0];
+                    foreach ($texts as $text) {
+                        $_document = new DOMDocument();
+                        $_document->loadXML($text);
+                        $_xpath = new DOMXPath($_document);
+                        $__text = $_xpath->query('//div[@class="text"]')[0];
+                        foreach ($__text->childNodes as $node) {
+                            $_node = $document->importNode($node, true);
+                            $_text->appendChild($_node);
+                        }
+                        $__note = $_xpath->query('//div[@class="footnotes"]')[0];
+                        foreach ($__note->childNodes as $node) {
+                            $_node = $document->importNode($node, true);
+                            $_note->appendChild($_node);
+                        }
+                    }
+                    $texts = [$document->saveXML($document->documentElement, LIBXML_NOEMPTYTAG)];
                 }
                 foreach (['screen','print'] as $media) {
                     foreach ($this->styles($media, $obfuscator) as $href) {
