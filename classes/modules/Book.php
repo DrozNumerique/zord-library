@@ -114,7 +114,7 @@ class Book extends Module {
     public function include($part, $parts) {
         $_parts = [$part];
         foreach ($parts as $_part) {
-            if ($_part['base'] === $part) {
+            if ($_part['base'] === $part && ($_part['index'] ?? false)) {
                 $_parts = array_merge($_parts, $this->include($_part['name'], $parts));
             }
         }
