@@ -3,7 +3,18 @@
 class LibraryPortal extends StorePortal {
     
     public function home() {
-        return $this->page('home', (new Book($this->controler))->classify($this->params['year'] ?? false));
+        if ($this->context === 'root') {
+            $collections = [];
+            foreach (Zord::getConfig('context') as $context => $config) {
+                if ($context !== 'root' && !empty($config['url'])) {
+                    $collections[] = $context;
+                }
+            }
+            $models = ['collections' => $collections];
+        } else {
+            $models = (new Book($this->controler))->classify($this->params['year'] ?? false);
+        }
+        return $this->page('home', $models);
     }
     
     protected function metadata($ean) {

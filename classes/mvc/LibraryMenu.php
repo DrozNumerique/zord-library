@@ -3,14 +3,19 @@
 class LibraryMenu extends Menu {
     
     protected function entry($name) {
+        if ($this->context === 'root' && !in_array($name, ['home','about','help','admin','lang','connect'])) {
+            return null;
+        }
         $entry = parent::entry($name);
         switch ($name) {
             case 'context': {
                 foreach (Zord::contextList($this->lang) as $context => $title) {
-                    $entry['menu'][$context] = [
-                        'type'  => 'nolink',
-                        'label' => $title
-                    ];
+                    if ($context !== 'root') {
+                        $entry['menu'][$context] = [
+                            'type'  => 'nolink',
+                            'label' => $title
+                        ];
+                    }
                 }
                 break;
             }

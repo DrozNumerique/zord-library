@@ -1,3 +1,3 @@
 		<div id="banner" align="center">
-			<img src="<?php echo $skin->banner->image; ?>"/>
+			<a href="<?php echo Zord::getContextURL($context); ?>"><img src="<?php echo Zord::getSkin($context)->banner->image; ?>"/></a>
 		</div>

@@ -400,6 +400,46 @@ input.account[type="submit"] {
 	color: #6C757E;;
 }
 
+/* -------------------------------Collections ------------------------------- */
+#collections ul {
+	text-align: center;
+	width: 850px;
+	margin: 0 auto;
+	padding: 15px 0 0 0;
+}
+
+#collections li {
+	display: block;
+	border: 1px gray solid;
+	padding: 15px;
+	margin-bottom: 2em;
+}
+
+#collections li .media,
+#collections li .title {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#collections li .media {
+	width: 150px;
+}
+
+#collections li .media img {
+	display: block;
+	max-height: 100px;
+	margin: 0 auto;
+}
+
+#collections li .title h1 {
+	margin-left: 25px;
+}
+
+#collections li .title a {
+	text-decoration: inherit;
+	color: #6C757E;
+}
+
 /* --------------------------------- Footer --------------------------------- */
 #footer {
 	position:relative;
@@ -444,6 +484,7 @@ form.account input {
 
 form.account input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0px 1000px #9BB7DC inset;
+	box-shadow: 0 0 0px 1000px #9BB7DC inset;
 }
 form.account input:-moz-autofill {
 	background: #9BB7DC;
