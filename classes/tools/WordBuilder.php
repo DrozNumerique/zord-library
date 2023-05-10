@@ -314,7 +314,7 @@ class WordBuilder {
         $fontStyle = $this->getFontStyle($fragment);
         $paragraphStyle = $this->getParagraphStyle($fragment);
         $header = $section->addHeader();
-        $header->addText($part['flat'], $fontStyle, $paragraphStyle);
+        $header->addText($part['flat'] ?? strip_tags($part['title']), $fontStyle, $paragraphStyle);
         $evenHeader = $section->addHeader(Header::EVEN);
         $evenHeader->addText($this->metadata['title'], $fontStyle, $paragraphStyle);
         $firstHeader = $section->addHeader(Header::FIRST);
