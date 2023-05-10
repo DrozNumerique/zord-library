@@ -413,6 +413,7 @@ input.account[type="submit"] {
 	border: 1px gray solid;
 	padding: 15px;
 	margin-bottom: 2em;
+	cursor: pointer;
 }
 
 #collections li .media,
@@ -433,10 +434,6 @@ input.account[type="submit"] {
 
 #collections li .title h1 {
 	margin-left: 25px;
-}
-
-#collections li .title a {
-	text-decoration: inherit;
 	color: #6C757E;
 }
 
