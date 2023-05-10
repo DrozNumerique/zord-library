@@ -1,4 +1,8 @@
 {
+	"root": {
+		"title": "Explorez, lisez, recherchez...",
+		"subtitle": "Découvrez nos portails de collections numériques"
+	},
 	"menu": {
 		"home": "Accueil",
 		"search" : "Recherche",

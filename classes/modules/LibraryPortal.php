@@ -5,8 +5,9 @@ class LibraryPortal extends StorePortal {
     public function home() {
         if ($this->context === 'root') {
             $collections = [];
+            $list = Zord::value('portal', 'root');
             foreach (Zord::getConfig('context') as $context => $config) {
-                if ($context !== 'root' && !empty($config['url'])) {
+                if ($context !== 'root' && !empty($config['url']) && (!isset($list) || in_array($context, $list))) {
                     $collections[] = $context;
                 }
             }

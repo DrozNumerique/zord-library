@@ -1,4 +1,8 @@
 {
+	"root": {
+		"title": "Explore, read, research...",
+		"subtitle": "Discover our digital collections portals"
+	},
 	"menu": {
 		"home": "Home",
 		"search": "Search",

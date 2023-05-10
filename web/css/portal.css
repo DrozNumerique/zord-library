@@ -401,40 +401,36 @@ input.account[type="submit"] {
 }
 
 /* -------------------------------Collections ------------------------------- */
-#collections ul {
+#collections {
 	text-align: center;
 	width: 850px;
 	margin: 0 auto;
 	padding: 15px 0 0 0;
+	color: #6C757E;
+}
+
+#collections ul {
+	padding: 0;
+	margin: 0;
+	display: flex;
 }
 
 #collections li {
-	display: block;
-	border: 1px gray solid;
+	display: inline-table;
 	padding: 15px;
-	margin-bottom: 2em;
 	cursor: pointer;
+	flex: 1 1 0;
 }
 
 #collections li .media,
 #collections li .title {
-	display: table-cell;
-	vertical-align: middle;
-}
-
-#collections li .media {
-	width: 150px;
+	display: block;
 }
 
 #collections li .media img {
 	display: block;
 	max-height: 100px;
 	margin: 0 auto;
-}
-
-#collections li .title h1 {
-	margin-left: 25px;
-	color: #6C757E;
 }
 
 /* --------------------------------- Footer --------------------------------- */

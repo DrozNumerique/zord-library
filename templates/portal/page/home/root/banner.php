@@ -3,6 +3,6 @@
 						<img src="<?php echo Zord::getSkin($context)->banner->image; ?>"/>
 					</div>
 					<div class="title">
-						<h1><?php echo Zord::getLocaleValue('title', Zord::value('context', $context)); ?></h1>
+						<h3><?php echo Zord::getLocaleValue('title', Zord::value('context', $context)); ?></h3>
 					</div>
 				</li>
