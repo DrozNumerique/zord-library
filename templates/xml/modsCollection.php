@@ -62,7 +62,17 @@
 		    }
 		    if (isset($metadata['ean'])) {
 ?>
-		<identifier type="isbn"><?php echo Library::xmlspecialchars($metadata['ean']); ?></identifier>
+		<identifier type="isbn" dislayLabel="print"><?php echo Library::xmlspecialchars($metadata['ean']); ?></identifier>
+<?php
+		    }
+		    if (isset($metadata['epub'])) {
+		        ?>
+		<identifier type="isbn" dislayLabel="epub"><?php echo Library::xmlspecialchars($metadata['epub']); ?></identifier>
+<?php
+		    }
+		    if (isset($metadata['pdf'])) {
+		        ?>
+		<identifier type="isbn" dislayLabel="pdf"><?php echo Library::xmlspecialchars($metadata['pdf']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['uri'])) {
