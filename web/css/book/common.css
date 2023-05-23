@@ -348,47 +348,47 @@ div.div[data-type="part"] > div.head {
 */
 /* ----------------------------------- hi ----------------------------------- */
 
-div.hi[data-rend="sup"], div.hi[data-rendition="sup"] {
+div.hi[data-rend~="sup"], div.hi[data-rendition~="sup"] {
 	vertical-align: super;
 	font-size: smaller;
 	line-height: normal;
 }
 
-div.hi[data-rend="sub"] {
+div.hi[data-rend~="sub"] {
 	vertical-align: sub;
 	font-size: smaller;
 	line-height: normal;
 }
 
-div.hi[data-rend="b"] {
+div.hi[data-rend~="b"] {
 	font-weight:bold;
 }
 
-div.hi[data-rend="sc"] {
+div.hi[data-rend~="sc"] {
 	font-variant:small-caps;
 }
 
-div.hi[data-rend="small"] {
+div.hi[data-rend~="small"] {
 	font-size:0.8em;
 }
 
-div.hi[data-rend="big"] {
+div.hi[data-rend~="big"] {
 	font-size:1.2em;
 }
 
-div.hi[data-rend="u"], div.hi[data-rend="underline"], div.hi[data-rendition="underline"] {
+div.hi[data-rend~="u"], div.hi[data-rend~="underline"], div.hi[data-rendition~="underline"] {
 	text-decoration:underline;
 }
 
-div.hi[data-rend="i"], div.hi[data-rendition="i"], div.hi[data-rend="italic"] {
+div.hi[data-rend~="i"], div.hi[data-rendition~="i"], div.hi[data-rend~="italic"] {
 	font-style: italic;
 }
 
-div.hi[data-rend="surlignage"], div.hi[data-rend="highlight"], div.hi[data-rend="h"] {
+div.hi[data-rend~="surlignage"], div.hi[data-rend~="highlight"], div.hi[data-rend~="h"] {
 	background-color : lightgray;
 }
 
-div.hi[data-rend="lt"] {
+div.hi[data-rend~="lt"] {
 	text-decoration:line-through;
 }
 /*
@@ -802,9 +802,13 @@ div.tei table {
 	margin-top:0.8em;
 }
 
-div.tei table[data-rend="noborder"],
-div.tei table[data-rend="noborder"] td {
+div.tei table[data-rend~="noborder"],
+div.tei table[data-rend~="noborder"] td {
 	border: none;
+}
+
+div.tei table[data-rend~="fixed"] {
+	table-layout: fixed;
 }
 
 div.tei table[data-rend="vis-a-vis"],
