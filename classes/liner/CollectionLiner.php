@@ -12,7 +12,7 @@ class CollectionLiner extends Liner {
         if (isset($metadata['collection_number'])) {
             $number = $metadata['collection_number'];
             if (!is_int($number)) {
-                $number = Library::roman2number($number);
+                $number = Zord::roman2number($number);
             }
         }
         return $number;

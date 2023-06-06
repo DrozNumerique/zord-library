@@ -1,22 +1,6 @@
 <?php
 
 class Library {
-
-    private static $romans = array(
-        'M'  => 1000,
-        'CM' => 900,
-        'D'  => 500,
-        'CD' => 400,
-        'C'  => 100,
-        'XC' => 90,
-        'L'  => 50,
-        'XL' => 40,
-        'X'  => 10,
-        'IX' => 9,
-        'V'  => 5,
-        'IV' => 4,
-        'I'  => 1,
-    );
     
     public static function data($ean, $path = null, $format = 'path') {
         return Store::data(STORE_FOLDER.'library'.DS.$ean.DS.(isset($path) ? $path : ''), $format);
@@ -154,28 +138,6 @@ class Library {
 	            preg_replace("/\s+/", " ", $title)
 	        )
 	    );
-	}
-	
-	public static function roman2number($roman) {
-	    $number = 0;
-	    $roman = strtoupper($roman);
-	    foreach (self::$romans as $key => $value) {
-	        while (strpos($roman, $key) === 0) {
-	            $number += $value;
-	            $roman = substr($roman, strlen($key));
-	        }
-	    }
-	    return $number;
-	}
-	
-	public static function number2roman($number, $upper = true) {
-	    $roman = '';
-	    foreach (self::$romans as $key => $value) {
-	        $repeat = intval($number / $value);
-	        $roman .= str_repeat($key, $repeat);
-	        $number = $number % $value;
-	    }
-	    return $upper ? $roman : strtolower($roman);
 	}
 	
 	public static function reference($isbn, $page = '') {
