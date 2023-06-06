@@ -7,7 +7,7 @@ class DefaultLiner extends Liner {
     }
     
     public function sortValue($shelf, $book) {
-        return $book['isbn'];
+        return $shelf === 'new' ? -1 * $book['date'] : $book['isbn'];
     }
     
     public function store($book) {
