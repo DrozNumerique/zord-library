@@ -147,13 +147,15 @@ class Book extends Module {
                 $part = ($defined && $readable) ? $this->params['part'] : 'home';
                 $message = null;
                 if ($readable) {
-                    (new UserHasQueryEntity())->create([
-                        'user'    => $this->user->login,
-                        'context' => $this->context,
-                        'book'    => $isbn,
-                        'part'    => $part,
-                        'type'    => '2'
-                    ]);
+                    if (isset($this->user->login)) {
+                        (new UserHasQueryEntity())->create([
+                            'user'    => $this->user->login,
+                            'context' => $this->context,
+                            'book'    => $isbn,
+                            'part'    => $part,
+                            'type'    => '2'
+                        ]);
+                    }
                 } else {
                     $message = ['class' => 'warning'];
                     if (!$this->user->hasAccess($isbn, 'read')) {

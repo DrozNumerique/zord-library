@@ -6,15 +6,13 @@ class LibraryUser extends User {
     
     public function __construct($login = null, $session = null, $date = null) {
         parent::__construct($login, $session, $date = null);
-        if (!empty($this->roles)) {
-            $context = (new BookHasContextEntity())->retrieve();
-            if ($context) {
-                foreach ($context as $entry) {
-                    foreach (Zord::getConfig('role') as $role => $privileges) {
-                        if ($this->hasRole($role, $entry->context)) {
-                            foreach ($privileges as $privilege) {
-                                $this->access[$entry->book][$privilege] = true;
-                            }
+        $context = (new BookHasContextEntity())->retrieve();
+        if ($context) {
+            foreach ($context as $entry) {
+                foreach (Zord::getConfig('role') as $role => $privileges) {
+                    if ($this->hasRole($role, $entry->context)) {
+                        foreach ($privileges as $privilege) {
+                            $this->access[$entry->book][$privilege] = true;
                         }
                     }
                 }
