@@ -22,6 +22,11 @@ div.tei *[data-rend="inline"] img {
 	display: inline ! important;
 }
 
+div.tei *[data-rend="hidden"],
+div.tei *[data-rend="hidden"] img {
+	display: none ! important;
+}
+
 /* -------------------------------- ab -------------------------------- */
 
 div.ab {
