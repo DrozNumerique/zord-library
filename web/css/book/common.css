@@ -17,6 +17,11 @@ div.tei *[data-rend="#center"] {
 	text-align: center;
 }
 
+div.tei *[data-rendition="#noindent"],
+div.tei *[data-rend="#noindent"] {
+	text-indent: 0;
+}
+
 div.tei *[data-rend="inline"],
 div.tei *[data-rend="inline"] img {
 	display: inline ! important;
