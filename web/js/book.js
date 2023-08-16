@@ -281,13 +281,15 @@ function displayTEI(selectorIndex) {
 				}
 			}
 		//}, 500);
-	}		
+	}
+	/*
 	[].forEach.call(teiContents, function(teiContent) {
 		var glosses = teiContent.querySelectorAll(GLOSS_SELECTOR);
 		[].forEach.call(glosses, function(gloss) {
 			gloss.style.position = 'absolute';
 		});
 	});
+	*/
 }
 
 (function(undefined) {
