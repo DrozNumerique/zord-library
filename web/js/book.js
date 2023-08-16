@@ -263,7 +263,7 @@ function displayTEI(selectorIndex) {
 				for (i = 0 ; i < nbDisplayed ; i++) {
 					if (pageDisplayed[i][j]) {
 						pageMaxTop = pageTop[i][j] > pageMaxTop ? pageTop[i][j] : pageMaxTop;
-					}minMarginTop
+					}
 				}
 				for (i = 0 ; i < nbDisplayed ; i++) {
 					if (pageDisplayed[i][j]) {
