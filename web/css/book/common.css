@@ -245,6 +245,10 @@ div.gloss[data-rend="margin"] {
     text-indent: 0;
 }
 
+div.note div.gloss[data-rend="margin"] {
+    position: relative;
+}
+
 /* --------------------------------- graphic --------------------------------- */
 
 div.graphic {
