@@ -1,4 +1,5 @@
 var TEI_SELECTOR;
+var GLOSS_SELECTOR;
 var PAGE_SELECTOR_INDEX    = 0;
 var LINE_SELECTOR_INDEX    = 1;
 var SECTION_SELECTOR_INDEX = 2;
@@ -279,6 +280,12 @@ function displayTEI(selectorIndex) {
 					}				
 				}
 			}
+			[].forEach.call(teiContents, function(teiContent) {
+				var glosses = teiContent.querySelectorAll(GLOSS_SELECTORS);
+				[].forEach.call(glosses, function(gloss) {
+					gloss.style.position = 'absolute';
+				});
+			});
 		//}, 500);
 	}		
 }
@@ -397,6 +404,7 @@ function displayTEI(selectorIndex) {
 		var pageOld = 0;
 
 		TEI_SELECTOR       = 'div.' + ELS['tei']['elm'];
+		GLOSS_SELECTOR     = 'div.' + ELS['gloss']['elm'];
 		FOOTNOTES_SELECTOR = 'div.footnotes';
 		PAGE_SELECTOR      = 'div.' + ELS['pb']['elm']  + '[data-' + ELS['pb']['n']     + ']:not([data-' + ELS['pb']['rend'] + '="temoin"])';
 		LINE_SELECTOR      = 'div.' + ELS['l']['elm']   + '[data-' + ELS['l']['rend']   + '="margin"]';
