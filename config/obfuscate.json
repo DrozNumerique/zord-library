@@ -9,6 +9,7 @@
 		"tei": [],
 		"pb": ["n","rend"],
 		"lb": ["rend"],
+		"gloss": ["rend"],
 		"graphic": ["url"],
 		"note": ["place","n"],
 		"head": [],
