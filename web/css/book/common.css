@@ -239,10 +239,11 @@ div.gloss {
 div.gloss[data-rend="margin"] {
     position: absolute;
     max-width: calc((100vw - 750px) / 2 - 120px);
-    left: calc((100vw + 750px) / 2);
+    left: calc((100% + 750px) / 2);
     margin-left: 10px;
     text-align: left;
     text-indent: 0;
+    width: 100%;
 }
 
 div.note div.gloss[data-rend="margin"] {
