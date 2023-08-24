@@ -285,7 +285,9 @@ function displayTEI(selectorIndex) {
 	[].forEach.call(teiContents, function(teiContent) {
 		var glosses = teiContent.querySelectorAll(GLOSS_SELECTOR);
 		[].forEach.call(glosses, function(gloss) {
-			gloss.style.position = 'absolute';
+			if (gloss.style.display != 'inline') {
+				gloss.style.position = 'absolute';
+			}
 		});
 	});
 }
