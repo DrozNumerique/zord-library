@@ -285,7 +285,7 @@ function displayTEI(selectorIndex) {
 	[].forEach.call(teiContents, function(teiContent) {
 		var glosses = teiContent.querySelectorAll(GLOSS_SELECTOR);
 		[].forEach.call(glosses, function(gloss) {
-			if (gloss.style.display != 'inline') {
+			if (!gloss.parentNode.classList.contains('bibl')) {
 				gloss.style.position = 'absolute';
 			}
 		});
