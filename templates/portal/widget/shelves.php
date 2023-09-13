@@ -16,7 +16,7 @@
 <?php foreach ($models['shelves'] as $name => $shelf) { ?>
 <?php   if ($shelf['apart']) { ?>
 			<div class="<?php echo $shelf['name']; ?> apart">
-				<div class="apart_title apart_label"><?php echo Zord::getLocaleValue($shelf['name'], $models['labels'], $lang, ['new', 'other'], $locale); ?></div>
+				<div class="apart_title apart_label"><?php echo Zord::getLocaleValue($shelf['name'], $models['labels'], $lang, ['new', 'other', 'demo'], $locale); ?></div>
 				<div class="apart_title apart_count"><?php echo count($shelf['books']); ?> <?php echo $locale->books; ?></div>
 <?php
 $this->render('shelf', ['shelf' => $shelf, 'search' => isset($models['search']['id']) ? $models['search']['id'] : null]);
