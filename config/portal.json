@@ -16,7 +16,8 @@
 		"publish": {
 			"no" : "hidden",
 			"new": "fa-star",
-			"yes": "fa-check"
+			"yes": "fa-check",
+			"demo": "fa-thumbs-up"
 		},
 		"delete": {
 			"del": "fa-remove"
@@ -36,5 +37,6 @@
 		"sequenceMode": true,
 		"showReferenceStrip": true,
 		"preload": true
-	}
+	},
+	"apart": ["new", "demo"]
 }

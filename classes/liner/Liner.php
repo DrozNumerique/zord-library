@@ -18,7 +18,7 @@ abstract class Liner {
     }
     
     public function apart($book, $apart) {
-        return ($book['status'] == 'new' && $apart) ? $book['status'] : false;
+        return (in_array($book['status'], Zord::value('portal', 'apart') ?? []) && $apart) ? $book['status'] : false;
     }
     
     public function getClass($name) {

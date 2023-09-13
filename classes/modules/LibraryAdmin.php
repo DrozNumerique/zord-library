@@ -105,8 +105,9 @@ class LibraryAdmin extends StoreAdmin {
             $entity = (new BookHasContextEntity())->retrieve(['where' => $data]);
             $change = false;
             switch ($status) {
-                case 'yes': 
-                case 'new': {
+                case 'yes':
+                case 'new':
+                case 'demo': {
                     if ($entity == false) {
                         (new BookHasContextEntity())->create(array_merge($data,['status' => $status]));
                         $change = true;

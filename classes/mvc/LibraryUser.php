@@ -10,7 +10,7 @@ class LibraryUser extends User {
         if ($context) {
             foreach ($context as $entry) {
                 foreach (Zord::getConfig('role') as $role => $privileges) {
-                    if ($this->hasRole($role, $entry->context)) {
+                    if ($entry->status === 'demo' || $this->hasRole($role, $entry->context)) {
                         foreach ($privileges as $privilege) {
                             $this->access[$entry->book][$privilege] = true;
                         }
