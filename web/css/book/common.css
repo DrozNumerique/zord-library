@@ -524,8 +524,15 @@ div.lg {
 	margin:8px 0px 15px 0px;
 }
 
+div.lg[data-n]::before {
+	content: attr(data-n);
+	display: block;
+	text-align: center;
+}
+
 div.lg[data-rend="margin"]::before {
-    content: attr(data-n);
+    display: inline;
+	text-align: center;
 }
 
 /* ---------------------------------- list ---------------------------------- */
