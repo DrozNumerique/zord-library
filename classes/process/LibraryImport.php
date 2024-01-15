@@ -1360,6 +1360,9 @@ class LibraryImport extends Import {
             if ($title == '' && $div->hasAttribute('synch')) {
                 $title = $div->getAttribute('synch');
             }
+            if ($flat == '' && $div->hasAttribute('synch')) {
+                $flat = $div->getAttribute('synch');
+            }
             $part = $this->addPart($name, $type, $title, $flat, $base, $node, $level, $div);
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
                 $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
