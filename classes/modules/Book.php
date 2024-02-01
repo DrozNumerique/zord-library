@@ -193,7 +193,14 @@ class Book extends Module {
                     }
                 }
                 $included = isset($this->params['included']);
-                if ($included) {
+                $complete = isset($this->params['complete']);
+                if ($complete && $this->user->hasRole('admin', $this->context)) {
+                    $included = true;
+                    $parts = [];
+                    foreach (Library::data($isbn, 'parts.json', 'array') as $part) {
+                        $parts[] = $part['name'];
+                    }
+                } else if ($included) {
                     $parts = $this->include($part, Library::data($isbn, 'parts.json', 'array'));
                 } else {
                     $parts = [$part];
