@@ -72,14 +72,6 @@
         	"BookHasContextEntity": ["book","book"]
         }
     },
-	"UserEntity": {
-        "join": {
-        	"UserHasQueryEntity": ["login", "user"]
-        },
-        "elements": {
-        	"UserHasQueryEntity": ["queries", "user"]
-        }
-	},
 	"UserHasQueryEntity": {
 		"table": "user_has_query",
 		"fields": [
