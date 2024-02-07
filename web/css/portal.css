@@ -714,3 +714,9 @@ form.account div {
 	width: 300px;
 	margin-top: 20px;
 }
+
+/* ---------------------------------- Banner -----------------------------------*/
+
+#banner img {
+	max-width: 300px;
+}
