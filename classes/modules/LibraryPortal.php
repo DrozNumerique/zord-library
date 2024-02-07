@@ -4,14 +4,13 @@ class LibraryPortal extends StorePortal {
     
     public function home() {
         if ($this->context === 'root') {
-            $collections = [];
-            $list = Zord::value('portal', 'root');
+            $corpus = [];
             foreach (Zord::getConfig('context') as $context => $config) {
-                if ($context !== 'root' && !empty($config['url']) && (!isset($list) || in_array($context, $list))) {
-                    $collections[] = $context;
+                if (isset($config['corpus'])) {
+                    $corpus[$config['corpus']][] = $context;
                 }
             }
-            $models = ['collections' => $collections];
+            $models = ['corpus' => $corpus];
         } else {
             $models = (new Book($this->controler))->classify($this->params['year'] ?? false);
         }
