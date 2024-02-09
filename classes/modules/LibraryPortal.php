@@ -6,15 +6,22 @@ class LibraryPortal extends StorePortal {
         if ($this->context === 'root') {
             $corpus = [];
             foreach (Zord::getConfig('context') as $context => $config) {
-                if (isset($config['corpus'])) {
+                if (isset($config['corpus']) && in_array($config['corpus'], Zord::value('portal', 'corpus'))) {
                     $corpus[$config['corpus']][] = $context;
                 }
             }
+            uksort($corpus, function($first, $second) {
+                return $this->corpus($first) <=> $this->corpus($second);
+            });
             $models = ['corpus' => $corpus];
         } else {
             $models = (new Book($this->controler))->classify($this->params['year'] ?? false);
         }
         return $this->page('home', $models);
+    }
+    
+    private function corpus($corpus) {
+        return array_search($corpus, Zord::value('portal', 'corpus'));
     }
     
     protected function metadata($ean) {
