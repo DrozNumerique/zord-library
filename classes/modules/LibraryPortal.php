@@ -6,7 +6,7 @@ class LibraryPortal extends StorePortal {
         if ($this->context === 'root') {
             $corpus = [];
             foreach (Zord::getConfig('context') as $context => $config) {
-                if ($context !== 'root' && isset($config['corpus']) && in_array($config['corpus'], Zord::value('portal', 'corpus'))) {
+                if ($context !== 'root' && !empty($config['urls']) && isset($config['corpus']) && in_array($config['corpus'], Zord::value('portal', 'corpus'))) {
                     $corpus[$config['corpus']][$context] = $config['position'] ?? 0;
                 }
             }
