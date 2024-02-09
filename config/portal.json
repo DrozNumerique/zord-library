@@ -39,5 +39,5 @@
 		"preload": true
 	},
 	"apart": ["new", "demo"],
-	"corpus": ["collection", "theme"]
+	"corpus": ["none"]
 }
