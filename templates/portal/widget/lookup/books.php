@@ -6,8 +6,8 @@
 						<fieldset class="context">
 							<legend><?php echo $this->locale('admin')->tab->publish->context; ?></legend>
         					<select id="context">
-        <?php foreach (Zord::getConfig('context') as $name => $data) { ?>
-        						<option value="<?php echo $name; ?>" <?php echo $name == $context ? 'selected' : ''; ?>><?php echo Zord::getLocaleValue('title', Zord::value('context', $name), $lang); ?></option>
+        <?php foreach (Zord::contextList($lang, false) as $name => $title) { ?>
+        						<option value="<?php echo $name; ?>" <?php echo $name == $context ? 'selected' : ''; ?>><?php echo $title; ?></option>
         <?php } ?>
         					</select>
         					<label for="only"><?php echo $this->locale('admin')->tab->publish->only; ?></label>
