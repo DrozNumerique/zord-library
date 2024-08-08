@@ -870,6 +870,12 @@ div.tei table td[rowspan] {
 	vertical-align: top;
 }
 
+
+div.tei table td[data-rend~="highlight"] {
+	background-color : lightgray;
+}
+
+
 /* -------------------------------- titlePage -------------------------------- */
 
 div.titlePage {
