@@ -203,6 +203,11 @@ div.figure[data-rend="zoom"] img, div.figure[data-rend="facsimile"] img {
 	margin-left: 5px ! important;
 }
 
+
+div.figure[data-rend="nobreak"] img {
+	max-height: unset;
+}
+
 /* ------------------------------ floatingText ------------------------------ */
 
 div.floatingText {
