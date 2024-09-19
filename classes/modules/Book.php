@@ -912,6 +912,15 @@ class Book extends Module {
             }
             $shelves[$name]['instances']['total'] = $count;
         }
+        $shelves = $this->order($shelves, $labels);
+        return [
+            'search'  => $search,
+            'shelves' => $shelves,
+            'labels'  => $labels
+        ];
+    }
+    
+    public function order($shelves, $labels) {
         $order = $shelves;
         $keys = array_keys($labels);
         $keys[-1]   = 'new';
@@ -929,11 +938,7 @@ class Book extends Module {
         foreach($order as $shelf) {
             $shelves[$shelf['name']] = $shelf;
         }
-        return [
-            'search'  => $search,
-            'shelves' => $shelves,
-            'labels'  => $labels
-        ];
+        return $shelves;
     }
     
     public function match() {

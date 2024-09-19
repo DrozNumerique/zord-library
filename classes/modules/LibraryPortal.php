@@ -15,7 +15,7 @@ class LibraryPortal extends StorePortal {
             });
             $models = ['corpus' => $corpus];
         } else {
-            $models = (new Book($this->controler))->classify($this->params['year'] ?? false);
+            $models = Zord::getInstance('Book', $this->controler)->classify($this->params['year'] ?? false);
         }
         return $this->page('home', $models);
     }
