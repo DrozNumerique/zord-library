@@ -588,7 +588,7 @@ function displayTEI(selectorIndex) {
 		});
 		
 		document.getElementById('ariadne').addEventListener('click', function(event) {
-			if (event.target && event.target.nodeName == "SPAN") {
+			if (event.target && event.target.nodeName == "SPAN" && event.target.dataset.part !== '') {
 				changeLocation(event, event.target);
 			}
 		});

@@ -29,6 +29,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+
 #ariadne .ariadne-previous:before {
 	display: inline-block;
 	position: relative;
@@ -49,6 +50,11 @@
 	text-align: right;
 	color: #C0392B;
 	top: -7px;
+}
+
+#ariadne .ariadne-previous[data-part=""]:before,
+#ariadne .ariadne-next[data-part=""]:before {
+	content: " ";
 }
 
 #ariadne button {
