@@ -170,30 +170,6 @@ function switchSelector(select) {
 	displayTEI(CURRENT_SELECTOR_INDEX);
 }
 
-function searchInBook() {
-	var query = document.getElementById('queryInput');
-	if (query && query.checkValidity()) {
-		var searchCriteria = {
-			query:query.value,
-			scope:'corpus',
-			filters:{
-				contentType:[0,1],
-				ean:[BOOK],				
-			},
-			context:CONTEXT,
-			start:0,
-			rows:1000
-		};
-		searchHistory = getContextProperty('search.history', []);
-		searchHistory.push(searchCriteria);
-		searchIndex = searchHistory.length;
-		setContextProperty('search.index',    searchIndex);
-		setContextProperty('search.history',  searchHistory);
-		setContextProperty('search.criteria', searchCriteria);
-		search(searchCriteria);
-	}
-}
-
 function displayTEI(selectorIndex) {
 	var contentTEI = document.getElementById('parts');
 	var teiContents = contentTEI.querySelectorAll(TEI_SELECTOR);

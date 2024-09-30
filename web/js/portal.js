@@ -29,6 +29,10 @@ var toScroll = function() {
 	}
 };
 
+var setWindowHeight = function() {
+	windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+};
+
 var search = function(criteria, callback) {
 	var fetch = (callback === undefined || typeof callback !== 'function') ? 'false' : 'true';
 	var results = null;
@@ -56,9 +60,31 @@ var search = function(criteria, callback) {
 	invokeZord(parameters);
 }
 
-var setWindowHeight = function() {
-	windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-};
+var searchInBook = function() {
+	var query = document.getElementById('queryInput');
+	var book = query.dataset.book ?? BOOK;
+	var context = query.dataset.context ?? CONTEXT;
+	if (query && query.checkValidity()) {
+		var searchCriteria = {
+			query:query.value,
+			scope:'corpus',
+			filters:{
+				contentType:[0,1],
+				ean:[book],
+			},
+			context:context,
+			start:0,
+			rows:1000
+		};
+		searchHistory = getContextProperty('search.history', []);
+		searchHistory.push(searchCriteria);
+		searchIndex = searchHistory.length;
+		setContextProperty('search.index',    searchIndex);
+		setContextProperty('search.history',  searchHistory);
+		setContextProperty('search.criteria', searchCriteria);
+		search(searchCriteria);
+	}
+}
 
 window.addEventListener("load", function(event) {
 	
