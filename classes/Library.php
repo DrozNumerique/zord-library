@@ -51,18 +51,17 @@ class Library {
         return $title;
     }
     
-	public static function listActors($actors, $type, $max = 3) {
+	public static function listActors($actors, $type, $max = 3, $glue = null) {
 	    $tooMany = count($actors) > $max;
-	    $glue = '';
 	    $end = '';
 	    switch ($type) {
 	        case 'TEI': {
-	            $glue = ';';
+	            $glue = $glue ?? ';';
 	            $end = ' <hi rend="italic">et al.</hi>';
 	            break;
 	        }
 	        case 'HTML': {
-	            $glue = ';<br/>';
+	            $glue = $glue ?? ';<br/>';
 	            $end = ' <i>et al.</i>';
 	            break;
 	        }
