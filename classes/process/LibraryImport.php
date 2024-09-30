@@ -91,10 +91,13 @@ class LibraryImport extends Import {
                     }
                 }
             }
-        } else if (count($this->refs) === 1 && $this->refs[0] === 'all') {
+        } else if (count($this->refs) === 1 && ($this->refs[0] === 'all' || substr($this->refs[0], 0, 1) === '+')) {
+            $greater = substr($this->refs[0], 0, 1) === '+' ? substr($this->refs[0], 1) : '0000000000000';
             $this->refs = [];
             foreach ((new BookEntity())->retrieveAll(['order' => ['asc' => 'ean']]) as $book) {
-                $this->refs[] = $book->ean;
+                if ($book->ean > $greater) {
+                    $this->refs[] = $book->ean;
+                }
             }
         }
     }
