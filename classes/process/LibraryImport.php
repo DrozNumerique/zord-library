@@ -91,6 +91,11 @@ class LibraryImport extends Import {
                     }
                 }
             }
+        } else if (count($this->refs) === 1 && $this->refs[0] === 'all') {
+            $this->refs = [];
+            foreach ((new BookEntity())->retrieveAll(['order' => ['asc' => 'ean']]) as $book) {
+                $this->refs[] = $book->ean;
+            }
         }
     }
     
