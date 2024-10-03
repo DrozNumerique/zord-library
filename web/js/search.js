@@ -391,6 +391,7 @@ var dressResults = function(results) {
 			}
 		}
 	});
+	loadPending(results);
 }
 
 var popupResults = function() {
