@@ -885,7 +885,10 @@ class Book extends Module {
         if (!isset($liner)) {
             $liner = Zord::value('plugin', 'liner');
             if (!isset($liner) || !(is_string($liner))) {
-                $liner = 'DefaultLiner';
+                $liner = Zord::value('plugin', ['liner','default']);
+                if (!isset($liner) || !(is_string($liner))) {
+                    $liner = 'DefaultLiner';
+                }
             }
         }
         $liner = new $liner($this->context, $this->lang);
