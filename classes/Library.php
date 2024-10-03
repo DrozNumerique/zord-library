@@ -51,7 +51,15 @@ class Library {
         return $title;
     }
     
-	public static function listActors($actors, $type, $max = 3, $glue = null) {
+	public static function listActors($actors, $type, $max = 3, $glue = null, $reverse = false) {
+	    if ($reverse) {
+	        foreach($actors as $index => $actor) {
+	            $tokens = explode(',', $actor);
+	            if (count($tokens) === 2) {
+	                $actors[$index] = trim($tokens[1]).' '.trim($tokens[0]);
+	            }
+	        }
+	    }
 	    $tooMany = count($actors) > $max;
 	    $end = '';
 	    switch ($type) {
