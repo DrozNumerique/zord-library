@@ -25,6 +25,10 @@ abstract class Liner {
         return [];
     }
     
+    public function other($book) {
+        $this->shelves['other']['books'][] = $book;
+    }
+    
     public function line($books, $apart = true, $classes = null) {
         foreach ($books as $book) {
             $shelf = $this->apart($book, $apart);
@@ -33,7 +37,7 @@ abstract class Liner {
                 $this->shelves[$shelf]['books'][] = $book;
             } else {
                 if ($this->store($book) === false) {
-                    $this->shelves['other']['books'][] = $book;
+                    $this->other($book);
                 }
             }
         }
