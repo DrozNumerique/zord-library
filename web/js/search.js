@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var rows       = document.getElementById('searchSize');
 	var titles     = document.getElementById('titles');
 	var books      = document.getElementById('books');
-	var results    = document.getElementById('shelves');
+	var shelves    = document.getElementById('shelves');
 	var references = getCSLObjects('corpus');
 	
 	[].forEach.call(document.querySelectorAll('div[data-scope="' + searchScope + '"]'), function(element) {
@@ -511,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		titles.setAttribute('data-loading', 'false');
 		window.dispatchEvent(new Event("selectLoaded"));
 		$('#titles').on('change', function(event) {
-			addCorpus(books, results, titles.value);
+			addCorpus(books, shelves, titles.value);
 		});
 	}
 	
@@ -620,13 +620,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		
 	if (references !== undefined && references !== null) {
 		for (var id in references) {
-			addCorpus(books, results, references[id].ean, references[id]);
+			addCorpus(books, shelves, references[id].ean, references[id]);
 		}
 	}
 
 	[].forEach.call(document.querySelectorAll('#books > li[data-isbn]'), function(entry) {
 		entry.addEventListener('click', function(event) {
-			removeCorpus(books, results, entry.getAttribute('data-isbn'));
+			removeCorpus(books, shelves, entry.getAttribute('data-isbn'));
 		});
 	});
 	
@@ -661,6 +661,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		window.dispatchEvent(new Event("selectLoaded"));
 		select.style.background = background;
 	});
+	
+	if (shelves.classList.contains('results')) {
+		dressResults(shelves);
+	}
 	
 });
 
