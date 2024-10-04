@@ -537,10 +537,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	}
 	
-	if (results) {
-		dressResults(results);
-	}
-	
 	function switchRefine(status) {
 		if (status) {
 			refine.classList.add('opened');
