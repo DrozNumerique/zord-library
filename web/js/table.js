@@ -124,6 +124,8 @@ var dressSortingToggles = function(element) {
 }
 	
 document.addEventListener("DOMContentLoaded", function(event) {
-	dressSortingToggles(document.body);
+	[].forEach.call(document.querySelectorAll('table.sortable'), function(table) {
+		dressSortingToggles(table);
+	});
 });
 

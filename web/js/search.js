@@ -306,6 +306,7 @@ function updateResults(start, rows) {
 					popupResults();
 				} else {
 					dressResults(results);
+					dressSortingToggles(results);
 				}
 			}
 			return results;
@@ -315,7 +316,6 @@ function updateResults(start, rows) {
 
 var dressResults = function(results) {
 	showPanel('search', true);
-	dressSortingToggles(results);
 	books = document.getElementById('books');
 	if (books) {
 		[].forEach.call(results.querySelectorAll('td.search'), function(td) {
@@ -400,6 +400,7 @@ var popupResults = function() {
 	results.style.display = 'inline-block';
 	results.dataset.dressed = 'false';
 	dressResults(results);
+	dressSortingToggles(results);
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
