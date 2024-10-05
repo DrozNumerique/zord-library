@@ -832,6 +832,10 @@ class Book extends Module {
         return $search;
     }
     
+    protected function statusInContext($entity) {
+        return $entity->status;
+    }
+    
     public function classify($search = false) {
         $books    = ($search !== false && isset($search['books'])) ? $search['books'] : null;
         $year     = ($search !== false && ctype_digit($search) && strlen($search) == 4 && in_array(substr($search, 0, 2), ['18','19','20'])) ? $search : null;
@@ -842,7 +846,7 @@ class Book extends Module {
         ]);
         $status = [];
         foreach ($entities as $entity) {
-            $status[$entity->book] = $entity->status;
+            $status[$entity->book] = $this->statusInContext($entity);
         }
         $raw = 'BookHasContextEntity.context = ?';
         $parameters = $this->context;
@@ -881,7 +885,7 @@ class Book extends Module {
                 'readable' => $this->user->hasAccess($isbn, 'read')
             ];
         }
-        $liner = ($search !== false) ? 'SearchLiner' : Zord::value('plugin', ['liner',$this->context]);
+        $liner = ($search !== false && empty($search['liner'])) ? (Zord::value('plugin', ['liner','search']) ?? 'SearchLiner') : Zord::value('plugin', ['liner',$this->context]);
         if (!isset($liner)) {
             $liner = Zord::value('plugin', 'liner');
             if (!isset($liner) || !(is_string($liner))) {
@@ -944,13 +948,14 @@ class Book extends Module {
         return $shelves;
     }
     
-    public function match() {
-        $term = $this->params['term']  ?? null;
+    public function match($term = null, $rows = 10, $fields = null) {
+        $term = $term ?? ($this->params['term'] ?? null);
         if (empty($term)) {
             return $this->error(400);
         }
         $results = [];
-        foreach (Store::match($term, null, 10) as $ean) {
+        $matches = Store::match($term, null, $rows, $fields);
+        foreach ($matches as $ean) {
             $book = (new BookEntity())->retrieve($ean);
             if ($book !== false) {
                 $context = (new BookHasContextEntity())->retrieve([
