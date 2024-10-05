@@ -850,6 +850,9 @@ class Book extends Module {
         }
         $raw = 'BookHasContextEntity.context = ?';
         $parameters = $this->context;
+        if (!empty($books)) {
+            $raw .= ' AND BookEntity.ean in ('.implode(',', array_map(function($ean) {return "'".$ean."'";}, $books)).')';
+        }
         if (isset($year)) {
             $raw .= ' AND BookEntity.date = ?';
             $parameters = [$parameters, $year];
@@ -860,8 +863,8 @@ class Book extends Module {
         }
         $entities = (new BookEntity())->retrieve([
             'many'  => true,
-            'join'  => empty($books) ? 'BookHasContextEntity' : null,
-            'where' => empty($books) ? ['raw' => $raw, 'parameters' => $parameters] : ['BookEntity.ean' => ['in' => $books]],
+            'join'  => 'BookHasContextEntity',
+            'where' => ['raw' => $raw, 'parameters' => $parameters],
             'order' => ['desc' => 'ean']
         ]);
         $shelves = [];
@@ -948,13 +951,13 @@ class Book extends Module {
         return $shelves;
     }
     
-    public function match($term = null, $rows = 10, $fields = null) {
+    public function match($term = null, $rows = 10, $fields = null, $exact = false) {
         $term = $term ?? ($this->params['term'] ?? null);
         if (empty($term)) {
             return $this->error(400);
         }
         $results = [];
-        $matches = Store::match($term, null, $rows, $fields);
+        $matches = Store::match($term, null, $rows, $fields, $exact);
         foreach ($matches as $ean) {
             $book = (new BookEntity())->retrieve($ean);
             if ($book !== false) {
