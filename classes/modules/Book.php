@@ -865,7 +865,7 @@ class Book extends Module {
             'many'  => true,
             'join'  => 'BookHasContextEntity',
             'where' => ['raw' => $raw, 'parameters' => $parameters],
-            'order' => ['desc' => 'ean']
+            'order' => Zord::value('portal', ['default','classify','order'])
         ]);
         $shelves = [];
         $labels  = [];
