@@ -1,5 +1,5 @@
 var marginTopMin = 0;
-var marginTopMax = 71;
+var marginTopMax = 0;
 var windowHeight = 0;
 
 var toScroll = function() {
@@ -14,7 +14,7 @@ var toScroll = function() {
 		var marginTop = marginTopMax - $scrollTop.get();
 		marginTop = (marginTop < marginTopMin) ? marginTopMin : (marginTop > marginTopMax) ? marginTopMax : marginTop;
 		navbar.style.marginTop = marginTop + 'px';
-		marginTop = marginTop + getNumber(document.getElementById('navbar'), 'height');
+		marginTop = marginTop + getNumber(navbar,'height') + getNumber(navbar,'padding-top') + getNumber(navbar,'padding-bottom');
 		[].forEach.call(document.querySelectorAll('.fixed'), function(element) {
 			element.style.marginTop = marginTop + 'px';
 			if (element.classList.contains('pullout')) {
