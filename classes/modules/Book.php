@@ -932,7 +932,7 @@ class Book extends Module {
     
     public function order($shelves, $labels) {
         $order = $shelves;
-        $keys = array_keys($labels);
+        $keys = array_keys($labels ?? []);
         $keys[-1]   = 'new';
         $keys[9999] = 'other';
         usort($order, function($first, $second) use ($keys) {
