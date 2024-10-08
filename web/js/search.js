@@ -392,6 +392,10 @@ var dressResults = function(results) {
 		}
 	});
 	loadPending(results);
+	var post = results.dataset.post;
+	if (post !== undefined && post !== null && window[post] instanceof Function) {
+		window[post]();
+	}
 }
 
 var popupResults = function() {
