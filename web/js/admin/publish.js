@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		activateStates(document, function(entry, next) {
 			return changeStatus(entry, next);
 		});
-		activateListSort(document.getElementById('books'), document.getElementById('lookup_books'));
+		activateListSort(document.getElementById('books'), document.getElementById('lookup_books'), document.getElementById('cursor_books'));
 		[].forEach.call(document.querySelectorAll('tr.data td.delete'), function(entry) {
 			entry.addEventListener("click", function(event) {
 				if (confirm(LOCALE.admin.book.delete.confirm) && changeStatus(entry, 'del')) {
@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		return {
 			module    : 'Admin',
 			action    : 'books',
+			offset    : document.getElementById('cursor_books').dataset.offset,
 			title     : lookup.querySelector('input[name="title"]').value,
 			ctx       : lookup.querySelector('#context').value,
 			only      : lookup.querySelector('#only').checked ? 'true' : 'false',
