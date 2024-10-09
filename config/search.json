@@ -13,9 +13,12 @@
 		"source": "SourceDateFilter"
 	},
 	"fetch": [
-		"ean"
+		"date",
+		"ean",
+		"count"
 	],
 	"sort": {
+		"date": "DESC",
 		"ean": "ASC",
 		"count": "ASC"
 	}
