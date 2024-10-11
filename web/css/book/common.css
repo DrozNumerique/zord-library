@@ -183,8 +183,8 @@ div.figure {
 }
 
 div.figure[data-rend="zoom"], div.figure[data-rend="facsimile"] {
-	width: 50em;
-	height: 400px;
+	width: 100%;
+	height: 600px;
 	background: whitesmoke;
 	margin-bottom: 2em;
 }
