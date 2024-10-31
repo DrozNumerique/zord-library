@@ -957,9 +957,9 @@ class Book extends Module {
             return $this->error(400);
         }
         $results = [];
-        $term = preg_replace_callback("/(&#[0-9]+;)/", function($m) {
+        $term = str_replace('"', '', preg_replace_callback("/(&#[0-9]+;)/", function($m) {
             return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
-        }, str_replace('"', '', $term));
+        }, $term));
         $matches = Store::match($term, null, $rows, $fields, $exact);
         foreach ($matches as $ean) {
             $book = (new BookEntity())->retrieve($ean);
