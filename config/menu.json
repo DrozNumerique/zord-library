@@ -1,4 +1,7 @@
 {
+	"root": [
+		"home","about","help","admin","lang","connect"
+	],
 	"home": {
 		"type": "default"
 	},

@@ -3,7 +3,7 @@
 class LibraryMenu extends Menu {
     
     protected function entry($name) {
-        if ($this->context === 'root' && !in_array($name, ['home','about','help','admin','lang','connect'])) {
+        if ($this->context === 'root' && !in_array($name, Zord::value('menu', 'root') ?? [])) {
             return null;
         }
         $entry = parent::entry($name);
