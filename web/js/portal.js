@@ -60,8 +60,11 @@ var search = function(criteria, callback) {
 	invokeZord(parameters);
 }
 
-var searchInBook = function() {
-	var query = document.getElementById('queryInput');
+var searchInBook = function(root) {
+	if (root === undefined || root === null) {
+		root = document
+	}
+	var query = root.querySelector('#queryInput');
 	var book = query.dataset.book ?? BOOK;
 	var context = query.dataset.context ?? CONTEXT;
 	if (query && query.checkValidity()) {
