@@ -50,6 +50,9 @@ class Book extends Module {
                 }
                 if (isset($access['context'])) {
                     $context = array_keys($access['context']);
+                    usort($context, function($first, $second) {
+                        return Zord::value('context', [$first, 'position']) <=> Zord::value('context', [$second, 'position']);
+                    });
                     $name = null;
                     foreach ($context as $key) {
                         if (null !== Zord::value('context', [$key,'url'])) {
