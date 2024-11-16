@@ -1138,7 +1138,11 @@ class LibraryImport extends Import {
                             }
                         }
                     } else if (substr($target, 0, 1) == '#' && isset($this->anchors[$target])) {
-                        $anchor->setAttribute('href', $this->anchors[$target].$target);
+                        $_target = $target;
+                        if (substr($target, 1, 1) == 'N') {
+                            $_target = '#footref_'.substr($target, 1);
+                        }
+                        $anchor->setAttribute('href', $this->anchors[$target].$_target);
                     } else if (substr($target, 0, 4) == 'http') {
                         $anchor->setAttribute('href', $target);
                     }
