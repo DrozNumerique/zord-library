@@ -548,6 +548,10 @@ div.list {
 	list-style: square inside url('data:image/gif;base64,R0lGODlhBQAKAIABAAAAAP///yH5BAEAAAEALAAAAAAFAAoAAAIIjI+ZwKwPUQEAOw==');
 }
 
+div.list[data-rend="none"] {
+    list-style: none;
+}
+
 div.list[data-rend="numbered"] > div.item[data-n] {
     list-style: none;
     text-indent: -1.3em;
