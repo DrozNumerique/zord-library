@@ -408,7 +408,7 @@ div.hi[data-rend~="surlignage"], div.hi[data-rend~="highlight"], div.hi[data-ren
 	background-color : lightgray;
 }
 
-div.hi[data-rend~="lt"] {
+div.hi[data-rend~="lt"], div.hi[data-rend~="s"], div.hi[data-rend~="strike"] {
 	text-decoration:line-through;
 }
 /*
