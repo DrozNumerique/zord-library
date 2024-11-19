@@ -1153,7 +1153,7 @@ class LibraryImport extends Import {
                     }
                     if ($anchor->hasAttribute('href')) {
                         for ($i = 0; $i < $ref->childNodes->length; $i++) {
-                            $anchor->appendChild($ref->removeChild($ref->childNodes->item(0)));
+                            $anchor->appendChild($ref->removeChild($ref->childNodes->item($i)));
                         }
                         $ref->appendChild($anchor);
                     }
