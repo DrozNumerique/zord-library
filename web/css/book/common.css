@@ -883,9 +883,20 @@ div.tei table td[rowspan] {
 	vertical-align: top;
 }
 
-
 div.tei table td[data-rend~="highlight"] {
 	background-color : lightgray;
+}
+
+div.tei table[data-rend~="#center"] td {
+	text-align: center;
+}
+
+div.tei table[data-rend~="#right"] td {
+	text-align: right;
+}
+
+div.tei table[data-rend~="#left"] td {
+	text-align: left;
 }
 
 
