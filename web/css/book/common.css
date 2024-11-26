@@ -643,6 +643,10 @@ div.note:before {
 	font-size:0.8em;
 }
 
+div.note a {
+	font-size:0.9em;
+}
+
 /*
 [data-type]
 	[data-0] => abstract
