@@ -592,7 +592,8 @@ div.list[data-type="gloss"] div.list {
 }
 
 div.div[data-type="toc"] div.list,
-div.div[data-type="index"] div.list {
+div.div[data-type="index"] div.list,
+div.div[data-type="glossary"] div.list {
 	list-style-position: inside;
 	display:block ! important;
 	list-style: none inside;
