@@ -1349,8 +1349,15 @@ class LibraryImport extends Import {
                 }
             }
             if ($div->hasAttribute('synch')) {
-                $group = $div->hasAttribute('corresp') ? $div->getAttribute('corresp') : $div->parentNode->getAttribute('id');
-                $visavis[$group][] = $name;
+                $group = null;
+                if ($div->hasAttribute('corresp')) {
+                    $group = $div->getAttribute('corresp');
+                } else if ($div->parentNode->hasAttribute('id')) {
+                    $group = $div->parentNode->getAttribute('id');
+                }
+                if (!empty($group)) {
+                    $visavis[$group][] = $name;
+                }
             }
             $title = '';
             $flat = '';
