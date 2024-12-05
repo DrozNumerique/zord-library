@@ -714,6 +714,11 @@ div.pb[data-rend="temoin"]:before {
 	content: "[" attr(data-n) "]" ! important;
 }
 
+div.pb[data-rend="block"] {
+	display: block;
+	padding: 5em 0;
+}
+
 div.div[data-type="section"].noopAlone {
 	display:inline ! important;
 }
