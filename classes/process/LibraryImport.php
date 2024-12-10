@@ -1348,7 +1348,7 @@ class LibraryImport extends Import {
                     $div->removeAttribute('xml:id');
                 }
             }
-            if ($div->hasAttribute('synch') && substr($div->hasAttribute('synch'), 0, 1) !== '#') {
+            if ($div->hasAttribute('synch') && substr($div->getAttribute('synch'), 0, 1) !== '#') {
                 $group = null;
                 if ($div->hasAttribute('corresp')) {
                     $group = $div->getAttribute('corresp');
