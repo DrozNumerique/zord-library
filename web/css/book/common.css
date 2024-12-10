@@ -716,7 +716,7 @@ div.pb[data-rend="temoin"]:before {
 
 div.pb[data-rend="block"] {
 	display: block;
-	padding: 5em 0;
+	padding: 10em 0 0 0;
 }
 
 div.div[data-type="section"].noopAlone {
