@@ -1393,7 +1393,9 @@ class LibraryImport extends Import {
                 $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
             }
             if (in_array($type, Zord::value('import', ['types','root'])) || in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
-                $this->scan('div[@id="'.$id.'"]', $name, $level + 1);
+                if (!$div->hasAttribute('synch') || substr($div->getAttribute('synch'), 0, 1) !== '#') {
+                    $this->scan('div[@id="'.$id.'"]', $name, $level + 1);
+                }
             }
         }
         if (count($visavis) > 0) {
