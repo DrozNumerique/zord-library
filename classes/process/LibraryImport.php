@@ -1337,9 +1337,6 @@ class LibraryImport extends Import {
         $visavis = array();
         for ($index = 0 ; $index < $divs->length ; $index++) {
             $div = $divs[$index];
-            if ($div->hasAttribute('synch') && substr($div->getAttribute('synch'), 0, 1) === '#') {
-                continue;
-            }
             $name = $base.'-'.($index + 1);
             $type = $div->getAttribute('type');
             $id = $div->getAttribute('id');
