@@ -1044,7 +1044,7 @@ class LibraryImport extends Import {
                     } else {
                         $part['link'] = $element->parentNode->getAttribute('data-part');
                     }
-                    $toDo = !in_array($part['name'], $this->dones);
+                    $toDo = !in_array($part['name'], $this->dones) && substr($part['title'], 0, 1) !== '#';
                     if ($toDo) {
                         if (isset($this->visavis)) {
                             foreach ($this->visavis as $group) {
