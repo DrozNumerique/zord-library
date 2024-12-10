@@ -1225,7 +1225,7 @@ class LibraryImport extends Import {
             $part['name'] == 'home' || 
             in_array($part['type'], Zord::value('import', ['types','root'])) || 
             in_array($part['type'], Zord::value('import', ['types','fragment'])) ||
-            (isset($part['synch']) && ($allvisavis || !isset($part['corresp'])));
+            (isset($part['synch']) && substr($part['synch'], 0, 1) !== '#' && ($allvisavis || !isset($part['corresp'])));
     }
     
     protected function xmlError($step, $element, $message, $parameters = null) {
