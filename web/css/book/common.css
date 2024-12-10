@@ -715,7 +715,7 @@ div.pb[data-rend="temoin"]:before {
 }
 
 div.pb[data-rend="block"] {
-	display: block;
+	display: block !important;
 	padding: 10em 0 0 0;
 }
 
