@@ -499,7 +499,7 @@ class LibraryImport extends Import {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->page->number.$info);
                                     $result = false;
                                 }
-                                if (!$element->hasAttribute('rend') || $element->getAttribute('rend') !== 'temoin') {
+                                if (!$element->hasAttribute('rend') || ($element->getAttribute('rend') !== 'temoin' && $element->getAttribute('rend') !== 'block')) {
                                     if (!isset($id) || empty($id)) {
                                         $this->xmlError('validate', $element, $this->locale->messages->validate->error->page->id.$info);
                                         $result = false;
