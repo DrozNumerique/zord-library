@@ -905,7 +905,7 @@ class LibraryImport extends Import {
                     }
                 }
                 foreach ($parts as &$part) {
-                    if ($part['level'] <= ($metadata['tocDepth'] ?? MAX_TOC_DEPTH)) {
+                    if ($part['level'] <= ((!empty($metadata['tocDepth']) && is_int($metadata['tocDepth'])) ? $metadata['tocDepth'] : MAX_TOC_DEPTH)) {
                         $navbar[] = [
                             'id'    => $part['id'],
                             'part'  => $part['ref'],
@@ -1024,7 +1024,7 @@ class LibraryImport extends Import {
                 $element = null;
                 if ($part['level'] == 1) {
                     $element = $this->tocXPath->query('//ul[@id="tocTEI_' . $part['part'] . '"]')[0];
-                } else if ($part['level'] <= ($this->metadata['tocDepth'] ?? MAX_TOC_DEPTH)) {
+                } else if ($part['level'] <= ((!empty($this->metadata['tocDepth']) && is_int($this->metadata['tocDepth'])) ? $this->metadata['tocDepth'] : MAX_TOC_DEPTH)) {
                     $parent = $this->tocXPath->query('//li[@data-id="' . $part['parent']->getAttribute('id') . '"]');
                     if ($parent->length == 1) {
                         $container = $this->tocXPath->query('//li[@data-id="' . $part['parent']->getAttribute('id') . '"]/ul');
