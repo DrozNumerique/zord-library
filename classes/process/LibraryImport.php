@@ -1024,7 +1024,7 @@ class LibraryImport extends Import {
                 $element = null;
                 if ($part['level'] == 1) {
                     $element = $this->tocXPath->query('//ul[@id="tocTEI_' . $part['part'] . '"]')[0];
-                } else if ($part['level'] <= MAX_TOC_DEPTH) {
+                } else if ($part['level'] <= ($this->metadata['tocDepth'] ?? MAX_TOC_DEPTH)) {
                     $parent = $this->tocXPath->query('//li[@data-id="' . $part['parent']->getAttribute('id') . '"]');
                     if ($parent->length == 1) {
                         $container = $this->tocXPath->query('//li[@data-id="' . $part['parent']->getAttribute('id') . '"]/ul');
