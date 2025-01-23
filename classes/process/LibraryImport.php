@@ -905,7 +905,7 @@ class LibraryImport extends Import {
                     }
                 }
                 foreach ($parts as &$part) {
-                    if ($part['level'] <= MAX_TOC_DEPTH) {
+                    if ($part['level'] <= ($metadata['tocDepth'] ?? MAX_TOC_DEPTH)) {
                         $navbar[] = [
                             'id'    => $part['id'],
                             'part'  => $part['ref'],
