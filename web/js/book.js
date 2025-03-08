@@ -268,9 +268,7 @@ function displayTEI(selectorIndex) {
 
 (function(undefined) {
 
-	var tocContentEl = null;
-	
-	var updateAriadne = function() {
+	var updateTOC = function() {
 		var id = window.location.hash.substring(1);
 		var toc = document.getElementById('tocContent');
 		[].forEach.call(toc.querySelectorAll('span'), function(span) {
@@ -280,6 +278,16 @@ function displayTEI(selectorIndex) {
 		if (selected) {
 			selected.classList.add('part-select');
 		}
+		[].forEach.call(document.querySelectorAll('#tocContent li[data-part]'), function(entry) {
+			if (entry.dataset.part == BOOK + '/' + PART) {
+				entry.classList.add('active');
+			} else {
+				entry.classList.remove('active');
+			}
+		});
+	};
+	
+	var updateAriadne = function() {
 		var ariadne = document.getElementById('ariadne');
 		var current = ariadne.querySelector('span.ariadne-current')
 		var previous = ariadne.querySelector('span.ariadne-previous')
@@ -359,7 +367,7 @@ function displayTEI(selectorIndex) {
 		}
 		$scrollTop.set(top - 10);
 		setMarkerAnchor(false);
-		//updateAriadne();
+		updateTOC();
 	}, false);
 
 
@@ -376,21 +384,14 @@ function displayTEI(selectorIndex) {
 		}
 		// elements
 		var tocEl = document.getElementById('toc');
-		var tocContentEl = document.getElementById('tocContent');
-		tocContentEl.classList.add('content');
 		var contentTEI = document.getElementById('tei');
 		var citationsEl = document.getElementById('quote');
 		var bugsEl = document.getElementById('tool_bug');
 		var footnotesEl = document.getElementById('footnotes');
+		var tocContentEl = document.getElementById('tocContent');
+		tocContentEl.classList.add('content');
 		
-		//updateAriadne();
-		[].forEach.call(tocContentEl.querySelectorAll('li[data-part]'), function(entry) {
-			if (entry.dataset.part == BOOK + '/' + PART) {
-				entry.classList.add('active');
-			} else {
-				entry.classList.remove('active');
-			}
-		});
+		updateTOC();
 
 		// vars
 		var page = 1;
@@ -553,7 +554,7 @@ function displayTEI(selectorIndex) {
 			var selectEl = tocEl.querySelector('.part-select');
 			if (selectEl) {
 				setTimeout(function() {
-					tocContentEl.scrollTop = selectEl.offsetTop - 125;
+					$('#tocContent').parent().scrollTop(selectEl.offsetTop - 125);
 				}, 300);
 			}
 		});
