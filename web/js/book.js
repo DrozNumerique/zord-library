@@ -280,9 +280,15 @@ function displayTEI(selectorIndex) {
 		}
 		[].forEach.call(document.querySelectorAll('#tocContent li[data-part]'), function(entry) {
 			if (entry.dataset.part == BOOK + '/' + PART) {
-				entry.classList.add('active');
+				var li = entry.querySelector(':scope> ul > li:first-child');
+				if (li && li.dataset.part != entry.dataset.part) {
+					entry.querySelector(':scope > span').classList.add('active');
+				} else {
+					entry.classList.add('active');
+				}
 			} else {
 				entry.classList.remove('active');
+				entry.querySelector(':scope > span').classList.remove('active');
 			}
 		});
 	};
