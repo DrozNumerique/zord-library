@@ -13,6 +13,7 @@
 	height: 50px;
 	margin-top: 55px;
 	width: var(--main-width);
+	z-index: 10000;
 }
 
 #ariadne span {

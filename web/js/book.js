@@ -347,16 +347,17 @@ function displayTEI(selectorIndex) {
 
 	window.addEventListener("hashchange", function() {
 		var header = document.getElementById('header');
+		var navbar = document.getElementById('navbar');
 		var ariadne = document.getElementById('ariadne');
-		var offset = header.offsetHeight;
+		var offset = navbar.offsetHeight + navbar.offsetTop;
 		if (ariadne) {
 			offset = offset + ariadne.offsetHeight;
 		}
 		var top = $scrollTop.get() - offset;
 		if (top < offset) {
-			top = offset;
+			top = 0;
 		}
-		$scrollTop.set(top);
+		$scrollTop.set(top - 10);
 		setMarkerAnchor(false);
 		//updateAriadne();
 	}, false);
