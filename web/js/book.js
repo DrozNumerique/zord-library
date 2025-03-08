@@ -331,7 +331,11 @@ function displayTEI(selectorIndex) {
 					offsetTop = offsetTop + el.offsetTop;
 				}
 				if (toScroll) {
-					$scrollTop.set(offsetTop - (window.innerHeight / 2) + document.getElementById('navcontent').offsetHeight);
+					var offsetHeight = document.getElementById('navcontent').offsetHeight;
+					if (document.getElementById('ariadne')) {
+						offsetHeight = offsetHeight + document.getElementById('ariadne').offsetHeight;
+					}
+					$scrollTop.set(offsetTop - (window.innerHeight / 2) + offsetHeight);
 				}
 				document.getElementById('markerAnchorLeft').style.top = offsetTop + 'px';
 				document.getElementById('markerAnchorLeft').style.left = 'calc( ( (100% - ' + document.getElementById('parts').offsetWidth + 'px) / 2) - 20px)'
@@ -343,9 +347,14 @@ function displayTEI(selectorIndex) {
 
 	window.addEventListener("hashchange", function() {
 		var header = document.getElementById('header');
-		var top = $scrollTop.get() - header.offsetHeight;
-		if (top < header.offsetHeight) {
-			top = header.offsetHeight;
+		var ariadne = document.getElementById('ariadne');
+		var offset = header.offsetHeight;
+		if (ariadne) {
+			offset = offset + ariadne.offsetHeight;
+		}
+		var top = $scrollTop.get() - offset;
+		if (top < offset) {
+			top = offset;
 		}
 		$scrollTop.set(top);
 		setMarkerAnchor(false);
@@ -543,8 +552,11 @@ function displayTEI(selectorIndex) {
 
 		var changeLocation = function(event,el) {
 			event.preventDefault();
-			var id = el.getAttribute('data-id');
 			var part = el.getAttribute('data-part');
+			if (part == undefined || part == null) {
+				return;
+			}
+			var id = el.getAttribute('data-id');
 			var hash = window.location.hash.substring(1);
 			if (id != undefined) {
 				part += '#' + id;
@@ -564,9 +576,11 @@ function displayTEI(selectorIndex) {
 		});
 		
 		document.getElementById('ariadne').addEventListener('click', function(event) {
-			if (event.target && event.target.nodeName == "SPAN" && event.target.dataset.part !== '') {
-				changeLocation(event, event.target);
-			}
+			[].forEach.call([event.target, event.target.parentNode] , function(target) {
+				if (target.nodeName == "SPAN" && target.dataset.part !== '') {
+					changeLocation(event, target);
+				}
+			});
 		});
 
 		tocEl.addEventListener('click', function(event){

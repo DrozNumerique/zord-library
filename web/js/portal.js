@@ -6,6 +6,7 @@ var toScroll = function() {
 	var navbar = document.getElementById('navbar');
 	if (navbar) {
 		var header = document.getElementById('header');
+		var ariadne = document.getElementById('ariadne');
 		if (header) {
 			marginTopMax = getNumber(header,'height');
 		} else {
@@ -15,6 +16,10 @@ var toScroll = function() {
 		marginTop = (marginTop < marginTopMin) ? marginTopMin : (marginTop > marginTopMax) ? marginTopMax : marginTop;
 		navbar.style.marginTop = marginTop + 'px';
 		marginTop = marginTop + getNumber(navbar,'height') + getNumber(navbar,'padding-top') + getNumber(navbar,'padding-bottom');
+		if (ariadne) {
+			ariadne.style.marginTop = marginTop + 'px';
+			marginTop = marginTop + getNumber(ariadne,'height') + getNumber(ariadne,'padding-top') + getNumber(ariadne,'padding-bottom');
+		}
 		[].forEach.call(document.querySelectorAll('.fixed'), function(element) {
 			element.style.marginTop = marginTop + 'px';
 			if (element.classList.contains('pullout')) {

@@ -10,9 +10,6 @@
 			<a id="get_book" class="fa fa-book fa-fw" target="_blank" title="<?php echo $locale->get_book; ?>" href="<?php echo $models['book']['metadata']['ref_url']; ?>"></a>
 <?php } ?>
 		</div>
-<?php if (isset($models['portal']['ariadne'])) { ?>
-<?php   $this->render('ariadne'); ?>
-<?php } ?>
 <?php if (isset($models['portal']['message'])) { ?>
 <?php   $this->render('message'); ?>
 <?php } ?>
