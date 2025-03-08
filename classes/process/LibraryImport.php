@@ -1381,7 +1381,7 @@ class LibraryImport extends Import {
                 }
             }
             $title = Library::compact($title);
-            $flat = Library::compact($flat);
+            $flat = !empty($flat) ? Library::compact($flat) : strip_tags($title);
             if ($title == '' && $div->hasAttribute('synch')) {
                 $title = $div->getAttribute('synch');
             }
