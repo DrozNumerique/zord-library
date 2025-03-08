@@ -384,6 +384,13 @@ function displayTEI(selectorIndex) {
 		var footnotesEl = document.getElementById('footnotes');
 		
 		//updateAriadne();
+		[].forEach.call(tocContentEl.querySelectorAll('li[data-part]'), function(entry) {
+			if (entry.dataset.part == BOOK + '/' + PART) {
+				entry.classList.add('active');
+			} else {
+				entry.classList.remove('active');
+			}
+		});
 
 		// vars
 		var page = 1;
@@ -550,7 +557,7 @@ function displayTEI(selectorIndex) {
 				}, 300);
 			}
 		});
-
+		
 		var changeLocation = function(event,el) {
 			event.preventDefault();
 			var part = el.getAttribute('data-part');

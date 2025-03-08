@@ -20,3 +20,12 @@
 #toc .part-select {
 	color: #C0392B;
 }
+
+#toc li[data-part].active {
+	background: aliceblue;
+	border: 1px solid lightgray;
+}
+
+#toc li[data-part].active li[data-part].active {
+	border: none;
+}
