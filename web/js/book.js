@@ -91,7 +91,6 @@ function formatCitation(citation) {
 				if (n != undefined) {
 					element.insertAdjacentHTML('beforebegin', '¡§¡sup¡¿¡' + n + '¡§¡/sup¡¿¡');
 				}
-				element.parentNode.removeChild(element);
 				break;
 			}
 			case ELS['ref']['elm']: {
@@ -530,6 +529,11 @@ function displayTEI(selectorIndex) {
 		};
 
 		[].forEach.call(contentTEI.querySelectorAll('div.' + ELS['note']['elm']), function (el,i) {
+			var footnote = document.getElementById('footref_' + (el.id || el.parentNode.parentNode.id));
+			if (footnote) {
+				var content = footnote.querySelector('div.footnote-note').firstElementChild;
+				el.dataset.tooltip = content.innerHTML.trim().replace(/<\/?[^>]+(>|$)/g, "").replaceAll('&nbsp;', ' ');
+			}
 			el.addEventListener('click', function(event) {
 				[].forEach.call(contentTEI.querySelectorAll('div.footnote-note'), function (footnote,i) {
 					footnote.classList.remove("footnote-select");

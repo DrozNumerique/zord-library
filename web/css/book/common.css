@@ -648,6 +648,19 @@ div.note a {
 	font-size:0.9em;
 }
 
+div.note[data-tooltip]:after {
+	margin: 0;
+	text-align: justify;
+	max-width: 400px;
+	left: 1em;
+	width: max-content;
+	bottom: unset;
+	top: 1em;
+	background: #FFFFEE;
+	color: black;
+	text-indent: 0;
+}
+
 /*
 [data-type]
 	[data-0] => abstract
