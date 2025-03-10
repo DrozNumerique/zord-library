@@ -729,6 +729,13 @@ function displayTEI(selectorIndex) {
 
 	window.addEventListener("load", function(event) {
 		displayTEI(CURRENT_SELECTOR_INDEX);
+		var tei = document.getElementById('tei');
+		[].forEach.call(tei.querySelectorAll('div.' + ELS['note']['elm']), function (note) {
+			if (note.offsetLeft > note.offsetParent.clientWidth / 2) {
+				var rule = "#" + (note.id || note.parentNode.parentNode.id) + "::after { right: 0; }";
+				document.styleSheets[0].insertRule(rule, 0);
+			}
+		});
 		setTimeout(function() {
 			setMarkerAnchor(true);
 			for (var id in viewers) {

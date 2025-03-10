@@ -652,10 +652,10 @@ div.note[data-tooltip]:after {
 	margin: 0;
 	text-align: justify;
 	max-width: 400px;
-	left: 1em;
 	width: max-content;
 	bottom: unset;
 	top: 1em;
+	left: unset;
 	background: #FFFFEE;
 	color: black;
 	text-indent: 0;
