@@ -2,7 +2,7 @@
 	"BookEntity": {
 		"table": "books",
 		"fields": [
-			"ean",
+	        "ean",
 	        "title",
 	        "subtitle",
 	        "creator",
@@ -11,7 +11,8 @@
 	        "number",
 	        "date",
 	        "s_from",
-	        "s_to"
+	        "s_to",
+	        "first_published"
         ],
         "key": "ean",
 		"json": [

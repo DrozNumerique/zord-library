@@ -2,7 +2,7 @@
                		<table id="books" class="admin-table">
                			<thead>
                				<tr>
-<?php foreach (['isbn','title'] as $field) { ?>
+<?php foreach (['isbn','title', 'first'] as $field) { ?>
                					<th class="sortable <?php echo $field; ?>" data-field="<?php echo $field == 'isbn' ? 'ean' : $field; ?>">
                						<?php echo $locale->tab->publish->book->$field; ?>
 <?php   if (($order ?? null) == ($field == 'isbn' ? 'ean' : $field)) { ?>
@@ -23,6 +23,9 @@
                         		</td>
                         		<td class="show" data-open="<?php echo $context; ?>" data-action="show" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
                         			<span class="content" title="<?php echo $locale->tab->publish->show; ?>"><?php echo $book['title']; ?></span>
+                        		</td>
+                        		<td class="date">
+                        			<span class="content"><?php echo $book['first']; ?></span>
                         		</td>
                         		<td class="xml" data-action="xml" data-isbn="<?php echo $book['isbn']; ?>" data-context="<?php echo $context; ?>">
           							<i class="display fa fa-file-code-o fa-fw" title="<?php echo $locale->tab->publish->xml; ?>"></i>

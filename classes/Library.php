@@ -24,7 +24,8 @@ class Library {
             $books[] = [
                 'isbn'   => $book->ean,
                 'status' => isset($status[$book->ean]) ? $status[$book->ean] : 'no',
-                'title'  => self::title($book->title, $book->subtitle)
+                'title'  => self::title($book->title, $book->subtitle),
+                'first'  => $book->first_published ?? 'undefined'
             ];
         }
         return $books;

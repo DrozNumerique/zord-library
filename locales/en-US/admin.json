@@ -18,7 +18,8 @@
 			"books": "Books",
 			"book": {
 				"isbn": "ISBN",
-				"title": "Title"
+				"title": "Title",
+				"first": "First publication"
 			},
 			"select": "Selected",
 			"show": "Read online",

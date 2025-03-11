@@ -741,6 +741,12 @@ class LibraryImport extends Import {
                             'context' => $context,
                             'status' => $status
                         ]);
+                        $book = (new BookEntity())->retrieveOne($ean);
+                        if ($book !== false && empty($book->first_published)) {
+                            (new BookEntity())->update($ean, [
+                                'first_published' => date('Y-m-d')
+                            ]);
+                        }
                     }
                 }
                 $this->info(2, $context.' => '.$this->locale->messages->publish->info->status->$status);

@@ -18,7 +18,8 @@
 			"books": "Ouvrages",
 			"book": {
 				"isbn": "ISBN",
-				"title": "Titre"
+				"title": "Titre",
+				"first": "Première publication"
 			},
 			"select": "Sélectionné",
 			"show": "Consulter en ligne",

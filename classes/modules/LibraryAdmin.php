@@ -35,7 +35,7 @@ class LibraryAdmin extends StoreAdmin {
         $offset = $this->params['offset'] ?? 0;
         $order = $this->params['order'] ?? 'ean';
         $direction = $this->params['direction'] ?? 'asc';
-        $books = Library::books($context, [$direction => $order]);
+        $books = Library::books($context, [$direction => ($order === 'first' ? 'first_published' : $order)]);
         if (!empty($title)) {
             $books = array_filter($books, function($book) use ($title) {return strpos(strtolower($book['title']), strtolower($title)) !== false;});
         }
