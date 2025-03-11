@@ -98,14 +98,14 @@ window.addEventListener("load", function(event) {
 	
 	var content = document.getElementById('content');
 	var navbar = document.getElementById('navbar');
-	var message = document.getElementById('message');
+	var ariadne = document.getElementById('ariadne');
 	if (content) {
 		var marginTop = getNumber(content,'margin-top');
 		if (navbar) {
 			marginTop += getNumber(navbar,'height');
 		}
-		if (message) {
-			marginTop += getNumber(message,'height');
+		if (ariadne) {
+			marginTop += getNumber(ariadne,'height');
 		}
 		content.style.marginTop = marginTop + 'px';
 	}
