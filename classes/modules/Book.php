@@ -390,12 +390,24 @@ class Book extends Module {
         }
     }
     
+    public function xml() {
+        return $this->download(STORE_FOLDER.'library'.DS.'${isbn}'.DS.'book.xml', 'admin', null, $this->params['isbn'].'.xml');
+    }
+    
     public function epub() {
         $metadata = Library::data($this->params['isbn'], 'metadata.json', 'array');
         if (isset($metadata['epub'])) {
             $this->params['isbn'] = $metadata['epub'];
         }
         return $this->download(STORE_FOLDER.'epub'.DS.'${isbn}.epub', 'reader');
+    }
+    
+    public function pdf() {
+        $metadata = Library::data($this->params['isbn'], 'metadata.json', 'array');
+        if (isset($metadata['pdf'])) {
+            $this->params['isbn'] = $metadata['pdf'];
+        }
+        return $this->download(STORE_FOLDER.'pdf'.DS.'${isbn}.pdf', 'reader');
     }
     
     public function quotes() {

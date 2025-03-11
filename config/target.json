@@ -62,6 +62,20 @@
 				"isbn": "FILTER_SANITIZE_STRING"
 			}
 		},
+		"xml": {
+			"response": "DOWNLOAD",
+			"shortcut": "xml",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING"
+			}
+		},
+		"pdf": {
+			"response": "DOWNLOAD",
+			"shortcut": "pdf",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING"
+			}
+		},
 		"quotes": {
 			"response": "DOWNLOAD",
 			"shortcut": "quotes",

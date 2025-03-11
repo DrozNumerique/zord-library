@@ -22,7 +22,9 @@
 			},
 			"select": "Sélectionné",
 			"show": "Consulter en ligne",
-			"epub": "Télécharger l'ePub",
+			"xml": "Télécharger le fichier XML-TEI",
+			"epub": "Télécharger le fichier ePub",
+			"pdf": "Télécharger le fichier PDF",
 			"word": "Télécharger le fichier Word"
 		}
 	}
