@@ -17,13 +17,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 		[].forEach.call(document.querySelectorAll('tr.data td[data-isbn]'), function(entry) {
 			entry.addEventListener("click", function(event) {
+				document.body.classList.add('waiting');
 				invokeZord({
 					module:'Book',
 					action:entry.dataset.action,
 					open:entry.dataset.open,
 					isbn:entry.dataset.isbn,
 					ctx:entry.dataset.context,
-					deferred:true
+					deferred:true,
+					success: function() {
+						document.body.classList.remove('waiting');
+					}
 				});
 			});
 		});
