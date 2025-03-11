@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					isbn:entry.dataset.isbn,
 					ctx:entry.dataset.context,
 					deferred:true,
-					success: function() {
+					after: function() {
 						document.body.classList.remove('waiting');
 					}
 				});
