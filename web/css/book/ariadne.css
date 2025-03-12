@@ -21,6 +21,10 @@
 	display: block;
 }
 
+#ariadne span span {
+	display: unset;
+}
+
 #ariadne span.visavis-variants {
 	display: inline;
 }
