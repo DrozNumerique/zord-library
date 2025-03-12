@@ -741,12 +741,7 @@ class LibraryImport extends Import {
                             'context' => $context,
                             'status' => $status
                         ]);
-                        $book = (new BookEntity())->retrieveOne($ean);
-                        if ($book !== false && empty($book->first_published)) {
-                            (new BookEntity())->update($ean, [
-                                'first_published' => date('Y-m-d')
-                            ]);
-                        }
+                        $this->postPublish($ean);
                     }
                 }
                 $this->info(2, $context.' => '.$this->locale->messages->publish->info->status->$status);
@@ -755,6 +750,10 @@ class LibraryImport extends Import {
             $this->info(2, $this->locale->messages->publish->info->none);
         }
         return true;
+    }
+    
+    protected function postPublish($ean) {
+        return Library::postPublish($ean);
     }
     
     protected function facets($ean) {

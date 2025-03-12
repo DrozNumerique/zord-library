@@ -269,4 +269,15 @@ class Library {
 	    }
 	    return $user->hasRole('reader', $context);
 	}
+	
+	public static function postPublish($book) {
+	    $_book = (new BookEntity())->retrieveOne($book);
+	    if ($_book !== false && empty($_book->first_published)) {
+	        (new BookEntity())->update($book, [
+	            'first_published' => date('Y-m-d')
+	        ]);
+	        return $_book;
+	    }
+	    return false;
+	}
 }

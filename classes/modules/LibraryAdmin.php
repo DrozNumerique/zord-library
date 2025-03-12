@@ -90,12 +90,7 @@ class LibraryAdmin extends StoreAdmin {
                 case 'demo': {
                     if ($entity == false) {
                         (new BookHasContextEntity())->create(array_merge($data,['status' => $status]));
-                        $_book = (new BookEntity())->retrieveOne($book);
-                        if ($_book !== false && empty($_book->first_published)) {
-                            (new BookEntity())->update($book, [
-                                'first_published' => date('Y-m-d')
-                            ]);
-                        }
+                        $this->postPublish($book);
                         $change = true;
                     } else if ($entity->status !== $status) {
                         (new BookHasContextEntity())->update(["many" => true, "where" => $data], ['status' => $status]);
@@ -120,6 +115,10 @@ class LibraryAdmin extends StoreAdmin {
             }
         }
         return ['change' => $change];
+    }
+    
+    protected function postPublish($book) {
+        return Library::postPublish($book);
     }
     
     protected function deletePaths($book) {
