@@ -131,11 +131,11 @@ var dressSortingToggles = function(element) {
 			toggle.addEventListener("click", function(event) {
 				sortColumn(toggle);
 			});
-			var defaultSort = element.querySelector('.sort.default');
-			if (defaultSort !== undefined && defaultSort !== null) {
-				sortColumn(defaultSort);
-			}
 		});
+		var defaultSort = element.querySelector('.sort.default');
+		if (defaultSort !== undefined && defaultSort !== null) {
+			sortColumn(defaultSort);
+		}
 		element.dataset.dressed = 'true';
 	}
 }

@@ -900,7 +900,8 @@ class Book extends Module {
                 'date'     => $book->date,
                 'category' => Zord::objectToArray($book->category),
                 'number'   => $book->number,
-                'readable' => $this->user->hasAccess($isbn, 'read')
+                'readable' => $this->user->hasAccess($isbn, 'read'),
+                'since'    => $book->first_published ?? ''
             ];
         }
         $liner = ($search !== false && empty($search['liner'])) ? (Zord::value('plugin', ['liner','search']) ?? 'SearchLiner') : Zord::value('plugin', ['liner',$this->context]);
