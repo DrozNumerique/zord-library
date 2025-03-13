@@ -44,5 +44,12 @@
 		"preload": true
 	},
 	"apart": ["new", "demo"],
-	"corpus": ["none"]
+	"corpus": ["none"],
+	"list": {
+		"context": {
+			"actions": {
+				"duplicate": "copy"
+			}
+		}
+	}
 }

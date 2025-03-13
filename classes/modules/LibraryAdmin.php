@@ -70,6 +70,62 @@ class LibraryAdmin extends StoreAdmin {
             'data'      => $books
         ];
     }
+    public function context() {
+        $result = [];
+        if (!empty($this->params['operation']) &&
+            !empty($this->params['name']) &&
+            !empty($this->params['title'])) {
+            $operation = $this->params['operation'];
+            $name = $this->params['name'];
+            $title = $this->params['title'];
+            if ($operation === 'duplicate') {
+                if (empty($this->params['source'])) {
+                    $result['error'] = [
+                        'code'    => 400,
+                        'message' => "contexte source manquant"
+                    ];
+                } else {
+                    $source = $this->params['source'];
+                    $context = Zord::getConfig('context');
+                    if (!isset($context[$name])) {
+                        $context[$name]['title'][$this->lang] = $title;
+                        $position = 0;
+                        foreach ($context as $_context) {
+                            if (($_context['position'] ?? 0) > $position) {
+                                $position = $_context['position'];
+                            }
+                        }
+                        $context[$name]['position'] = $position;
+                        foreach ((new BookHasContextEntity())->retrieveAll(['context' => $source]) as $entity) {
+                            (new BookHasContextEntity())->create([
+                                'book'    => $entity->book,
+                                'context' => $name,
+                                'status'  => $entity->status
+                            ]);
+                        }
+                        if (!$this->doContext($operation, $name, $context)) {
+                            $result['error'] = [
+                                'code'    => 500,
+                                'message' => "erreur lors de l'opération <".$operation."> sur le contexte ".$name
+                            ];
+                        }
+                    } else {
+                        $result['error'] = [
+                            'code'    => 400,
+                            'message' => "contexte <".$name."> existant"
+                        ];
+                    }
+                }
+            } else {
+                return parent::context();
+            }
+        }
+        if (isset($result['error'])) {
+            $this->response = 'DATA';
+            return $this->error($result['error']['code'], $result['error']['message']);
+        }
+        return $this->index('context', $result);
+    }
     
     public function publish() {
         if (isset($this->params['name']) &&
@@ -115,6 +171,12 @@ class LibraryAdmin extends StoreAdmin {
             }
         }
         return ['change' => $change];
+    }
+    
+    protected function postContext($operation, $name, $context) {
+        if ($operation === 'delete') {
+            (new BookHasContextEntity())->deleteAll(['context' => $name]);
+        }
     }
     
     protected function postPublish($book) {

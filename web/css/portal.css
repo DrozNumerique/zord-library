@@ -6,10 +6,6 @@ body {
 	padding:0;
 }
 
-body.waiting * {
-	cursor: wait !important; 
-}
-
 ::-moz-selection { /* Code for Firefox */
 	background: #c7dffc ! important;
 }

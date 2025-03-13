@@ -28,5 +28,10 @@
 				"confirm": "Confirm book deletion"
 			}
 		}
+	},
+	"list": {
+		"actions": {
+			"duplicate": "Duplicate"
+		}
 	}
 }

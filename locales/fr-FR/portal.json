@@ -28,5 +28,10 @@
 				"confirm": "Confirmer la suppression de l'ouvrage"
 			}
 		}
+	},
+	"list": {
+		"actions": {
+			"duplicate": "Dupliquer"
+		}
 	}
 }

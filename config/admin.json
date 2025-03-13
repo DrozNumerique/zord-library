@@ -1,4 +1,19 @@
 {
+	"context": {
+		"scripts": [
+			{
+				"src": "/library/js/admin/context.js",
+				"type": "text/javascript"
+			}
+		],
+		"styles": [
+			{
+				"media": "screen",
+				"type": "text/css",
+				"href": "/library/css/admin/context.css"
+			}
+		]
+	},
 	"import": {
 		"scripts": [
 			{
