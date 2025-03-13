@@ -348,7 +348,7 @@ function displayTEI(selectorIndex) {
 					if (document.getElementById('ariadne')) {
 						offsetHeight = offsetHeight + document.getElementById('ariadne').offsetHeight;
 					}
-					$scrollTop.set(offsetTop - (window.innerHeight / 2) + offsetHeight);
+					$scrollTop.set(offsetTop - (window.innerHeight / 2) + offsetHeight + 3);
 				}
 				document.getElementById('markerAnchorLeft').style.top = offsetTop + 'px';
 				document.getElementById('markerAnchorLeft').style.left = 'calc( ( (100% - ' + document.getElementById('parts').offsetWidth + 'px) / 2) - 1em)'
