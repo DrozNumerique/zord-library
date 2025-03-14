@@ -816,6 +816,7 @@ class Book extends Module {
             $search = [
                 'criteria' => $criteria,
                 'found'    => $found,
+                'pages'    => ceil($found / $criteria['rows']),
                 'books'    => $books,
                 'parts'    => $parts,
                 'end'      => $end,

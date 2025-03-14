@@ -33,11 +33,11 @@ $this->render('shelf', ['shelf' => $shelf, 'search' => isset($models['search']['
 						<div class="frame_title"><?php echo Zord::getLocaleValue($shelf['name'], $models['labels'], $lang, ['new', 'other'], $locale); ?></div>
 <?php     if (isset($models['search']['matches'])) { ?>
 						<div class="frame_subtitle">
-							<span class="frame_instances count"><?php echo $shelf['instances']['total']; ?></span>&nbsp;<span class="frame_instances"><?php echo $locale->instances; ?></span>
+							<span class="frame_instances count"><?php echo ($models['search']['pages'] ?? 1) > 1 ? '~ ' : ''; ?><?php echo $shelf['instances']['total'] * ($models['search']['pages'] ?? 1); ?></span>&nbsp;<span class="frame_instances"><?php echo $locale->instances; ?></span>
 						</div>
 <?php     } ?>			
 						<div class="frame_subtitle">
-							<span class="frame_books count"><?php echo count($shelf['books']); ?></span>&nbsp;<span class="frame_books"><?php echo $locale->books; ?></span>
+							<span class="frame_books count"><?php echo ($models['search']['pages'] ?? 1) > 1 ? '~ ' : ''; ?><?php echo count($shelf['books']) * ($models['search']['pages'] ?? 1); ?></span>&nbsp;<span class="frame_books"><?php echo $locale->books; ?></span>
 						</div>
 					</div>
 <?php   } ?>
