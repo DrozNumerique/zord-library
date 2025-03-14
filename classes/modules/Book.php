@@ -773,14 +773,17 @@ class Book extends Module {
             if (!isset($criteria['scope']) || empty($criteria['scope'])) {
                 $criteria['scope'] = Zord::value('portal', ['default','search','scope']);
             }
-            if ($criteria['scope'] == 'corpus' && is_array($criteria['filters']['ean']) && isset($this->user->login)) {
-                foreach ($criteria['filters']['ean'] as $book) {
-                    (new UserHasQueryEntity())->create([
-                        'user'    => $this->user->login,
-                        'context' => $this->context,
-                        'book'    => $book,
-                        'type'    => '5'
-                    ]);
+            if ($criteria['scope'] == 'corpus' && is_array($criteria['filters']['ean'])) {
+                $query->addFilterQuery(Store::field('ean').':('.implode(' ', $criteria['filters']['ean']).')');
+                if (isset($this->user->login)) {
+                    foreach ($criteria['filters']['ean'] as $book) {
+                        (new UserHasQueryEntity())->create([
+                            'user'    => $this->user->login,
+                            'context' => $this->context,
+                            'book'    => $book,
+                            'type'    => '5'
+                        ]);
+                    }
                 }
             } else {
                 $query->addFilterQuery($this->inContextFilterQuery());
