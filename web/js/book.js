@@ -269,13 +269,23 @@ function displayTEI(selectorIndex) {
 
 	var updateTOC = function() {
 		var id = window.location.hash.substring(1);
-		var toc = document.getElementById('tocContent');
-		[].forEach.call(toc.querySelectorAll('span'), function(span) {
-			span.classList.remove('part-select');
-		});
-		var selected = toc.querySelector('li[data-id="' + id + '"] > span');
-		if (selected) {
-			selected.classList.add('part-select');
+		if (id.substring(0, 8) == 'footref_') {
+			id = id.substring(8);
+		}
+		var element = document.getElementById(id);
+		while (element != undefined && element != null && id.substring(0, 5) != 'Zsec_') {
+			element = element.parentNode;
+			id = (element != undefined && element != null) ? (element.id ?? '') : '';
+		}
+		if (id.substring(0, 5) == 'Zsec_') {
+			var toc = document.getElementById('tocContent');
+			[].forEach.call(toc.querySelectorAll('span'), function(span) {
+				span.classList.remove('part-select');
+			});
+			var selected = toc.querySelector('li[data-id="' + id + '"] > span');
+			if (selected) {
+				selected.classList.add('part-select');
+			}
 		}
 		[].forEach.call(document.querySelectorAll('#tocContent li[data-part]'), function(entry) {
 			if (entry.dataset.part == BOOK + '/' + PART) {
