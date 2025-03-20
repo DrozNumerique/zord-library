@@ -631,7 +631,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 		
 	var references = getCSLObjects('corpus');
-	if (references !== undefined && references !== null) {
+	if (books && references !== undefined && references !== null) {
 		for (var id in references) {
 			addCorpus(books, shelves, references[id].ean, references[id]);
 		}
