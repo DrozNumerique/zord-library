@@ -797,6 +797,8 @@ class Book extends Module {
                 $query->setHighlightMaxAnalyzedChars(-1);
                 $query->setHighlightMergeContiguous(false);
                 $query->setHighlight(true);
+            } else {
+                $criteria['rows'] = SEARCH_PAGE_MAX_SIZE;
             }
             list($found, $documents, $highlighting) = Store::search($query);
             foreach ($documents as $document) {

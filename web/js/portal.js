@@ -46,10 +46,12 @@ var search = function(criteria, callback) {
 		action:"search",
 		fetch: fetch,
 		criteria:JSON.stringify(criteria),
+		back: window.location,
 		before:function() {
 			$dialog.wait();
 		},
 		after:function() {
+			history.pushState({}, null, BASEURL['zord'] + '/search');
 			$dialog.hide(function() {
 				if (fetch == 'true' && results !== undefined && results !== null && results.dataset.search.length > 0 && results.dataset.alert.length > 0) {
 					alert(results.dataset.alert);
@@ -84,13 +86,22 @@ var searchInBook = function(root) {
 			start:0,
 			rows:1000
 		};
-		searchHistory = getContextProperty('search.history', []);
-		searchHistory.push(searchCriteria);
-		searchIndex = searchHistory.length;
-		setContextProperty('search.index',    searchIndex);
-		setContextProperty('search.history',  searchHistory);
-		setContextProperty('search.criteria', searchCriteria);
-		search(searchCriteria);
+		invokeZord({
+			module:'Book',
+			action:'reference',
+			isbn:book,
+			success:function(reference) {
+				setCSLObjects('corpus', {});
+				addCSLObject('corpus', reference);
+				searchHistory = getContextProperty('search.history', []);
+				searchHistory.push(searchCriteria);
+				searchIndex = searchHistory.length;
+				setContextProperty('search.index',    searchIndex);
+				setContextProperty('search.history',  searchHistory);
+				setContextProperty('search.criteria', searchCriteria);
+				search(searchCriteria);
+			}
+		});
 	}
 }
 

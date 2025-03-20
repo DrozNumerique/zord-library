@@ -30,8 +30,8 @@ function updateStyle(select, id) {
 }
 
 function refreshHistory(only) {
-	display = document.getElementById('searchHistoryDisplay');
-	style = document.getElementById('historyStyles');
+	var display = document.getElementById('searchHistoryDisplay');
+	var style = document.getElementById('historyStyles');
 	if (only == undefined || only == null || !only) {
 		updateStyle(style, 'corpusStyles');
 	}
@@ -42,7 +42,7 @@ function refreshHistory(only) {
 			criteria:JSON.stringify(searchHistory[searchIndex - 1]),
 			success:function(result) {
 				display.innerHTML = '';
-				index = document.createElement('div');
+				var index = document.createElement('div');
 				index.appendChild(document.createTextNode(searchIndex + '/' + searchHistory.length));
 				display.appendChild(index);
 				if (result.query) {
@@ -51,24 +51,24 @@ function refreshHistory(only) {
 					display.appendChild(query);
 				}
 				if (result.results) {
-					results = document.createElement('li');
+					var results = document.createElement('li');
 					results.appendChild(document.createTextNode(result.results));
 					display.appendChild(results);
 				}
 				if (result.include) {
-					include = document.createElement('li');
+					var include = document.createElement('li');
 					include.appendChild(document.createTextNode(result.include));
 					display.appendChild(include);
 				}
 				if (result.source) {
-					source = document.createElement('li');
+					var source = document.createElement('li');
 					source.appendChild(document.createTextNode(result.source));
 					display.appendChild(source);
 				}
 				if (result.books && result.books.length > 0) {
-					books = document.createElement('li');
+					var books = document.createElement('li');
 					display.appendChild(books);
-					biblio = document.createElement('ul');
+					var biblio = document.createElement('ul');
 					[].forEach.call(result.books, function(text, index) {
 						if (index == 0) {
 							books.appendChild(document.createTextNode(text));
@@ -76,7 +76,7 @@ function refreshHistory(only) {
 							if (index == 1) {
 								books.appendChild(biblio);
 							}
-							cslObjects = getCSLObjects('history');
+							var cslObjects = getCSLObjects('history');
 							var reference = null;
 							if (cslObjects) {
 								for (var id in cslObjects) {
@@ -95,7 +95,7 @@ function refreshHistory(only) {
 								    }
 								);
 							}
-							entry = document.createElement('li');
+							var entry = document.createElement('li');
 							entry.innerHTML = getBiblio('history', reference.id);
 							biblio.appendChild(entry);
 						}
@@ -103,15 +103,15 @@ function refreshHistory(only) {
 				}
 				if (result.facets) {
 					if (result.operator) {
-						operator = document.createElement('li');
+						var operator = document.createElement('li');
 						operator.appendChild(document.createTextNode(result.operator));
 						display.appendChild(operator);
 					}
 					for (var name in result.facets) {
 						if (result.facets[name].length > 0) {
-							label = document.createElement('li');
+							var label = document.createElement('li');
 							display.appendChild(label);
-							list = document.createElement('ul');
+							var list = document.createElement('ul');
 							[].forEach.call(result.facets[name], function(text, index) {
 								if (index == 0) {
 									label.appendChild(document.createTextNode(text));
@@ -133,7 +133,7 @@ function refreshHistory(only) {
 }
 
 function getYear(name) {
-	year = document.getElementById(name).value;
+	var year = document.getElementById(name).value;
 	if (!/^([1-2]\d{3,})$/.test(year)) {
 		year = '';
 	}
@@ -170,7 +170,7 @@ function getCriteria() {
 		filters['contentType'] = 0;
 	}
 	if (searchScope == 'corpus') {
-		books = [];
+		var books = [];
 		[].forEach.call(document.getElementById('books').querySelectorAll('li'), function(entry) {
 			books.push(entry.getAttribute('data-isbn'));
 		});
@@ -185,7 +185,7 @@ function getCriteria() {
 		from:getYear('search_source_from'),
 		to:getYear('search_source_to')
 	}
-	rows = Number(document.getElementById('searchSize').value);
+	var rows = Number(document.getElementById('searchSize').value);
 	searchCriteria = {
 		query:query,
 		scope:searchScope,
@@ -198,9 +198,9 @@ function getCriteria() {
 }
 
 function updateSelectedCorpus(books) {
-	selected = document.getElementById('selected');
-	full = document.getElementById('full');
-	remove = document.getElementById('remove');
+	var selected = document.getElementById('selected');
+	var full = document.getElementById('full');
+	var remove = document.getElementById('remove');
 	if (full !== null && remove !== null) {
 		[].forEach.call(document.getElementById('titles').options, function(option) {
 			option.selected = false;
@@ -219,13 +219,13 @@ function updateSelectedCorpus(books) {
 }
 
 function updateCorpus(event, params, only) {
-	style = document.getElementById('corpusStyles');
-	books = document.getElementById('books');
+	var style = document.getElementById('corpusStyles');
+	var books = document.getElementById('books');
 	if (style !== null && books !== null) {
 		if (only == undefined || only == null || !only) {
 			updateStyle(style, 'historyStyles');
 		}
-		list = books.querySelectorAll('li[data-isbn]');
+		var list = books.querySelectorAll('li[data-isbn]');
 		updateSelectedCorpus(list);
 		refreshBiblio('corpus',	list);
 	}
@@ -257,7 +257,7 @@ function addCorpus(books, results, isbn, reference) {
 			search.classList.add('selected');
 		}
 	}
-	entry = document.createElement('li');
+	var entry = document.createElement('li');
 	entry.setAttribute('data-isbn', isbn);
 	entry.addEventListener('click', function(event) {
 		removeCorpus(books, results, entry.getAttribute('data-isbn'));
@@ -287,19 +287,19 @@ function updateResults(start, rows) {
 	searchIndex = searchHistory.length;
 	saveHistory();
 	search(searchCriteria, function(html) {
-		nodes = $.parseHTML(html);
-		results = null;
+		var nodes = $.parseHTML(html);
+		var results = null;
 		$.each(nodes, function(index, node) {
 			if (node.nodeName == 'DIV' && node.classList.contains('results')) {
 				results = node;
 			}
 		});
 		if (results) {
-	 		popup = results.classList.contains('popup');
+	 		var popup = results.classList.contains('popup');
 			if (popup && document.querySelector('div.fancybox-container') !== null) {
 				$.fancybox.close();
 			}
-			parent = document.getElementById('searchResults');
+			var parent = document.getElementById('searchResults');
 			if (parent) {
 				parent.replaceChild(results, parent.firstElementChild);
 				if (popup) {
@@ -316,8 +316,15 @@ function updateResults(start, rows) {
 
 var dressResults = function(results) {
 	showPanel('search', true);
-	books = document.getElementById('books');
+	var books = document.getElementById('books');
 	if (books) {
+		[].forEach.call(books.querySelectorAll('li[data-isbn]'), function(entry) {
+			var isbn = entry.getAttribute('data-isbn');
+			var search = document.querySelector('td.search[data-isbn="' + isbn + '"]');
+			if (search) {
+				search.classList.add('selected');
+			}
+		});
 		[].forEach.call(results.querySelectorAll('td.search'), function(td) {
 			td.addEventListener('click', function(event) {
 				var isbn = td.getAttribute('data-isbn');
@@ -351,7 +358,7 @@ var dressResults = function(results) {
 	var rows  = Number(results.dataset.rows);
 	var start = Number(results.dataset.start);
 	var found = Number(results.dataset.found);
-	select = results.querySelector('div.fetch span select');
+	var select = results.querySelector('div.fetch span select');
 	if (select) {
 		select.addEventListener('change', function(event) {
 			updateResults(select.value, rows);
@@ -400,7 +407,7 @@ var dressResults = function(results) {
 
 var popupResults = function() {
 	$.fancybox.open(document.getElementById("searchResults").innerHTML);
-	results = document.querySelector('div.fancybox-slide--html.fancybox-slide--current div.results');
+	var results = document.querySelector('div.fancybox-slide--html.fancybox-slide--current div.results');
 	results.style.display = 'inline-block';
 	results.dataset.dressed = 'false';
 	dressResults(results);
@@ -434,7 +441,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var titles     = document.getElementById('titles');
 	var books      = document.getElementById('books');
 	var shelves    = document.getElementById('shelves');
-	var references = getCSLObjects('corpus');
 	
 	[].forEach.call(document.querySelectorAll('div[data-scope="' + searchScope + '"]'), function(element) {
 		element.classList.add('current');
@@ -458,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		_context : CONTEXT
 	});
 
-	options = getSessionProperty('context.' + CONTEXT + '.options._keys', {});
+	var options = getSessionProperty('context.' + CONTEXT + '.options._keys', {});
 	for (var index in options) {
 		loadData({
 			module   : 'Portal',
@@ -496,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	if (searchCriteria.operator !== undefined) {
 		[].forEach.call(['AND','OR'], function(operator) {
-			radio = document.getElementById('search_operator_' + operator);
+			var radio = document.getElementById('search_operator_' + operator);
 			if (searchCriteria.operator == radio.value) {
 				radio.checked = true;
 			}
@@ -505,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	if (titles) {
 		titles.setAttribute('data-loading', 'true');
-		values = getSessionProperty('context.' + CONTEXT + '.options.titles');
+		var values = getSessionProperty('context.' + CONTEXT + '.options.titles');
 		for (var key in values) {
 			var option = document.createElement('option');
 			option.value = getOptionValue(key);
@@ -521,16 +527,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 	
 	if (books) {
-		[].forEach.call(books.querySelectorAll('li[data-isbn]'), function(entry) {
-			var isbn = entry.getAttribute('data-isbn');
-			var search = document.querySelector('td.search[data-isbn="' + isbn + '"]');
-			if (search) {
-				search.classList.add('selected');
-			}
-		});
 		var styles = document.getElementById('styles');
 		if (styles) {
-			cslStyle = getCSLParam('style');
+			var cslStyle = getCSLParam('style');
 			for (var index = 0 ; index < styles.options.length ; index++) {
 				if (styles.item(index).value == cslStyle) {
 					styles.item(index).selected = true;
@@ -605,6 +604,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	[].forEach.call(document.querySelectorAll('#queryButton, button.search'), function(button) {
 		button.addEventListener("click", function(event) {
+			if (button.id == 'queryButton') {
+				var query = document.querySelector('#queryInput');
+				if (query) {
+					if (query.value.replace(' ', '').length == 0) {
+						return;
+					}
+				}
+			}
 			getCriteria();
 			updateResults(0, rows.value);
 		});
@@ -623,6 +630,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	});
 		
+	var references = getCSLObjects('corpus');
 	if (references !== undefined && references !== null) {
 		for (var id in references) {
 			addCorpus(books, shelves, references[id].ean, references[id]);
@@ -647,10 +655,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var background = select.style.background;
 		select.style.background = "url('/img/wait.gif') no-repeat center";
 		select.setAttribute('data-loading', 'true');
-		values = getSessionProperty('context.' + CONTEXT + '.options.' + select.id);
+		var values = getSessionProperty('context.' + CONTEXT + '.options.' + select.id);
 		for (var key in values) {
 			var option = document.createElement('option');
-			value = getOptionValue(key);
+			var value = getOptionValue(key);
 			option.value = value;
 			if (searchCriteria.filters !== undefined && searchCriteria.filters !== null) {
 				var filter = searchCriteria.filters[select.id];
