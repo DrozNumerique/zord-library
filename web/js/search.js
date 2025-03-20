@@ -77,26 +77,26 @@ function refreshHistory(only) {
 								books.appendChild(biblio);
 							}
 							var cslObjects = getCSLObjects('history');
-							var reference = null;
+							_reference = null;
 							if (cslObjects) {
 								for (var id in cslObjects) {
 									if (cslObjects[id].ean == text) {
-										reference = cslObjects[id];
+										_reference = cslObjects[id];
 									}
 								}
 							}
-							if (reference == null) {
+							if (_reference == null) {
 								$.get(
 									BASEURL['zord'] + '/Book/reference',
 								    {isbn: text},
 								    function(result) {
-								    	reference = result;
-										addCSLObject('history', reference);
+								    	_reference = result;
+										addCSLObject('history', _reference);
 								    }
 								);
 							}
 							var entry = document.createElement('li');
-							entry.innerHTML = getBiblio('history', reference.id);
+							entry.innerHTML = getBiblio('history', _reference.id);
 							biblio.appendChild(entry);
 						}
 					});
