@@ -29,6 +29,12 @@ function updateStyle(select, id) {
 	}
 }
 
+function addEntry(biblio, reference) {
+	var entry = document.createElement('li');
+	entry.innerHTML = getBiblio('history', reference.id);
+	biblio.appendChild(entry);
+}
+
 function refreshHistory(only) {
 	var display = document.getElementById('searchHistoryDisplay');
 	var style = document.getElementById('historyStyles');
@@ -76,28 +82,28 @@ function refreshHistory(only) {
 							if (index == 1) {
 								books.appendChild(biblio);
 							}
+							var reference = null;
 							var cslObjects = getCSLObjects('history');
-							_reference = null;
 							if (cslObjects) {
 								for (var id in cslObjects) {
 									if (cslObjects[id].ean == text) {
-										_reference = cslObjects[id];
+										reference = cslObjects[id];
 									}
 								}
 							}
-							if (_reference == null) {
+							if (reference) {
+								addEntry(biblio, reference);
+							} else {
 								$.get(
 									BASEURL['zord'] + '/Book/reference',
 								    {isbn: text},
 								    function(result) {
-								    	_reference = result;
-										addCSLObject('history', _reference);
+										reference = result;
+										addCSLObject('history', result);
+										addEntry(biblio, result);
 								    }
 								);
 							}
-							var entry = document.createElement('li');
-							entry.innerHTML = getBiblio('history', _reference.id);
-							biblio.appendChild(entry);
 						}
 					});
 				}
