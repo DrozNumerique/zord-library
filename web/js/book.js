@@ -388,6 +388,7 @@ function displayTEI(selectorIndex) {
 
 	document.addEventListener("DOMContentLoaded", function(event) {
 
+		document.body.classList.add('waiting');
 		loadings = document.querySelectorAll('div.loading');
 		if (loadings) {
 			[].forEach.call(loadings, function(loading) {
@@ -738,7 +739,6 @@ function displayTEI(selectorIndex) {
 	});
 
 	window.addEventListener("load", function(event) {
-		document.body.classList.add('waiting');
 		displayTEI(CURRENT_SELECTOR_INDEX);
 		var tei = document.getElementById('tei');
 		[].forEach.call(tei.querySelectorAll('div.' + ELS['note']['elm']), function (note) {
@@ -747,9 +747,7 @@ function displayTEI(selectorIndex) {
 				document.styleSheets[0].insertRule(rule, 0);
 			}
 		});
-		document.body.classList.remove('waiting');
 		setTimeout(function() {
-			document.body.classList.add('waiting');
 			setMarkerAnchor(true);
 			for (var id in viewers) {
 				var viewer = OpenSeadragon(Object.assign(Object.assign({}, CONFIG.zoom), {
@@ -763,8 +761,8 @@ function displayTEI(selectorIndex) {
 					}
 				});
 			}
-			document.body.classList.remove('waiting');
 		}, 300);
+		document.body.classList.remove('waiting');
 	});
 
 })();
