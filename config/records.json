@@ -1,5 +1,6 @@
 {
-	"MODS":      "modsCollection",
-	"MARC-XML": ["modsCollection","mods2marcxml"],
-	"UNIMARC" : ["modsCollection","mods2marcxml","marcxml2unimarc"]
+	"MODS"    : "xml:modsCollection",
+	"MARC-XML": ["xml:modsCollection","mods2marcxml"],
+	"UNIMARC" : ["xml:modsCollection","mods2marcxml","marcxml2unimarc"],
+	"KBART"   : "csv:kbart"
 }

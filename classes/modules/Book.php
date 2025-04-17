@@ -304,32 +304,40 @@ class Book extends Module {
             $format = $this->params['format'] ?? 'MODS';
             $books = Zord::objectToArray(json_decode($this->params['books']));
             $steps = Zord::value('records', $format);
+            $content = null;
+            $ext = null;
             if ($steps) {
                 if (!is_array($steps)) {
                     $steps = [$steps];
                 }
-                $view = new View('/xml/'.$steps[0], ['books' => $books], $this->controler);
+                $first = explode(':',$steps[0]);
+                $view = new View('/'.$first[0].'/'.$first[1], ['books' => $books], $this->controler);
                 $view->setMark(false);
                 $content = $view->render();
-                for ($index = 1 ; $index < count($steps) ; $index++) {
-                    $document = new DOMDocument();
-                    $document->preserveWhiteSpace = false;
-                    $document->formatOutput = true;
-                    $document->loadXML($content);
-                    $processor = Zord::getProcessor($steps[$index]);
-                    if (isset($processor)) {
-                        $content = $processor->transformToXML($document);
-                    } else {
-                        $content = null;
-                        break;
+                $ext = $first[0];
+                switch ($ext) {
+                    case 'xml': {
+                        for ($index = 1 ; $index < count($steps) ; $index++) {
+                            $document = new DOMDocument();
+                            $document->preserveWhiteSpace = false;
+                            $document->formatOutput = true;
+                            $document->loadXML($content);
+                            $processor = Zord::getProcessor($steps[$index]);
+                            if (isset($processor)) {
+                                $content = $processor->transformToXML($document);
+                            } else {
+                                $content = null;
+                                break;
+                            }
+                        }
                     }
                 }
-                return isset($content) ? $this->download(
-                    $this->context.'_'.$format.'_'.date("Y-m-d").'.xml',
-                    null,
-                    $content
-                ) : $this->error(501);
             }
+            return (isset($content) && isset($ext)) ? $this->download(
+                $this->context.'_'.$format.'_'.date("Y-m-d").'.'.$ext,
+                null,
+                $content
+            ) : $this->error(501);
         } else {
             $entity = (new BookHasContextEntity())->retrieve([
                 'many' => true,
