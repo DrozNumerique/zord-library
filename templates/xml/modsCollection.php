@@ -1,10 +1,7 @@
 <modsCollection xmlns="http://www.loc.gov/mods/v3"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
-<?php 
-    	foreach ($models['books'] as $isbn) {
-    	    $metadata = Library::data($isbn, 'metadata.json', 'array');
-?>
+<?php foreach ($models['books'] as $metadata) { ?>
 	<mods>
 		<typeOfResource>text</typeOfResource>
 		<genre authority="local">book</genre>

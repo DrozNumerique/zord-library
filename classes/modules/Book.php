@@ -298,11 +298,46 @@ class Book extends Module {
         }
         return $this->error(404, Zord::substitute($this->locale->message->unknown, ['isbn' => $isbn]));
     }
-        
+    
+    protected function recordsMetadata($format, $isbn) {
+        $metadata = Library::data($isbn, 'metadata.json', 'array');
+        if (RECORDS_FIELDS[$format] ?? false) {
+            $_metadata = [];
+            foreach (RECORDS_FIELDS[$format] as $field) {
+                $_metadata[$field] = $this->recordsField($format, $field, $metadata);
+            }
+            return $_metadata;
+        }
+        return $metadata;
+    }
+    
+    protected function recordsField($format, $field, $metadata) {
+        switch ($format) {
+            case 'KBART': {
+                switch ($field) {
+                    case "publication_title": return '"'.str_replace('"', '""', $metadata['title']).'"';
+                    case "print_identifier": return Store::isbn($metadata['ean']);
+                    case "title_url": return $metadata['uri'];
+                    case "first_author": return explode(',', $metadata['creator'][0] ?? '')[0];
+                    case "title_id": return $metadata['ean'];
+                    case "coverage_depth": return "fulltext";
+                    case "publisher_name": return $metadata['publisher'];
+                    case "publication_type": return "monograph";
+                    case "date_monograph_published_print": return $metadata['date'];
+                    case "date_monograph_published_online": return $metadata['publication'];
+                    case "first_editor": return explode(',', $metadata['editor'][0] ?? '')[0];
+                    case "access_type": return "P";
+                    default: return "";
+                }
+                break;
+            }
+        }
+    }
+    
     public function records() {
         if (isset($this->params['books'])) {
             $format = $this->params['format'] ?? 'MODS';
-            $books = Zord::objectToArray(json_decode($this->params['books']));
+            $books = Zord::objectToArray(json_decode($this->params['books'] ?? []));
             $steps = Zord::value('records', $format);
             $content = null;
             $ext = null;
@@ -311,7 +346,11 @@ class Book extends Module {
                     $steps = [$steps];
                 }
                 $first = explode(':',$steps[0]);
-                $view = new View('/'.$first[0].'/'.$first[1], ['books' => $books], $this->controler);
+                $metadata = [];
+                foreach ($books as $isbn) {
+                    $metadata[] = $this->recordsMetadata($format, $isbn);
+                }
+                $view = new View('/'.$first[0].'/'.$first[1], ['books' => $metadata], $this->controler);
                 $view->setMark(false);
                 $content = $view->render();
                 $ext = $first[0];
