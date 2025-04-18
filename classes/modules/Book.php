@@ -317,7 +317,7 @@ class Book extends Module {
                 switch ($field) {
                     case "publication_title": return '"'.str_replace('"', '""', $metadata['title']).'"';
                     case "print_identifier": return Store::isbn($metadata['ean']);
-                    case "title_url": return $metadata['uri'];
+                    case "title_url": return $this->baseURL.'/book/'.$metadata['ean'];
                     case "first_author": return explode(',', $metadata['creator'][0] ?? '')[0];
                     case "title_id": return $metadata['ean'];
                     case "coverage_depth": return "fulltext";
