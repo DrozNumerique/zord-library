@@ -327,10 +327,9 @@ class Book extends Module {
                     case "date_monograph_published_online": return $metadata['publication'];
                     case "first_editor": return explode(',', $metadata['editor'][0] ?? '')[0];
                     case "access_type": return "P";
-                    default: return "";
                 }
-                break;
             }
+            default: return $metadata[$field] ?? "";
         }
     }
     
