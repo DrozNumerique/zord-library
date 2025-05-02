@@ -7,6 +7,7 @@ class LibraryControler extends Controler {
             return [
                 'host'    => $host,
                 'scheme'  => parse_url(OPENURL, PHP_URL_SCHEME),
+                'method'  => 'GET',
                 'config'  => null,
                 'skin'    => null,
                 'context' => 'unknown',
