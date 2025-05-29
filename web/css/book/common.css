@@ -371,13 +371,13 @@ div.div[data-type="part"] > div.head {
 div.hi[data-rend~="sup"], div.hi[data-rendition~="sup"] {
 	vertical-align: super;
 	font-size: smaller;
-	line-height: normal;
+	line-height: 0;
 }
 
 div.hi[data-rend~="sub"] {
 	vertical-align: sub;
 	font-size: smaller;
-	line-height: normal;
+	line-height: 0;
 }
 
 div.hi[data-rend~="b"] {
@@ -818,6 +818,7 @@ div.ref[data-rendition="#notecall #app"], div.ref[data-rend="sup"], div.ref[data
 	position:relative;
 	top:-0.6em;
 	font-size:0.8em;
+	line-height: 0;
 }
 
 /* ----------------------------------- seg ----------------------------------- */
@@ -998,7 +999,7 @@ div.titlePart[data-type="sub"] {
 	color: #6e97cd;
 	font-size:20px;
 	margin: 10px 0;
-	line-height: 1em;
+	line-height: 0;
 }
 
 /*
