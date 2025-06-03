@@ -433,7 +433,8 @@ function displayTEI(selectorIndex) {
         var FACSIMILE_SELECTOR = 'div.' + ELS['figure']['elm'] + '[data-' + ELS['figure']['rend'] + '="facsimile"]';
 		var GRAPHIC_SELECTOR = 'div.' + ELS['graphic']['elm'];
 		var GRAPHIC_URL_ATTRIBUTE = 'data-' + ELS['graphic']['url'];
-		var selectorTemoin = 'div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="margin"], div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="temoin"], ' + pageSelector;
+		//var selectorTemoin = 'div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="margin"], div.' + ELS['lb']['elm'] + '[data-' + ELS['lb']['rend'] + '="temoin"], ' + pageSelector;
+		var selectorTemoin = 'div.' + ELS['lb']['elm'] + ', ' + pageSelector;
 
 		// ------------------------------------------------------------------
 		// DISPLAY ASSIGN
