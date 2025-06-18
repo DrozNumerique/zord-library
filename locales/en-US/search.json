@@ -9,7 +9,7 @@
 	"to": "to",
 	"year": "year",
 	"include_index": "Include indexes, glossaries, bibliographies and tables of content",
-	"page_size": "Number of chapters per page",
+	"page_size": "Number of chapters per results page",
 	"history": {
 		"previous": "Previous",
 		"next": "Next",
