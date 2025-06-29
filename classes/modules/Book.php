@@ -333,61 +333,77 @@ class Book extends Module {
         }
     }
     
-    public function records() {
-        if (isset($this->params['books'])) {
-            $format = $this->params['format'] ?? 'MODS';
-            $books = Zord::objectToArray(json_decode($this->params['books'] ?? []));
-            $steps = Zord::value('records', $format);
-            $content = null;
-            $ext = null;
-            if ($steps) {
-                if (!is_array($steps)) {
-                    $steps = [$steps];
-                }
-                $first = explode(':',$steps[0]);
-                $metadata = [];
-                foreach ($books as $isbn) {
-                    $metadata[] = $this->recordsMetadata($format, $isbn);
-                }
-                $view = new View('/'.$first[0].'/'.$first[1], ['books' => $metadata], $this->controler);
-                $view->setMark(false);
-                $content = $view->render();
-                $ext = $first[0];
-                switch ($ext) {
-                    case 'xml': {
-                        for ($index = 1 ; $index < count($steps) ; $index++) {
-                            $document = new DOMDocument();
-                            $document->preserveWhiteSpace = false;
-                            $document->formatOutput = true;
-                            $document->loadXML($content);
-                            $processor = Zord::getProcessor($steps[$index]);
-                            if (isset($processor)) {
-                                $content = $processor->transformToXML($document);
-                            } else {
-                                $content = null;
-                                break;
-                            }
+    protected function recordsContent($books, $format) {
+        $steps = Zord::value('records', $format);
+        $content = null;
+        $ext = null;
+        if ($steps) {
+            if (!is_array($steps)) {
+                $steps = [$steps];
+            }
+            $first = explode(':',$steps[0]);
+            $metadata = [];
+            foreach ($books as $isbn) {
+                $metadata[] = $this->recordsMetadata($format, $isbn);
+            }
+            $view = new View('/'.$first[0].'/'.$first[1], ['books' => $metadata], $this->controler);
+            $view->setMark(false);
+            $content = $view->render();
+            $ext = $first[0];
+            switch ($ext) {
+                case 'xml': {
+                    for ($index = 1 ; $index < count($steps) ; $index++) {
+                        $document = new DOMDocument();
+                        $document->preserveWhiteSpace = false;
+                        $document->formatOutput = true;
+                        $document->loadXML($content);
+                        $processor = Zord::getProcessor($steps[$index]);
+                        if (isset($processor)) {
+                            $content = $processor->transformToXML($document);
+                        } else {
+                            $content = null;
+                            break;
                         }
                     }
                 }
             }
-            return (isset($content) && isset($ext)) ? $this->download(
-                $this->context.'_'.$format.'_'.date("Y-m-d").'.'.$ext,
-                null,
-                $content
-            ) : $this->error(501);
+        }
+        return (isset($content) && isset($ext)) ? $this->download(
+            $this->context.'_'.$format.'_'.date("Y-m-d").'.'.$ext,
+            null,
+            $content
+        ) : $this->error(501);
+    }
+    
+    protected function recordsList() {
+        $entity = (new BookHasContextEntity())->retrieve([
+            'many' => true,
+            'where' => ['context' => $this->context],
+            'order' => ['desc' => 'book']
+        ]);
+        $books = [];
+        foreach($entity as $entry) {
+            $books[$entry->book] = $entry->status;
+        }
+        return $books;
+    }
+    
+    public function records() {
+        if (isset($this->params['books'])) {
+            $format = $this->params['format'] ?? 'MODS';
+            $books = $this->params['books'] ?? '[]';
+            if ($books === 'all') {
+                $books = array_keys($this->recordsList());
+            } else {
+                $books = Zord::objectToArray(json_decode($books));
+            }
+            return $this->recordsContent($books, $format);
         } else {
-            $entity = (new BookHasContextEntity())->retrieve([
-                'many' => true,
-                'where' => ['context' => $this->context],
-                'order' => ['desc' => 'book']
-            ]);
-            $books = [];
-            foreach($entity as $entry) {
-                $isbn = $entry->book;
+            $books = $this->recordsList();
+            foreach($books as $isbn => $status) {
                 $book = (new BookEntity())->retrieve($isbn);
                 if ($book) {
-                    $books[$entry->status == 'new' ? 'new' : 'other'][] = [
+                    $books[$status == 'new' ? 'new' : 'other'][] = [
                         'isbn'    => $isbn,
                         'authors' => Zord::objectToArray($book->creator),
                         'title'   => $book->title,
