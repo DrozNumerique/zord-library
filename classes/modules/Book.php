@@ -383,7 +383,16 @@ class Book extends Module {
         ]);
         $books = [];
         foreach($entity as $entry) {
-            $books[$entry->book] = $entry->status;
+            $book = (new BookEntity())->retrieve($entry->book);
+            if ($book) {
+                $books[$entry->book] = [
+                    'isbn'    => $entry->book,
+                    'authors' => Zord::objectToArray($book->creator),
+                    'title'   => $book->title,
+                    'editors' => Zord::objectToArray($book->editor),
+                    'date'    => $book->date
+                ];
+            }
         }
         return $books;
     }
@@ -400,17 +409,8 @@ class Book extends Module {
             return $this->recordsContent($books, $format);
         } else {
             $books = $this->recordsList();
-            foreach($books as $isbn => $status) {
-                $book = (new BookEntity())->retrieve($isbn);
-                if ($book) {
-                    $books[$status == 'new' ? 'new' : 'other'][] = [
-                        'isbn'    => $isbn,
-                        'authors' => Zord::objectToArray($book->creator),
-                        'title'   => $book->title,
-                        'editors' => Zord::objectToArray($book->editor),
-                        'date'    => $book->date     
-                    ];
-                }
+            foreach($books as $data) {
+                $books[$data['status'] == 'new' ? 'new' : 'other'][] = $data;
             }
             return $this->page('records', ['books' => $books]);
         }
