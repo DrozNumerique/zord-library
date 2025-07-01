@@ -267,7 +267,7 @@ class Library {
 	            }
 	        }
 	    }
-	    return $user->hasRole('reader', $context);
+	    return $user->hasRole('reader', $context) || $user->hasRole('researcher', $context);
 	}
 	
 	public static function postPublish($book) {
