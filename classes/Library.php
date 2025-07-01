@@ -257,7 +257,7 @@ class Library {
 	        'many'  => true,
 	        'where' => [
 	            'user' => $user->login,
-	            'role' => ['in' => ['*','reader']]
+	            'role' => ['in' => ['*','reader','researcher']]
 	        ]
 	    ]);
 	    foreach ($entities as $entity) {
