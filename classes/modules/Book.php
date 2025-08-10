@@ -130,6 +130,10 @@ class Book extends Module {
             if (isset($this->params['ctx'])) {
                 return $this->redirect(Zord::getContextURL($this->params['ctx'], 0, '/book/'.$isbn, $this->lang, $this->user->session), true);
             }
+            if ($this->context === 'root') {
+                $this->params['id'] = $isbn;
+                return $this->openurl();
+            }
             if (isset($this->params['xhr']) && $this->params['xhr']) {
                 $path = '/book/'.$isbn;
                 if (isset($this->params['part'])) {
