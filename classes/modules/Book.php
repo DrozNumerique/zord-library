@@ -375,12 +375,15 @@ class Book extends Module {
         ) : $this->error(501);
     }
     
-    protected function recordsList() {
-        $entity = (new BookHasContextEntity())->retrieve([
+    protected function recordsList($context = null) {
+        $criteria = [
             'many' => true,
-            'where' => ['context' => $this->context],
             'order' => ['desc' => 'book']
-        ]);
+        ];
+        if (!empty($context)) {
+            $criteria['where'] = ['context' => $context];
+        }
+        $entity = (new BookHasContextEntity())->retrieve($criteria);
         $books = [];
         foreach($entity as $entry) {
             $book = (new BookEntity())->retrieve($entry->book);
@@ -401,14 +404,16 @@ class Book extends Module {
         if (isset($this->params['books'])) {
             $format = $this->params['format'] ?? 'MODS';
             $books = $this->params['books'] ?? '[]';
-            if ($books === 'all') {
+            if ($books === 'any') {
                 $books = array_keys($this->recordsList());
+            } else if ($books === 'all') {
+                $books = array_keys($this->recordsList($this->context));
             } else {
                 $books = Zord::objectToArray(json_decode($books));
             }
             return $this->recordsContent($books, $format);
         } else {
-            $books = $this->recordsList();
+            $books = $this->recordsList($this->context);
             foreach($books as $data) {
                 $books[$data['status'] == 'new' ? 'new' : 'other'][] = $data;
             }
