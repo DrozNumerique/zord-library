@@ -21,6 +21,7 @@
 		"KBART": [
 			"publication_title",
 			"print_identifier",
+			"oclc_collection_name",
 			"title_url",
 			"first_author",
 			"title_id",
