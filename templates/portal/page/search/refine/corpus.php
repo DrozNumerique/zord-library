@@ -5,7 +5,6 @@
         			<div id="selected" class="caption">
         				<div style="display:inline;"><?php echo $locale->corpus->select; ?></div>
 						<div id="full"> : <?php echo $locale->corpus->full; ?></div>
-        				<div id="remove"> (<?php echo $locale->corpus->remove; ?>)</div>
 	    				<ul id="books"></ul>
         			</div>
 <?php $this->render('#styles', ['id' => 'corpus', 'change' => 'updateCorpus']); ?>

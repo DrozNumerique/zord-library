@@ -144,11 +144,23 @@ div.block > div {
 
 #books > li {
 	padding: 5px;
-	cursor: zoom-out;
 	border: 1px gray dashed;
 	border-bottom: 0;
 	margin-left: 20px;
 	color: black;
+	display: flex;
+	align-items: center;
+}
+
+#books > li > div.csl-entry {
+	margin-left: .3rem;
+}
+
+#books > li > i {
+	cursor: pointer;
+	background: lightgray;
+	padding: .2rem .1rem;
+	border-radius: .2rem;
 }
 
 #books > li:first-child {

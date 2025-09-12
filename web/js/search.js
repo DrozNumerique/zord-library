@@ -206,8 +206,7 @@ function getCriteria() {
 function updateSelectedCorpus(books) {
 	var selected = document.getElementById('selected');
 	var full = document.getElementById('full');
-	var remove = document.getElementById('remove');
-	if (full !== null && remove !== null) {
+	if (full !== null) {
 		[].forEach.call(document.getElementById('titles').options, function(option) {
 			option.selected = false;
 		});
@@ -215,11 +214,9 @@ function updateSelectedCorpus(books) {
 		if (books.length == 0) {
 			selected.classList.add('empty');
 			full.style.display = full.parentNode.firstElementChild.style.display;
-			remove.style.display = 'none';
 		} else {
 			selected.classList.remove('empty');
 			full.style.display = 'none';
-			remove.style.display = remove.parentNode.firstElementChild.style.display;
 		}
 	}
 }
@@ -235,6 +232,14 @@ function updateCorpus(event, params, only) {
 		updateSelectedCorpus(list);
 		refreshBiblio('corpus',	list);
 	}
+	[].forEach.call(document.querySelectorAll('#books > li'), function(entry) {
+		var remove = document.createElement('i');
+		remove.setAttribute('class', 'fa fa-fw fa-times');
+		remove.addEventListener('click', function(event) {
+			removeCorpus(books, document.getElementById('shelves'), entry.dataset.isbn);
+		});
+		entry.insertBefore(remove, entry.firstElementChild);
+	});
 }
 	
 function removeCorpus(books, results, isbn) {
@@ -264,14 +269,17 @@ function addCorpus(books, results, isbn, reference) {
 		}
 	}
 	var entry = document.createElement('li');
+	var remove = document.createElement('i');
 	entry.setAttribute('data-isbn', isbn);
-	entry.addEventListener('click', function(event) {
-		removeCorpus(books, results, entry.getAttribute('data-isbn'));
+	remove.setAttribute('class', 'fa fa-fw fa-times');
+	remove.addEventListener('click', function(event) {
+		removeCorpus(books, results, isbn);
 	});
 	books.appendChild(entry);
 	updateSelectedCorpus(books.querySelectorAll('li[data-isbn]'));
 	if (reference !== undefined && reference !== null) {
 		setBiblio('corpus', entry, reference);
+		entry.insertBefore(remove, entry.firstElementChild);
 	} else {
 		invokeZord({
 			module:'Book',
@@ -280,6 +288,7 @@ function addCorpus(books, results, isbn, reference) {
 			success:function(reference) {
 				addCSLObject('corpus', reference);
 				setBiblio('corpus', entry, reference);
+				entry.insertBefore(remove, entry.firstElementChild);
 			}
 		});
 	}
@@ -642,12 +651,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			addCorpus(books, shelves, references[id].ean, references[id]);
 		}
 	}
-
-	[].forEach.call(document.querySelectorAll('#books > li[data-isbn]'), function(entry) {
-		entry.addEventListener('click', function(event) {
-			removeCorpus(books, shelves, entry.getAttribute('data-isbn'));
-		});
-	});
 	
 	document.getElementById('queryInput').addEventListener("keypress", function(event) {
 	    var key = event.which || event.keyCode;

@@ -710,11 +710,13 @@ div.pb {
 div.pb[id] {
 	margin-top: 20px;
 	color:gray;
+	font-size: 12px;
 }
 
 div.pb[id]:before {
-	content: "p. " attr(data-n) "";
+	content: "[ p. " attr(data-n) " ]";
 	cursor:pointer;
+	font-size: 12px;
 }
 
 div.pb[data-rend="temoin"] {
@@ -780,6 +782,9 @@ div.pb[data-visavis="noopVariant"]:before, div.pb[data-visavis="variant"]:before
 
 div.p > div[data-visavis="noopAlone"]:after, div.p > div[data-visavis="alone"]:after {
 	content:"|";
+	color: #CC6459;
+	font-weight: 1000;
+	font-size: 1rem;
 }
 
 /* ---------------------------------- quote ---------------------------------- */
