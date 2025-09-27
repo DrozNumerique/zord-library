@@ -269,6 +269,9 @@ function displayTEI(selectorIndex) {
 
 	var updateTOC = function() {
 		var id = window.location.hash.substring(1);
+		if (id.length == 0) {
+			return;
+		}
 		if (id.substring(0, 8) == 'footref_') {
 			id = id.substring(8);
 		}
