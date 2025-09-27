@@ -592,7 +592,7 @@ function displayTEI(selectorIndex) {
 			if (id != undefined) {
 				part += '#' + id;
 			}
-			window.location.href = BASEURL['zord'] + '/book/' + part;
+			window.location.href = BASEPATH['zord'] + '/book/' + part;
 			if (hash == id) {
 				var event = document.createEvent("HTMLEvents");
 				event.initEvent("hashchange", true, false);
