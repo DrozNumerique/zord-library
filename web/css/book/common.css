@@ -2,6 +2,14 @@ div.tei {
 	margin: 0 auto;
 }
 
+div.tei:first-child:not(:last-child) {
+	margin-left: 0;
+}
+
+div.tei:last-child:not(:first-child) {
+	margin-right: 0;
+}
+
 div.tei div.text div:not(.openseadragon-container), div.footnote-note div {
 	display:inline;
 }
