@@ -366,7 +366,7 @@ function displayTEI(selectorIndex) {
 				document.getElementById('markerAnchorLeft').style.top = offsetTop + 'px';
 				document.getElementById('markerAnchorLeft').style.left = 'calc( ( (100% - ' + document.getElementById('parts').offsetWidth + 'px) / 2) - 1em)'
 				document.getElementById('markerAnchorRight').style.top = offsetTop + 'px';
-				document.getElementById('markerAnchorRight').style.left = 'calc( ( (100% + ' + document.getElementById('parts').offsetWidth + 'px) / 2) + 1em)'
+				document.getElementById('markerAnchorRight').style.left = 'calc( ( (100% + ' + document.getElementById('parts').offsetWidth + 'px) / 2))'
 			}
 		}
 	};

@@ -21,15 +21,15 @@ class LibraryControler extends Controler {
             return parent::findTarget($host, $path);
         }
     }
-    
+    /*
     public function getTarget($url, $redirect = false) {
         $target = parent::getTarget($url, $redirect);
         if ($target['module'] === 'Book' && $target['action'] === 'show') {
-            //$target['base'] = $target['basePath'].'/book/'.($target['params']['isbn'] ?? null).'/'.($target['params']['part'] ?? null);
+            $target['base'] = $target['basePath'].'/book/'.($target['params']['isbn'] ?? null).'/'.($target['params']['part'] ?? null);
         }
         return $target;
     }
-
+    */
     public function models() {
 	    $models = parent::models();
 	    $models['portal']['header']['right']['text'] = $this->skin->header->right->text ?? explode(' ', Zord::getLocaleValue('title', $this->config, $this->lang));
