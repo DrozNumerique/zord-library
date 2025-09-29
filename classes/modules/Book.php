@@ -456,7 +456,14 @@ class Book extends Module {
                     return $this->send($file);
                 }
             }
-            return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path, 'reader');
+            $readable = $this->user->hasAccess($isbn, 'read') && $this->access($isbn);
+            if ($readable) {
+                return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path);
+            } else if ($this->user->isConnected()) {
+                return $this->error(403);
+            } else {
+                return $this->error(401);
+            }
         } else {
             return $this->error(404);
         }
