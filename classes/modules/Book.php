@@ -124,6 +124,10 @@ class Book extends Module {
         return $_parts;
     }
     
+    protected function readable($isbn) {
+        return $this->user->hasAccess($isbn, 'read') && $this->access($isbn);
+    }
+    
     public function show() {
         $isbn = $this->either(null, 'isbn');
         if (isset($isbn)) {
@@ -150,7 +154,7 @@ class Book extends Module {
             if (file_exists(Library::data($isbn))) {
                 $metadata = Library::data($isbn, 'metadata.json', 'array');
                 $defined = isset($this->params['part']) && !empty($this->params['part']);
-                $readable = $this->user->hasAccess($isbn, 'read') && $this->access($isbn);
+                $readable = $this->readable($isbn);
                 $part = ($defined && $readable) ? $this->params['part'] : 'home';
                 $message = null;
                 if ($readable) {
@@ -449,24 +453,16 @@ class Book extends Module {
     private function resource($type) {
         $isbn = $this->params['isbn'] ?? null;
         $path = $this->params['path'] ?? null;
-        if ($isbn && $path) {
-            if (in_array(pathinfo($path, PATHINFO_FILENAME), Zord::getSkin($this->context)->book->medias->public ?? [])) {
-                $file = STORE_FOLDER.'public'.DS.$path;
-                if (file_exists($file)) {
-                    return $this->send($file);
-                }
-            }
-            $readable = $this->user->hasAccess($isbn, 'read') && $this->access($isbn);
-            if ($readable) {
-                return $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path);
-            } else if ($this->user->isConnected()) {
-                return $this->error(403);
-            } else {
-                return $this->error(401);
-            }
-        } else {
+        if (empty($isbn) || empty($path)) {
             return $this->error(404);
         }
+        if (in_array(pathinfo($path, PATHINFO_FILENAME), Zord::getSkin($this->context)->book->medias->public ?? [])) {
+            $file = STORE_FOLDER.'public'.DS.$path;
+            if (file_exists($file)) {
+                return $this->send($file);
+            }
+        }
+        return $this->readable($isbn) ? $this->send(STORE_FOLDER.$type.DS.$isbn.DS.$path) : $this->error($this->user->isKnown() ? 403 : 401);
     }
     
     public function xml() {
