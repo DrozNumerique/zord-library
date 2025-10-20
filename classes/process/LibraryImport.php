@@ -350,7 +350,7 @@ class LibraryImport extends Import {
                 "creator"  => $metadata['creator'] ?? [],
                 "editor"   => $metadata['editor'] ?? [],
                 "category" => $metadata['category'] ?? [],
-                "number"   => $metadata['category_number'] ?? '',
+                "number"   => $metadata['category_number'] ?? 0,
                 "date"     => $metadata['date'] ?? '',
                 "s_from"   => $metadata['creation_date_from'] ?? '',
                 "s_to"     => $metadata['creation_date_to'] ?? ''
