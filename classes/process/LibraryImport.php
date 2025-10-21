@@ -120,11 +120,14 @@ class LibraryImport extends Import {
             mkdir($folder);
         }
         $text = $this->folder.$ean.'.xml';
+        if (!file_exists($text)) {
+            $text = STORE_FOLDER.'books'.DS.filename($text);
+        }
         if ($this->total > 0 && file_exists($text)) {
             $this->size += filesize($text);
             $this->progress = $this->size / $this->total;
         }
-        $this->xml = $this->folder.$ean.'.xml';
+        $this->xml = $text;
         $this->document = null;
         $this->adjusted = null;
         $this->metadata = null;
