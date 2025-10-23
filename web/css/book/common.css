@@ -34,6 +34,12 @@ div.tei *[data-rend="#noindent"] {
 	text-indent: 0;
 }
 
+div.tei *[data-rendition="#hanging"],
+div.tei *[data-rend="#hanging"] {
+	text-indent: -2em;
+	margin-left: 2em;
+}
+
 div.tei *[data-rend="inline"],
 div.tei *[data-rend="inline"] img {
 	display: inline ! important;
