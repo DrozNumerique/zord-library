@@ -3,6 +3,7 @@ div.highlight {
 	cursor:pointer ! important;
 	background-color: white ! important;
 	color:#CC6459;
+	white-space: nowrap;
 }
 
 div.highlight:before {
