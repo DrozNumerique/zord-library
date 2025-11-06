@@ -239,7 +239,7 @@ class Book extends Module {
                             '#\b('.preg_quote($match).')\b#',
                             function($matches) use (&$count, $index) {
                                 //$replace = $count == $index ? '>'.$matches[1].'<div class="highlight" id="search">'.$matches[2].'</div>'.(count($matches) > 3 ? $matches[3] : '') : '>'.$matches[1].$matches[2].(count($matches) > 3 ? $matches[3] : '');
-                                $replace = $count == $index ? '<div class="highlight" id="search">'.$matches[1].'</div>' : $matches[1];
+                                $replace = '<div class="highlight"'.($count == $index ? ' id="search"' : '').'>'.$matches[1].'</div>';
                                 $count++;
                                 return $replace;
                             },
