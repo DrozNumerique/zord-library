@@ -14,8 +14,8 @@
 													<span class="right"><?php echo mb_substr($match['right'], 0, 25); ?>...</span>
 													<div class="tooltip">
 														<span class="left">...<?php echo $match['left']; ?></span>
-														<span class="keyword"><b><?php echo $match['keyword']; ?></b></span>		   								
-														<span class="right"><?php echo $match['right']; ?>...</span>	   								
+														<span class="keyword"><b><?php echo $match['keyword']; ?></b></span>
+														<span class="right"><?php echo $match['right']; ?>...</span>
 													</div>
 												</div>
 											</div>
