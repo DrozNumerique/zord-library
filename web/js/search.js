@@ -354,6 +354,9 @@ var dressResults = function(results) {
 	[].forEach.call(results.querySelectorAll('.keyword'), function(instance) {
 		instance.addEventListener("click", function(event) {
 			var snip = this.parentNode;
+			if (snip.classList.contains('tooltip')) {
+				snip = snip.parentNode;
+			}
 			var isbn = snip.dataset.book;
 			var part = snip.dataset.part;
 			var match = snip.dataset.match;
