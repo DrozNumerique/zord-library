@@ -364,9 +364,9 @@ function displayTEI(selectorIndex) {
 					$scrollTop.set(offsetTop - (window.innerHeight / 2) + offsetHeight + 3);
 				}
 				document.getElementById('markerAnchorLeft').style.top = offsetTop + 'px';
-				document.getElementById('markerAnchorLeft').style.left = 'calc( ( (100% - ' + document.getElementById('parts').offsetWidth + 'px) / 2) - 1em)'
+				document.getElementById('markerAnchorLeft').style.right = 'calc( ( (100% + ' + document.getElementById('parts').offsetWidth + 'px) / 2) + 10px)'
 				document.getElementById('markerAnchorRight').style.top = offsetTop + 'px';
-				document.getElementById('markerAnchorRight').style.left = 'calc( ( (100% + ' + document.getElementById('parts').offsetWidth + 'px) / 2))'
+				document.getElementById('markerAnchorRight').style.left = 'calc( ( (100% + ' + document.getElementById('parts').offsetWidth + 'px) / 2) + 10px)'
 			}
 		}
 	};
