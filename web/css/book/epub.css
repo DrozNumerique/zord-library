@@ -30,6 +30,10 @@ a > div.note:before {
 	content: '';
 }
 
+div.tei {
+	hyphens: auto;
+}
+
 /*
 div.pb[id]:not([data-rend="temoin"]):before {
 	position:absolute;
