@@ -700,11 +700,17 @@ function displayTEI(selectorIndex) {
 					var top = selection.getRangeAt(0).getBoundingClientRect().top + $scrollTop.get();
 					var pageBefore = null;
 					var pageBreaks = parent.querySelectorAll(pageSelectorNot);
-					[].forEach.call(pageBreaks, function (page,i) {
-						if (page.offsetTop <= top) {
-							pageBefore = page;
-						}
-					});
+					var breakException = {};
+					try {
+						[].forEach.call(pageBreaks, function (page,i) {
+							if (page.offsetTop <= top) {
+								pageBefore = page;
+								throw breakException;
+							}
+						});
+					} catch (e) {
+						if (e !== breakException) throw e;
+					}
 					var page = pageBefore ? pageBefore.getAttribute('data-' + ELS['pb']['n']) : '';
 					var id = pageBefore ? ('#' + pageBefore.id) : '';
 					$quote.add({
