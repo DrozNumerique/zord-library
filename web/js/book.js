@@ -705,7 +705,7 @@ function displayTEI(selectorIndex) {
 							pageBefore = page;
 						}
 					});
-					var page = pageBefore ? pageBefore.getAttribute('data-n') : '';
+					var page = pageBefore ? pageBefore.getAttribute('data-' + ELS['pb']['n']) : '';
 					var id = pageBefore ? ('#' + pageBefore.id) : '';
 					$quote.add({
 						book : BOOK,
