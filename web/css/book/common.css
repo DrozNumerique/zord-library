@@ -350,6 +350,7 @@ div.head[data-rendition="sssssectiontitle"] {
 	margin-bottom: 0.3em;
 }
 
+div.div[data-type="book"] > div.head,
 div.div[data-type="part"] > div.head {
 	display:block ! important;
 	color: #32455D;
