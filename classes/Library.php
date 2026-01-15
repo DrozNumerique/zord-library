@@ -31,6 +31,41 @@ class Library {
         return $books;
     }
     
+    public static function context($isbn, $user) {
+        $name = null;
+        if (file_exists(Library::data($isbn))) {
+            $access = [];
+            $context = (new BookHasContextEntity())->retrieve([
+                'where' => ['book' => $isbn],
+                'many'   => true
+            ]);
+            if ($context) {
+                foreach ($context as $entry) {
+                    $access['context'][$entry->context] = true;
+                }
+            }
+            if (isset($access['context'])) {
+                $context = array_keys($access['context']);
+                usort($context, function($first, $second) {
+                    return Zord::value('context', [$first, 'position']) <=> Zord::value('context', [$second, 'position']);
+                });
+                foreach ($context as $key) {
+                    if (null !== Zord::value('context', [$key,'url'])) {
+                        $name = $key;
+                        break;
+                    }
+                }
+                foreach ($context as $key) {
+                    if ($user->isAuthorized('read', $key) && null !== Zord::value('context', [$key,'url'])) {
+                        $name = $key;
+                        break;
+                    }
+                }
+            }
+        }
+        return $name;
+    }
+    
     public static function title($title, $subtitle = null, $maxlength = null, $separator = '. ') {
         if (is_array($title)) {
             if (isset($title['subtitle'])) {

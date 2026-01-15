@@ -37,41 +37,11 @@ class Book extends Module {
     public function openurl() {
         if (isset($this->params['id'])) {
             $isbn = $this->params['id'];
-            if (file_exists(Library::data($isbn))) {
-                $access = [];
-                $context = (new BookHasContextEntity())->retrieve([
-                    'where' => ['book' => $isbn],
-                    'many'   => true
-                ]);
-                if ($context) {
-                    foreach ($context as $entry) {
-                        $access['context'][$entry->context] = true;
-                    }
-                }
-                if (isset($access['context'])) {
-                    $context = array_keys($access['context']);
-                    usort($context, function($first, $second) {
-                        return Zord::value('context', [$first, 'position']) <=> Zord::value('context', [$second, 'position']);
-                    });
-                    $name = null;
-                    foreach ($context as $key) {
-                        if (null !== Zord::value('context', [$key,'url'])) {
-                            $name = $key;
-                            break;
-                        }
-                    }
-                    foreach ($context as $key) {
-                        if ($this->user->isAuthorized('read', $key) && null !== Zord::value('context', [$key,'url'])) {
-                            $name = $key;
-                            break;
-                        }
-                    }
-                    if ($name) {
-                        $this->params['isbn'] = $isbn;
-                        $this->params['ctx'] = $name;
-                        return $this->show();
-                    }
-                }
+            $name = Library::context($isbn, $this->user);
+            if ($name) {
+                $this->params['isbn'] = $isbn;
+                $this->params['ctx'] = $name;
+                return $this->show();
             }
         }
         if (isset($this->params['cover'])) {
@@ -450,7 +420,7 @@ class Book extends Module {
         return $this->resource('medias');
     }
         
-    private function resource($type) {
+    protected function resource($type) {
         $isbn = $this->params['isbn'] ?? null;
         $path = $this->params['path'] ?? null;
         if (empty($isbn) || empty($path)) {
