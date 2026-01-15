@@ -31,7 +31,7 @@ class Library {
         return $books;
     }
     
-    public static function context($isbn, $user) {
+    public static function context($isbn, $user = null) {
         $name = null;
         if (file_exists(Library::data($isbn))) {
             $access = [];
@@ -55,10 +55,12 @@ class Library {
                         break;
                     }
                 }
-                foreach ($context as $key) {
-                    if ($user->isAuthorized('read', $key) && null !== Zord::value('context', [$key,'url'])) {
-                        $name = $key;
-                        break;
+                if ($user) {
+                    foreach ($context as $key) {
+                        if ($user->isAuthorized('read', $key) && null !== Zord::value('context', [$key,'url'])) {
+                            $name = $key;
+                            break;
+                        }
                     }
                 }
             }
