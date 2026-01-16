@@ -53,6 +53,18 @@ class Book extends Module {
         return $this->error(404);
     }
     
+    public function context() {
+        $isbn = $this->params['isbn'] ?? null;
+        if (empty($isbn)) {
+            return $this->error(404);
+        }
+        $name = Library::context($isbn, $this->user);
+        if (empty($name)) {
+            return $this->error(404);
+        }
+        return Zord::getContextURL($name);
+    }
+    
     public function search() {
         $results = $this->classify($this->fetch());
         $fetch = $this->params['fetch'] ?? false;

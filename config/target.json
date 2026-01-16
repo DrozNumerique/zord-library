@@ -55,6 +55,13 @@
 				"file": "FILTER_SANITIZE_STRING"
 			}
 		},
+		"context": {
+			"response": "DATA",
+			"shortcut": "context",
+			"parameters": {
+				"isbn": "FILTER_SANITIZE_STRING"
+			}
+		},
 		"epub": {
 			"response": "DOWNLOAD",
 			"shortcut": "epub",
