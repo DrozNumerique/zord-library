@@ -12,6 +12,8 @@
         					</select>
         					<label for="only"><?php echo $this->locale('admin')->tab->publish->only; ?></label>
         					<input type="checkbox" id="only"/>
+        					<label for="orphans"><?php echo $this->locale('admin')->tab->publish->orphans; ?></label>
+        					<input type="checkbox" id="orphans"/>
 						</fieldset>
 						<fieldset class="status">
 							<legend><?php echo $this->locale('admin')->tab->publish->status; ?></legend>

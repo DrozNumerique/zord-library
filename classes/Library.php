@@ -16,6 +16,14 @@ class Library {
         foreach ($entity as $entry) {
             $status[$entry->book] = $entry->status;
         }
+        $orphans = [];
+        $entity = (new BookEntity())->retrieve([
+            "many"  => true,
+            "where" => ["raw" => "ean NOT IN (SELECT DISTINCT book FROM book_has_context)"]
+        ]);
+        foreach($entity as $book) {
+            $orphans[] = $book->ean;
+        }
         $entity = (new BookEntity())->retrieve([
             "many"  => true,
             "order" => $order
@@ -23,7 +31,8 @@ class Library {
         foreach($entity as $book) {
             $books[] = [
                 'isbn'   => $book->ean,
-                'status' => isset($status[$book->ean]) ? $status[$book->ean] : 'no',
+                'status' => $status[$book->ean] ?? 'no',
+                'orphan' => in_array($book->ean, $orphans),
                 'title'  => self::title($book->title, $book->subtitle),
                 'first'  => $book->first_published ?? 'undefined'
             ];

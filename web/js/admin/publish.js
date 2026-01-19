@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			title     : lookup.querySelector('input[name="title"]').value,
 			ctx       : lookup.querySelector('#context').value,
 			only      : lookup.querySelector('#only').checked ? 'true' : 'false',
+			orphans   : lookup.querySelector('#orphans').checked ? 'true' : 'false',
 			new       : lookup.querySelector('#new').checked ? 'true' : 'false',
 			order     : lookup.querySelector('input[name="order"]').value,
 			direction : lookup.querySelector('input[name="direction"]').value,

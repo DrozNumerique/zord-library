@@ -12,6 +12,7 @@
 			"keyword": "Title",
 			"context": "Context",
 			"only":"This context only",
+			"orphans":"Orphans only",
 			"status": "Status",
 			"new":"New publish only",
 			"submit": "OK",

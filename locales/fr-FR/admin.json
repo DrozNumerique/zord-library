@@ -12,6 +12,7 @@
 			"keyword": "Titre",
 			"context": "Contexte",
 			"only":"Ce contexte uniquement",
+			"orphans":"Orphelins uniquement",
 			"status": "Statut",
 			"new":"Nouveautés uniquement",
 			"submit": "Valider",

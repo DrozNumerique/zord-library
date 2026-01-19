@@ -31,6 +31,7 @@ class LibraryAdmin extends StoreAdmin {
         $title = $this->params['title'] ?? null;
         $context = $this->params['ctx'] ?? $this->context;
         $only = $this->params['only'] ?? 'false';
+        $orphans = $this->params['orphans'] ?? 'false';
         $new = $this->params['new'] ?? 'false';
         $offset = $this->params['offset'] ?? 0;
         $order = $this->params['order'] ?? 'ean';
@@ -44,6 +45,9 @@ class LibraryAdmin extends StoreAdmin {
         }
         if ($new == 'true') {
             $books = array_filter($books, function($book) {return $book['status'] !== 'yes';});
+        }
+        if ($orphans == 'true') {
+            $books = array_filter($books, function($book) {return $book['orphan'];});
         }
         if ($order == 'title') {
             Zord::sort($books, true, function($comparable) {
