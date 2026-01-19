@@ -12,13 +12,13 @@
         					</select>
         					<label for="only"><?php echo $this->locale('admin')->tab->publish->only; ?></label>
         					<input type="checkbox" id="only"/>
-        					<label for="orphans"><?php echo $this->locale('admin')->tab->publish->orphans; ?></label>
-        					<input type="checkbox" id="orphans"/>
 						</fieldset>
 						<fieldset class="status">
 							<legend><?php echo $this->locale('admin')->tab->publish->status; ?></legend>
         					<label for="new"><?php echo $this->locale('admin')->tab->publish->new; ?></label>
         					<input type="checkbox" id="new"/>
+        					<label for="orphans"><?php echo $this->locale('admin')->tab->publish->orphans; ?></label>
+        					<input type="checkbox" id="orphans"/>
 						</fieldset>
 						<input name="order" type="hidden" value="<?php echo $models['order'] ?? 'login'; ?>"/>
 						<input name="direction" type="hidden" value="<?php echo $models['direction'] ?? 'asc'; ?>"/> 
