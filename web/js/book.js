@@ -392,7 +392,7 @@ function displayTEI(selectorIndex) {
 	document.addEventListener("DOMContentLoaded", function(event) {
 
 		document.body.classList.add('waiting');
-		loadings = document.querySelectorAll('div.loading');
+		var loadings = document.querySelectorAll('div.loading');
 		if (loadings) {
 			[].forEach.call(loadings, function(loading) {
 				if (window.ELS !== undefined && loading.parentNode.classList.contains(window.ELS['graphic']['elm']) && loading.dataset.load == undefined) {

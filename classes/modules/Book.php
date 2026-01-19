@@ -212,6 +212,19 @@ class Book extends Module {
                 $texts = [];
                 foreach($parts as $item) {
                     $text = Library::data($isbn, $item.'.xhtml', 'content');
+                    if (isset($this->params['print'])) {
+                        $_document = new DOMDocument();
+                        $_document->loadXML($text);
+                        $_xpath = new DOMXPath($_document);
+                        $_loadings = $_xpath->query('//div[@class="graphic"]/div[@class="loading"]');
+                        foreach ($_loadings as $_loading) {
+                            $_graphic = $_loading->parentNode;
+                            $_image = $_document->createElement('img');
+                            $_image->setAttribute('src', '/medias/'.$isbn.'/'.$_graphic->getAttribute('data-url'));
+                            $_graphic->replaceChild($_image, $_loading);
+                            $text = $_document->saveXML($_document->documentElement);
+                        }
+                    }
                     if ($item == $part && isset($this->params['match']) && isset($this->params['index'])) {
                         $match = $this->params['match'];
                         $index = $this->params['index'];
