@@ -1027,8 +1027,7 @@ class Book extends Module {
         $order = $shelves;
         $keys = array_keys($labels ?? []);
         $keys[-1]   = 'new';
-        $keys[9998] = 'other';
-        $keys[9999] = 'others';
+        $keys[9999] = 'other';
         usort($order, function($first, $second) use ($keys) {
             $x = (int) array_search($first['name'], $keys);
             $y = (int) array_search($second['name'], $keys);
