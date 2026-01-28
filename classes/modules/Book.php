@@ -397,7 +397,8 @@ class Book extends Module {
                     'authors' => Zord::objectToArray($book->creator),
                     'title'   => $book->title,
                     'editors' => Zord::objectToArray($book->editor),
-                    'date'    => $book->date
+                    'date'    => $book->date,
+                    'status'  => $entry->status
                 ];
             }
         }
