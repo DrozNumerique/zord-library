@@ -1441,7 +1441,7 @@ class LibraryImport extends Import {
                         $attributes[$name] = $attribute->value;
                     }
                     foreach ($attributes as $name => $value) {
-                        if (!in_array($name, ['id','class','style']) && substr($name, 0, 5) !== 'data-') {
+                        if (!in_array($name, ['id','class','style']) && substr($name, 0, 5) !== 'data-' && substr($name, 0, 5) !== 'aria-') {
                             $element->removeAttribute($name);
                             if ($tag[1] == 'cell' && in_array($name, ['rows','cols'])) {
                                 $name = $name.'pan';
