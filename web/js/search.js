@@ -95,7 +95,7 @@ function refreshHistory(only) {
 								addEntry(biblio, reference);
 							} else {
 								$.get(
-									BASEPATH['zord'] + '/Book/reference',
+									BASEPATH[CONTEXT] + '/Book/reference',
 								    {isbn: text},
 								    function(result) {
 										reference = result;

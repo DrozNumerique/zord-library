@@ -51,7 +51,7 @@ var search = function(criteria, callback) {
 			$dialog.wait();
 		},
 		after:function() {
-			history.pushState({}, null, window.location.origin + BASEPATH['zord'] + '/search');
+			history.pushState({}, null, window.location.origin + BASEPATH[CONTEXT] + '/search');
 			$dialog.hide(function() {
 				if (fetch == 'true' && results !== undefined && results !== null && results.dataset.search.length > 0 && results.dataset.alert.length > 0) {
 					alert(results.dataset.alert);
@@ -171,9 +171,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	
 	bindSearch({
 		input:    '#menu_quick input',
-		source:   BASEPATH['zord'] + '/match',
+		source:   BASEPATH[CONTEXT] + '/match',
 		location: function(ui) {
-			return BASEPATH['zord'] + '/book/' + ui.item.value;
+			return BASEPATH[CONTEXT] + '/book/' + ui.item.value;
 		},
 		position: {
 			my:'right top+8',
