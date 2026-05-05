@@ -2,7 +2,7 @@
 
 class LibraryControler extends Controler {
         
-    public function findTarget($host, $path) {
+    public function findTarget($scheme, $host, $path, $query, $fragment) {
         if (parse_url(OPENURL, PHP_URL_HOST) == $host) {
             return [
                 'host'    => $host,
@@ -18,7 +18,7 @@ class LibraryControler extends Controler {
                 'action'  => 'openurl'
             ];
         } else {
-            return parent::findTarget($host, $path);
+            return parent::findTarget($scheme, $host, $path, $query, $fragment);
         }
     }
     /*
