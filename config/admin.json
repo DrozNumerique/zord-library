@@ -27,6 +27,7 @@
 		"list": {
 			"limit": 20
 		},
+		"actions": ["xml","epub"],
 		"scripts": [
 			{
 				"src": "/library/js/admin/publish.js",
