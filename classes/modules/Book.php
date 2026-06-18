@@ -391,7 +391,7 @@ class Book extends Module {
         $books = [];
         foreach($entity as $entry) {
             $book = (new BookEntity())->retrieve($entry->book);
-            if ($book) {
+            if ($book && !in_array($entry->book, $books)) {
                 $books[$entry->book] = [
                     'isbn'    => $entry->book,
                     'authors' => Zord::objectToArray($book->creator),
@@ -418,7 +418,7 @@ class Book extends Module {
             }
             return $this->recordsContent($books, $format);
         } else {
-            $books = $this->recordsList($this->context);
+            $books = $this->recordsList($this->context === 'root' ? null : $this->context);
             foreach($books as $data) {
                 $books[$data['status'] == 'new' ? 'new' : 'other'][] = $data;
             }
