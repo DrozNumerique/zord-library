@@ -372,8 +372,12 @@ class Book extends Module {
                 }
             }
         }
+        $path = ($this->context ?? 'any').'_'.$format.'_'.date("Y-m-d").'.'.$ext;
+        if (empty($this->controller)) {
+            file_put_contents(BUILD_FOLDER.$path, $content);
+        }
         return (isset($content) && isset($ext)) ? $this->download(
-            $this->context.'_'.$format.'_'.date("Y-m-d").'.'.$ext,
+            $path,
             null,
             $content
         ) : $this->error(501);
