@@ -302,127 +302,14 @@ class Book extends Module {
         return $this->error(404, Zord::substitute($this->locale->message->unknown, ['isbn' => $isbn]));
     }
     
-    protected function recordsMetadata($format, $isbn) {
-        $metadata = Library::data($isbn, 'metadata.json', 'array');
-        if (RECORDS_FIELDS[$format] ?? false) {
-            $_metadata = [];
-            foreach (RECORDS_FIELDS[$format] as $field) {
-                $_metadata[$field] = $this->recordsField($format, $field, $metadata);
-            }
-            return $_metadata;
-        }
-        return $metadata;
-    }
-    
-    protected function recordsField($format, $field, $metadata) {
-        switch ($format) {
-            case 'KBART': {
-                switch ($field) {
-                    case "publication_title": return '"'.str_replace('"', '""', $metadata['title']).'"';
-                    case "print_identifier": return Store::isbn($metadata['ean']);
-                    case "oclc_collection_name": return '"'.str_replace('"', '""', $metadata['collection'] ?? '').'"';
-                    case "title_url": return $this->baseURL.'/book/'.$metadata['ean'];
-                    case "first_author": return explode(',', $metadata['creator'][0] ?? '')[0];
-                    case "title_id": return $metadata['ean'];
-                    case "coverage_depth": return "fulltext";
-                    case "publisher_name": return $metadata['publisher'];
-                    case "publication_type": return "monograph";
-                    case "date_monograph_published_print": return $metadata['date'];
-                    case "date_monograph_published_online": return $metadata['publication'];
-                    case "first_editor": return explode(',', $metadata['editor'][0] ?? '')[0];
-                    case "access_type": return "P";
-                }
-            }
-            default: return $metadata[$field] ?? "";
-        }
-    }
-    
-    protected function recordsContent($books, $format) {
-        $steps = Zord::value('records', $format);
-        $content = null;
-        $ext = null;
-        if ($steps) {
-            if (!is_array($steps)) {
-                $steps = [$steps];
-            }
-            $first = explode(':',$steps[0]);
-            $metadata = [];
-            foreach ($books as $isbn) {
-                $metadata[] = $this->recordsMetadata($format, $isbn);
-            }
-            $view = new View('/'.$first[0].'/'.$first[1], ['books' => $metadata], $this->controler);
-            $view->setMark(false);
-            $content = $view->render();
-            $ext = $first[0];
-            switch ($ext) {
-                case 'xml': {
-                    for ($index = 1 ; $index < count($steps) ; $index++) {
-                        $document = new DOMDocument();
-                        $document->preserveWhiteSpace = false;
-                        $document->formatOutput = true;
-                        $document->loadXML($content);
-                        $processor = Zord::getProcessor($steps[$index]);
-                        if (isset($processor)) {
-                            $content = $processor->transformToXML($document);
-                        } else {
-                            $content = null;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        $path = ($this->context ?? 'any').'_'.$format.'_'.date("Y-m-d").'.'.$ext;
-        if (empty($this->controller)) {
-            file_put_contents(BUILD_FOLDER.$path, $content);
-        }
-        return (isset($content) && isset($ext)) ? $this->download(
-            $path,
-            null,
-            $content
-        ) : $this->error(501);
-    }
-    
-    protected function recordsList($context = null) {
-        $criteria = [
-            'many' => true,
-            'order' => ['desc' => 'book']
-        ];
-        if (!empty($context)) {
-            $criteria['where'] = ['context' => $context];
-        }
-        $entity = (new BookHasContextEntity())->retrieve($criteria);
-        $books = [];
-        foreach($entity as $entry) {
-            $book = (new BookEntity())->retrieve($entry->book);
-            if ($book && !in_array($entry->book, $books)) {
-                $books[$entry->book] = [
-                    'isbn'    => $entry->book,
-                    'authors' => Zord::objectToArray($book->creator),
-                    'title'   => $book->title,
-                    'editors' => Zord::objectToArray($book->editor),
-                    'date'    => $book->date,
-                    'status'  => $entry->status
-                ];
-            }
-        }
-        return $books;
-    }
-    
     public function records() {
         if (isset($this->params['books'])) {
             $format = $this->params['format'] ?? 'MODS';
-            $books = $this->params['books'] ?? '[]';
-            if ($books === 'any') {
-                $books = array_keys($this->recordsList());
-            } else if ($books === 'all') {
-                $books = array_keys($this->recordsList($this->context));
-            } else {
-                $books = Zord::objectToArray(json_decode($books));
-            }
-            return $this->recordsContent($books, $format);
+            $books = Library::recordsBooks($this->params['books'] ?? '[]', $this->context);
+            list($content, $path) = Library::recordsContent($books, $format, $books === 'any' ? null : $this->context);
+            return (isset($content) && isset($path)) ? $this->download($path, null, $content) : $this->error(501);
         } else {
-            $books = $this->recordsList($this->context === 'root' ? null : $this->context);
+            $books = Library::recordsList($this->context === 'root' ? null : $this->context);
             foreach($books as $data) {
                 $books[$data['status'] == 'new' ? 'new' : 'other'][] = $data;
             }

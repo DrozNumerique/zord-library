@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					deferred:true,
 					after: function() {
 						document.body.classList.remove('waiting');
+					},
+					failure: function() {
+						document.body.classList.remove('waiting');
 					}
 				});
 			});
