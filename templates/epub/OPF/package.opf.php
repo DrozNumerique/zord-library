@@ -15,6 +15,7 @@
 		<dc:identifier id="ean"><?php echo $metadata['epub']; ?></dc:identifier>
 		<dc:identifier id="uri"><?php echo $metadata['uri']; ?></dc:identifier>
 		<dc:identifier id="uid">urn:uuid:<?php echo $metadata['uuid']; ?></dc:identifier>
+		<dc:identifier id="doi"><?php echo $metadata['doi']; ?></dc:identifier>
 		<dc:title><?php echo htmlspecialchars(Library::title($metadata, null, null, ', ')); ?></dc:title>
 <?php if (isset($metadata['creator']) && is_array($metadata['creator'])) { ?>
 <?php     foreach($metadata['creator'] as $creator) { ?>
