@@ -342,6 +342,12 @@ class Library {
 	public static function recordsField($format, $field, $metadata) {
 	    switch ($format) {
 	        case 'KBART': {
+	            $platforms = [];
+	            foreach ((new BookHasContextEntity())->retrieveAll(['book' => $metadata['ean']]) as $entry) {
+	                if (!in_array($entry->context, $platforms) && !empty(Zord::value('context', [$entry->context, 'url']))) {
+	                    $platforms[] = $entry->context;
+	                }
+	            }
 	            switch ($field) {
 	                case "publication_title": return '"'.str_replace('"', '""', $metadata['title']).'"';
 	                case "print_identifier": return Store::isbn($metadata['ean']);
@@ -356,6 +362,7 @@ class Library {
 	                case "date_monograph_published_online": return $metadata['publication'] ?? '';
 	                case "first_editor": return explode(',', $metadata['editor'][0] ?? '')[0];
 	                case "access_type": return "P";
+	                case "available_platforms": return count($platforms) > 0 ? implode('|', $platforms) : '';
 	            }
 	        }
 	        default: return $metadata[$field] ?? "";

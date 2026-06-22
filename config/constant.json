@@ -30,7 +30,8 @@
 			"date_monograph_published_print",
 			"date_monograph_published_online",
 			"first_editor",
-			"access_type"
+			"access_type",
+			"available_platforms"
 		]
 	}
 }
