@@ -878,13 +878,15 @@ class LibraryImport extends Import {
                         $links = $partXPath->query('//a[@href]');
                         foreach ($links as $anchor) {
                             $tokens = explode('#', $anchor->getAttribute('href'));
-                            $_part = $tokens[0];
-                            $_anchor = $tokens[1];
-                            if (substr($_anchor, 0, 8) == 'footref_') {
-                                $_anchor = substr($_anchor, 8);
-                            }
-                            if (count($tokens) == 2 && isset($anchors['#'.$_anchor]) && $anchors['#'.$_anchor] == $_part) {
-                                $anchor->setAttribute('href', $_part.'.xhtml#'.$tokens[1]);
+                            if (count($tokens) == 2) {
+                                $_part = $tokens[0];
+                                $_anchor = $tokens[1];
+                                if (substr($_anchor, 0, 8) == 'footref_') {
+                                    $_anchor = substr($_anchor, 8);
+                                }
+                                if (isset($anchors['#'.$_anchor]) && $anchors['#'.$_anchor] == $_part) {
+                                    $anchor->setAttribute('href', $_part.'.xhtml#'.$tokens[1]);
+                                }
                             }
                         }
                         $notes = $partXPath->query('//div[@class="note"][@id]');
