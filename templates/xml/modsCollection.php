@@ -32,6 +32,11 @@
 <?php
 			    }
 			}
+			foreach (Library::portals($metadata['ean']) as $title) {
+?>
+		<classification authority="local"><?php echo $title; ?>></classification>
+<?php
+			}
 		    if (isset($metadata['publisher'])) {
 ?>
 		<originInfo>

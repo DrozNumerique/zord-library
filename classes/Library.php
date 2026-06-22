@@ -40,6 +40,16 @@ class Library {
         return $books;
     }
     
+    public static function portals($isbn) {
+        $portals = [];
+        foreach ((new BookHasContextEntity())->retrieveAll(['book' => $isbn]) as $entry) {
+            if (!in_array($entry->context, $portals) && !empty(Zord::value('context', [$entry->context, 'url']))) {
+                $portals[$entry->context] = Zord::value('context', [$entry->context, 'title', DEFAULT_LANG]);
+            }
+        }
+        return $portals;
+    }
+    
     public static function context($isbn, $user = null) {
         $name = null;
         if (file_exists(Library::data($isbn))) {
@@ -342,12 +352,7 @@ class Library {
 	public static function recordsField($format, $field, $metadata) {
 	    switch ($format) {
 	        case 'KBART': {
-	            $platforms = [];
-	            foreach ((new BookHasContextEntity())->retrieveAll(['book' => $metadata['ean']]) as $entry) {
-	                if (!in_array($entry->context, $platforms) && !empty(Zord::value('context', [$entry->context, 'url']))) {
-	                    $platforms[] = $entry->context;
-	                }
-	            }
+	            $platforms = array_keys(Library::portals($metadata['ean']));
 	            switch ($field) {
 	                case "publication_title": return '"'.str_replace('"', '""', $metadata['title']).'"';
 	                case "print_identifier": return Store::isbn($metadata['ean']);
