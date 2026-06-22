@@ -79,7 +79,7 @@
 		    }
 		    if (isset($metadata['doi'])) {
 		        ?>
-		<identifier type="doi" dislayLabel="DOI"><?php echo Library::xmlspecialchars($metadata['doi']); ?></identifier>
+		<identifier type="doi" dislayLabel="DOI">https://doi.org/<?php echo Library::xmlspecialchars($metadata['doi']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['uri'])) {
