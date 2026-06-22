@@ -63,13 +63,18 @@
 <?php
 		    }
 		    if (isset($metadata['epub'])) {
-		        ?>
+?>
 		<identifier type="isbn" dislayLabel="epub"><?php echo Library::xmlspecialchars($metadata['epub']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['pdf'])) {
-		        ?>
+?>
 		<identifier type="isbn" dislayLabel="pdf"><?php echo Library::xmlspecialchars($metadata['pdf']); ?></identifier>
+<?php
+		    }
+		    if (isset($metadata['doi'])) {
+		        ?>
+		<identifier type="doi" dislayLabel="DOI"><?php echo Library::xmlspecialchars($metadata['doi']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['uri'])) {
