@@ -305,7 +305,7 @@ class Library {
 	}
 	
 	public static function isCounter($user, $context) {
-	    return $user->isConnected() && self::isReader($user, $context);
+	    return $user->isConnected() && ($user->hasRole('reader', $context) || self::isReader($user, $context));
 	}
 	
 	public static function isReader($user, $context) {
@@ -323,7 +323,7 @@ class Library {
 	            }
 	        }
 	    }
-	    return $user->hasRole('reader', $context) || $user->hasRole('researcher', $context);
+	    return false;
 	}
 	
 	public static function postPublish($book) {
