@@ -495,7 +495,7 @@ div.l div.gloss {
 	text-indent:0;
 }
 
-div.div[data-visavis] div.l div.gloss {
+div.div[data-synch] div.l div.gloss {
 	position: revert;
 	display: inline !important;
 	margin-top: revert;
