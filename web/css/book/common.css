@@ -497,9 +497,7 @@ div.l div.gloss {
 
 div.div[data-visavis] div.l div.gloss {
 	position: revert;
-	display: revert;
-	max-width: revert;
-	left: revert;
+	display: inline !important;
 	margin-top: revert;
 }
 
