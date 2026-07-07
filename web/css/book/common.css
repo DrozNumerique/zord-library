@@ -495,6 +495,14 @@ div.l div.gloss {
 	text-indent:0;
 }
 
+div.div[data-visavis] div.l div.gloss {
+	position: revert;
+	display: revert;
+	max-width: revert;
+	left: revert;
+	margin-top: revert;
+}
+
 div.l div.figure,
 div.l div.figure img {
 	display: inline ! important;
