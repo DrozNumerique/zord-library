@@ -416,6 +416,7 @@ class LibraryImport extends Import {
                 }
                 $path = implode(' | ', $path);
                 $elements = $this->xpath->query($path);
+                $fragments = Zord::value('import', ['types','fragment']);
                 foreach ($elements as $element) {
                     switch ($num) {
                         case 0: {
@@ -435,6 +436,7 @@ class LibraryImport extends Import {
                                 $result = false;
                             } else {
                                 $type = $element->getAttribute('type');
+                                $rendition = $element->getAttribute('rendition');
                                 $valid = false;
                                 foreach (Zord::value('import', 'types') as $types) {
                                     if (in_array($type, $types)) {
@@ -446,8 +448,7 @@ class LibraryImport extends Import {
                                     $this->xmlError('validate', $element, $this->locale->messages->validate->error->type, ['type' => $type]);
                                     $result = false;
                                 }
-                                $fragments = Zord::value('import', ['types','fragment']);
-                                if (in_array($type, $fragments)) {
+                                if ($rendition !== 'nofragment' && in_array($type, $fragments)) {
                                     $parent = $element->parentNode;
                                     while (isset($parent)) {
                                         if ($parent->localName === 'div') {
@@ -1234,7 +1235,7 @@ class LibraryImport extends Import {
         return 
             $part['name'] == 'home' || 
             in_array($part['type'], Zord::value('import', ['types','root'])) || 
-            in_array($part['type'], Zord::value('import', ['types','fragment'])) ||
+            (in_array($part['type'], Zord::value('import', ['types','fragment'])) && $part['rendition'] !== 'nofragment') ||
             (isset($part['synch']) && substr($part['synch'], 0, 1) !== '#' && ($allvisavis || !isset($part['corresp'])));
     }
     
@@ -1300,6 +1301,7 @@ class LibraryImport extends Import {
         $newPart = [
             'name'        => $name,
             'id'          => $node->getAttribute('id'),
+            'rendition'   => $node->getAttribute('rendition'),
             'base'        => $base,
             'title'       => $title,
             'flat'        => $flat,
@@ -1372,7 +1374,7 @@ class LibraryImport extends Import {
             $title = '';
             $flat = '';
             foreach ($div->childNodes as $child) {
-                if ($child->localName == 'head') {
+                if ($child->localName == 'head' && !in_array($child->getAttribute('type'), ['sub', 'number'])) {
                     $title .= empty($title) ? '' : ' ';
                     $flat .= empty($flat) ? '' : ' ';
                     foreach ($child->childNodes as $grandChild) {
