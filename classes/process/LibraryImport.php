@@ -436,7 +436,7 @@ class LibraryImport extends Import {
                                 $result = false;
                             } else {
                                 $type = $element->getAttribute('type');
-                                $rend = $element->getAttribute('rend') ?? $element->getAttribute('rendition');
+                                $rend = !empty($element->getAttribute('rend')) ? $element->getAttribute('rend') : $element->getAttribute('rendition');
                                 $valid = false;
                                 foreach (Zord::value('import', 'types') as $types) {
                                     if (in_array($type, $types)) {
@@ -1301,7 +1301,7 @@ class LibraryImport extends Import {
         $newPart = [
             'name'        => $name,
             'id'          => $node->getAttribute('id'),
-            'rend'        => $node->getAttribute('rend') ?? $node->getAttribute('rendition'),
+            'rend'        => !empty($node->getAttribute('rend')) ? $node->getAttribute('rend') : $node->getAttribute('rendition'),
             'base'        => $base,
             'title'       => $title,
             'flat'        => $flat,
