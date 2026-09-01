@@ -103,7 +103,7 @@ div.byline {
 }
 
 div.byline div.persName {
-	display: inline-flex;
+	display: inline-flex !important;
 }
 
 div.byline div.surname {
