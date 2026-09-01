@@ -102,6 +102,10 @@ div.byline {
 	display:block ! important;
 }
 
+div.byline div.surname {
+	margin-left: 0.2em;
+}
+
 /* --------------------------------- caption --------------------------------- */
 
 div.caption {
