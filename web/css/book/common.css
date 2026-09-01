@@ -204,7 +204,8 @@ div.figure {
 	text-align: center;
 }
 
-div.figure > div.head {
+div.figure > div.head,
+div.figure > div.bibl {
 	margin:0.2em 0;
 	padding: 0;
 	font-size: 0.9em;
@@ -213,10 +214,6 @@ div.figure > div.head {
 
 div.figure > div.figDesc {
 	display:none;
-}
-
-div.figure > div.bibl {
-
 }
 
 div.figure > div:last-child {
