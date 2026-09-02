@@ -17,6 +17,13 @@ class LibraryMenu extends Menu {
                         ];
                     }
                 }
+                $menu = $entry['menu'] ?? null;
+                if (!empty($menu)) {
+                    uksort($menu, function($first, $second) {
+                        return Zord::value('context', [$first, 'position']) <=> Zord::value('context', [$second, 'position']);
+                    });
+                    $entry['menu'] = $menu;
+                }
                 break;
             }
             case 'lang': {
