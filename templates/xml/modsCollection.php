@@ -101,14 +101,14 @@
 		<accessCondition type="restrictionOnAccess"><?php echo Library::xmlspecialchars($metadata['rights']); ?></accessCondition>
 <?php
 		    }
-		    if (isset($metadata['relation'])) {
+		    if (!empty($metadata['collection'])) {
 ?>
 		<relatedItem type="series">
 			<titleInfo>
 				<title><?php echo Library::xmlspecialchars($metadata['collection']); ?></title>
 			</titleInfo>
 <?php 
-		        if (isset($metadata['collection_number'])) {
+		        if (!empty($metadata['collection_number'])) {
 ?>
 			<part>
 				<detail type="volume">
