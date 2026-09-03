@@ -385,7 +385,7 @@ class Library {
 	    return $books;
 	}
 	
-	public static function recordsContent($books, $format, $context, $processor = null) {
+	public static function recordsContent($books, $format = 'MODS', $context = null, $processor = null) {
 	    $steps = Zord::value('records', $format);
 	    $content = null;
 	    $ext = null;
