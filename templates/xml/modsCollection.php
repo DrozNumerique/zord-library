@@ -105,7 +105,7 @@
 ?>
 		<relatedItem type="series">
 			<titleInfo>
-				<title><?php echo Library::xmlspecialchars($metadata['relation']); ?></title>
+				<title><?php echo Library::xmlspecialchars($metadata['collection']); ?></title>
 			</titleInfo>
 <?php 
 		        if (isset($metadata['collection_number'])) {
