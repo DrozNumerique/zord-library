@@ -64,22 +64,22 @@
 		    }
 		    if (isset($metadata['ean'])) {
 ?>
-		<identifier type="isbn" dislayLabel="print"><?php echo Library::xmlspecialchars($metadata['ean']); ?></identifier>
+		<identifier type="isbn" displayLabel="print"><?php echo Library::xmlspecialchars($metadata['ean']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['epub'])) {
 ?>
-		<identifier type="isbn" dislayLabel="epub"><?php echo Library::xmlspecialchars($metadata['epub']); ?></identifier>
+		<identifier type="isbn" displayLabel="epub"><?php echo Library::xmlspecialchars($metadata['epub']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['pdf'])) {
 ?>
-		<identifier type="isbn" dislayLabel="pdf"><?php echo Library::xmlspecialchars($metadata['pdf']); ?></identifier>
+		<identifier type="isbn" displayLabel="pdf"><?php echo Library::xmlspecialchars($metadata['pdf']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['doi'])) {
 		        ?>
-		<identifier type="doi" dislayLabel="DOI">https://doi.org/<?php echo Library::xmlspecialchars($metadata['doi']); ?></identifier>
+		<identifier type="doi" displayLabel="DOI">https://doi.org/<?php echo Library::xmlspecialchars($metadata['doi']); ?></identifier>
 <?php
 		    }
 		    if (isset($metadata['uri'])) {
