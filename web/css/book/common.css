@@ -216,6 +216,10 @@ div.figure > div.bibl {
 	color:#6c757e;
 }
 
+div.figure > div.graphic > img {
+	margin-top: 0.9em;
+}
+
 div.figure > div.figDesc {
 	display:none;
 }

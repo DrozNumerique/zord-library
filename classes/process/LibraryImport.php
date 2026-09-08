@@ -1374,7 +1374,7 @@ class LibraryImport extends Import {
             $title = '';
             $flat = '';
             foreach ($div->childNodes as $child) {
-                if ($child->localName == 'head' && !in_array($child->getAttribute('type'), ['sub', 'number'])) {
+                if ($child->localName == 'head' && !in_array($child->getAttribute('type'), ['sub'/*, 'number'*/])) {
                     $title .= empty($title) ? '' : ' ';
                     $flat .= empty($flat) ? '' : ' ';
                     foreach ($child->childNodes as $grandChild) {
