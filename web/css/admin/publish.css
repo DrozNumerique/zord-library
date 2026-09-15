@@ -12,8 +12,8 @@
 
 .admin-table td.show,
 .admin-table td.xml,
-.admin-table td.epub,
-.admin-table td.pdf,
+.admin-table td.epub[data-action],
+.admin-table td.pdf[data-action],
 .admin-table td.word,
 .admin-table td.delete {
 	cursor: pointer;
