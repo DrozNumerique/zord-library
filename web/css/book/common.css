@@ -221,7 +221,7 @@ div.figure > div.graphic > img {
 }
 
 div.figure > div.figDesc {
-	display:none;
+	display:none !important;
 }
 
 div.figure > div:last-child {
