@@ -1407,7 +1407,7 @@ class LibraryImport extends Import {
                 $this->anchors['#'.$id_ref] = $part['ref'];
                 if (substr($id_ref, 0, 1) === 'N') {
                     $this->anchors['#footref_'.$id_ref] = $part['ref'];
-                    $this->anchors['#footpage_'.substr($id_ref, 1, strpos($id_ref, '-') - 1)] = $part['ref'];
+                    $this->anchors['#footpage_p'.substr($id_ref, 1, strpos($id_ref, '-') - 1)] = $part['ref'];
                 }
             }
             if (in_array($type, Zord::value('import', ['types','root'])) || in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
