@@ -1402,7 +1402,11 @@ class LibraryImport extends Import {
             }
             $part = $this->addPart($name, $type, $title, $flat, $base, $node, $level, $div);
             foreach ($this->adjXPath->query('//'.$this->prefix.':div[@id="'.$id.'"]//*[@xml:id]') as $element) {
-                $this->anchors['#'.$element->getAttribute('xml:id')] = $part['ref'];
+                $id_ref = ''.$element->getAttribute('xml:id');
+                $this->anchors['#'.$id_ref] = $part['ref'];
+                if (substr($id_ref, 0, 1) === 'N') {
+                    $this->anchors['#footref_'.$id_ref] = $part['ref'];
+                }
             }
             if (in_array($type, Zord::value('import', ['types','root'])) || in_array($type, Zord::value('import', ['types','fragment'])) || in_array($type, Zord::value('import', ['types','toc']))) {
                 $this->scan('div[@id="'.$id.'"]', $name, $level + 1);
